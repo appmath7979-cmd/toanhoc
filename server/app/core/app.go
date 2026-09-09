@@ -2,6 +2,8 @@ package core
 
 import (
 	"log"
+	"server/app"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -13,10 +15,25 @@ type Application struct {
 }
 
 func NewApplication() *Application {
+	var origins []string
+
 	r := gin.Default()
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://example.com"},
+	mode := app.LoadEnv("MODE")
+	clients := app.LoadEnv("CLIENT_URL")
+
+	if mode != "release" {
+		origins = []string{
+			"http://localhost:1420", "http://tauri.localhost", "https://tauri.localhost", "tauri://localhost",
+		}
+	}
+
+	if clients != "" {
+		origins = strings.Split(clients, ",")
+	}
+
+	r.Use(RateLimiter(), cors.New(cors.Config{
+		AllowOrigins:     origins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
