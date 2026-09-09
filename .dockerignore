@@ -1,0 +1,18 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Môi trường và log
+.env
+*.log
+
+server/tmp/
+server/bin/
+*.exe
+*.test
+*/docs
