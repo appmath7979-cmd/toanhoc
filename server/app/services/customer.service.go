@@ -1,10 +1,13 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"server/app/dtos"
 	"server/app/models"
+	"strings"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -62,6 +65,41 @@ func (s *CustomerService) GetMany(search string, page int, sort string, active *
 	return data, int(total), totalPage, nil
 }
 
-// func (s *CustomerService) GetMany() {}
+func (s *CustomerService) Create(req dtos.CreateCustomer) (uint16, error) {
+	var betPair datatypes.JSONSlice[models.BetPair]
+
+	for _, b := range req.Setting.Bets {
+		betPair = append(betPair, models.BetPair{
+			Type:    models.BetType(b.Type),
+			C:       models.BetValue(b.C),
+			T:       models.BetValue(b.T),
+			Percent: b.Percent,
+		})
+	}
+
+	customer := models.Customer{
+		FullName:    req.FullName,
+		PhoneNumber: req.PhoneNumber,
+		Guest:       req.Guest,
+		Setting: &models.Setting{
+			XienMB: req.Setting.XienMB,
+			DaXT:   models.DaX_T(req.Setting.DaXT),
+			Bets:   betPair,
+		},
+	}
+
+	err := s.db.Create(&customer).Error
+
+	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "1062") {
+			return 409, errors.New("Số điện thoại đã được đăng ký!")
+		}
+
+		return 500, err
+	}
+
+	return 201, nil
+}
+
 // func (s *CustomerService) GetMany() {}
 // func (s *CustomerService) GetMany() {}
