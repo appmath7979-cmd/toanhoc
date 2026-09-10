@@ -23,7 +23,7 @@ type RouteGroup struct {
 	Routes []Route
 }
 
-func (a *Application) RegistRoute(ver string, groups ...RouteGroup) {
+func (a *Application) RegistRoute(ver string, groups []RouteGroup) {
 	var currVer string
 
 	if ver == "" {
