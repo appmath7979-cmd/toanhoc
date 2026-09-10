@@ -3,11 +3,14 @@ package main
 import (
 	"server/app"
 	"server/app/core"
+	"server/app/handlers"
+	"server/app/models"
 	"server/configs"
+
+	_ "server/docs"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "server/docs"
 )
 
 // @title           Toanhoc Backend API
@@ -19,14 +22,16 @@ func main() {
 	port := app.LoadEnv("PORT")
 
 	configs.DbConfig()
-	configs.DbMigrate()
+	configs.DbMigrate(&models.Customer{}, &models.Setting{})
 
 	app := core.NewApplication()
 
 	r := app.Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	app.RegistRoute("v1", core.RouteGroup{})
+	app.RegistRoute("v1", []core.RouteGroup{
+		{Prefix: "customers", Routes: []core.Route{{Path: "", Method: "GET", Handler: handlers.CustomerHandlers(configs.DB).GetCustomerList}}},
+	})
 
 	app.Run(port)
 }
