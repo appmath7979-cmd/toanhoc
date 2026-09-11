@@ -1,47 +1,77 @@
 @import "tailwindcss";
 
 :root {
-  --background: oklch(97.315% 0.00011 271.152);
-  --foreground: oklch(14.958% 0.00002 271.152);
-  --primary: oklch(53.722% 0.21662 27.868);
-  --primary-foreground: oklch(99.115% 0.00423 15.765);
-  --secondary: oklch(96.7% 0.001 286.375);
-  --secondary-foreground: oklch(14.1% 0.005 285.823);
+	--background: oklch(98.5% 0.002 247.839);
+	--foreground: oklch(14.5% 0 none);
+	--surface: oklch(96.7% 0.003 264.542);
+	--primary: oklch(53.722% 0.21662 27.868);
+	--primary-foreground: oklch(99.115% 0.00423 15.765);
+	--secondary: oklch(96.7% 0.001 286.375);
+	--secondary-foreground: oklch(14.1% 0.005 285.823);
+	--border: oklch(87% 0 none);
 }
 
 .dark {
-  --background: oklch(21.779% 0.00002 271.152);
-  --foreground: oklch(97.913% 0.00011 271.152);
-  --primary: oklch(58.139% 0.23486 27.975);
+	--background: oklch(13% 0.028 261.692);
+	--foreground: oklch(98.5% 0 none);
+	--surface: oklch(21% 0.034 264.665);
+	--primary: oklch(58.139% 0.23486 27.975);
+	--border: oklch(43.9% 0 none);
 }
 
 @theme inline {
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-surface: var(--surface);
+	--color-border: var(--border);
 }
 
 @layer base {
-  html,
-  body,
-  #root {
-    @apply scroll-smooth bg-background text-foreground;
-  }
+	html,
+	body,
+	#root {
+		@apply scroll-smooth bg-background text-foreground;
+	}
 
-  .contain {
-    @apply px-2 md:px-3;
-  }
+	.contain {
+		@apply px-2 md:px-3;
+	}
 }
 
 @layer components {
-  .btn-icon {
-    @apply size-8 inline-flex justify-center items-center font-semibold [&_svg]:size-5 transition-colors duration-300;
-  }
+	.btn {
+		@apply inline-flex items-center gap-1.5 transition-colors duration-300 px-4 font-semibold rounded-md;
+	}
 
-  .btn-icon--outline {
-    @apply border rounded-md bg-secondary hover:bg-secondary-foreground/5;
-  }
+	.btn-primary {
+		@apply bg-primary text-primary-foreground;
+	}
+
+	.btn-outline {
+		@apply border border-border rounded-md bg-secondary hover:bg-secondary-foreground/5;
+	}
+
+	.btn-icon {
+		@apply size-7 inline-flex justify-center items-center font-semibold [&_svg]:size-4.5 transition-colors duration-300 rounded-md;
+	}
+
+	.btn-icon--outline {
+		@apply border border-border;
+	}
+	/* bg-secondary hover:bg-secondary-foreground/5 */
+	.btn-icon--ghost {
+		@apply bg-secondary text-secondary-foreground hover:bg-secondary-foreground/5;
+	}
+
+	.nav {
+		@apply fixed bottom-4 border border-border w-fit rounded-full left-1/2 -translate-x-1/2 px-4 py-1 flex justify-center items-center gap-1 bg-surface shadow-sm;
+	}
+
+	.nav-item {
+		@apply inline-flex flex-col gap-0.5 justify-center items-center hover:bg-secondary-foreground/5 hover:text-primary rounded-full px-4 py-1 max-lg:size-12 transition-colors duration-300 z-9999;
+	}
 }

@@ -1,14 +1,15 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Header } from "../components/base/Header";
+import { Navbar } from "../components/base/Navbar";
 
 export default function RootLayout() {
 	return (
-		<main className="contain">
+		<main>
 			<Header />
-			<Outlet />
-			<nav>
-				<Link to={"/customers"}>Customers</Link>
-			</nav>
+			<div className="contain">
+				<Outlet />
+				<Navbar />
+			</div>
 		</main>
 	);
 }
