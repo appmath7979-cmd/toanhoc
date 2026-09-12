@@ -1,6 +1,8 @@
 import { createStore } from "@lavaz/store";
-import { DatePickerBox } from "./boxes/date-picker.box";
+import { datePickerBox } from "./boxes/date-picker.box";
+import { sidebarBox } from "./boxes/side-bar.box";
 
 export const store = createStore({
-	datePicker: DatePickerBox,
+	datePicker: datePickerBox,
+	sidebar: sidebarBox,
 });

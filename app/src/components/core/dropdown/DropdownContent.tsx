@@ -1,24 +1,29 @@
+import { cn } from "@/libs/utils/cn";
 import { Popover } from "radix-ui";
-import { PopoverContentProps, PopoverPortalProps } from "radix-ui/popover";
+import { ReactNode } from "react";
 
-export function DropdownContent({ children, ...props }: PopoverPortalProps) {
-	return (
-		<Popover.Portal {...props}>
-			<DropdownContentChild>{children}</DropdownContentChild>
-		</Popover.Portal>
-	);
+interface DropdownContentProps {
+	children: ReactNode;
+	variant?: "solid" | "glass";
 }
 
-export function DropdownContentChild({
+export function DropdownContent({
 	children,
-	...props
-}: PopoverContentProps) {
+	variant = "solid",
+}: DropdownContentProps) {
 	return (
-		<Popover.Content
-			className="border border-border rounded-md flex flex-col **:border-0 text-sm p-1 bg-surface m-0.5"
-			{...props}
-		>
-			{children}
-		</Popover.Content>
+		<Popover.Portal>
+			<Popover.Content
+				className={cn(
+					"border rounded-md shadow-md p-1",
+					variant === "solid" &&
+						"bg-surface **:hover:bg-gray-300 dark:**:hover:bg-gray-700",
+					variant === "glass" &&
+						"bg-surface/70 backdrop-blur-md **:hover:bg-gray-200/50 dark:**:hover:bg-gray-800/50",
+				)}
+			>
+				{children}
+			</Popover.Content>
+		</Popover.Portal>
 	);
 }
