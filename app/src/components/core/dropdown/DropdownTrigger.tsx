@@ -1,10 +1,11 @@
 import { Popover } from "radix-ui";
-import { PopoverTriggerProps } from "radix-ui/popover";
+import { ReactNode } from "react";
 
-export function DropdownTrigger({ children, ...props }: PopoverTriggerProps) {
-	return (
-		<Popover.Trigger asChild {...props}>
-			{children}
-		</Popover.Trigger>
-	);
+interface DropdownTriggerProps {
+	children: ReactNode;
+	setChild?: boolean;
+}
+
+export function DropdownTrigger({ children, setChild }: DropdownTriggerProps) {
+	return <Popover.Trigger asChild={setChild}>{children}</Popover.Trigger>;
 }

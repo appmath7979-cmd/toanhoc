@@ -1,6 +1,6 @@
+import { cn } from "@/libs/utils/cn";
 import { Slot } from "radix-ui";
 import { ComponentProps } from "react";
-import { cn } from "../../utils/cn";
 
 const variants = {
 	primary: "btn-primary",
@@ -8,23 +8,23 @@ const variants = {
 };
 
 const sizes = {
-	default: "h-8 [&_svg]:size-4.5",
+	default: "btn-default",
 };
 
-interface ButtonProps extends ComponentProps<"button"> {
+interface ButtonProps {
 	setChild?: boolean;
 	variant?: keyof typeof variants;
 	size?: keyof typeof sizes;
 }
 
 export function Button({
-	variant = "primary",
-	size = "default",
-	setChild = false,
 	children,
 	className,
+	variant = "primary",
+	size = "default",
+	setChild,
 	...props
-}: ButtonProps) {
+}: ButtonProps & ComponentProps<"button">) {
 	const Comp = setChild ? Slot.Root : "button";
 
 	return (

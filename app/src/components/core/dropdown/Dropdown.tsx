@@ -1,6 +1,10 @@
 import { Popover } from "radix-ui";
-import { PopoverProps } from "radix-ui/popover";
+import { ReactNode } from "react";
 
-export function Dropdown({ children }: PopoverProps) {
+interface DropdownProps {
+	children: ReactNode;
+}
+
+export function Dropdown({ children }: DropdownProps) {
 	return <Popover.Root>{children}</Popover.Root>;
 }

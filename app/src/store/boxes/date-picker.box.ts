@@ -4,10 +4,10 @@ interface DatePickerState {
 	date: Date;
 }
 
-const initialState = {
+const initalState = {
 	date: new Date(),
 } satisfies DatePickerState as DatePickerState;
 
-export const DatePickerBox = createBox(initialState, (set) => ({
+export const datePickerBox = createBox(initalState, (set) => ({
 	setDate: (date: Date) => set((prev) => ({ ...prev, date })),
 })).create();
