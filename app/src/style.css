@@ -37,6 +37,7 @@
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
 	--color-surface: var(--surface);
 	--color-border: var(--border);
 	--color-secondary: var(--secondary);
@@ -66,12 +67,16 @@ html {
 		@apply inline-flex items-center gap-1.5 font-medium text-sm rounded-md transition-all duration-300;
 	}
 
+	.btn-primary {
+		@apply bg-primary text-primary-foreground hover:bg-primary/80;
+	}
+
 	.btn-outline {
 		@apply border bg-secondary text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
 	}
 
 	.btn-default {
-		@apply h-8 px-4 [&_svg]:size-5;
+		@apply h-8 px-2 [&_svg]:size-5;
 	}
 
 	.btn-icon {
