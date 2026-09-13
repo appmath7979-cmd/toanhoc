@@ -1,7 +1,7 @@
 import { DatePicker } from "../core/DatePicker";
-import { SidebarTrigger } from "../core/sidebar/SidebarTrigger";
+import { SidebarTrigger } from "../core/sidebar/Sidebar";
 
-export function Header() {
+export default function Header() {
 	return (
 		<header className="bg-surface sticky top-0 left-0 w-full border-b px-4 py-1.5 flex justify-between items-center">
 			<SidebarTrigger />
