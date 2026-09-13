@@ -68,8 +68,14 @@ function SidebarMenuItem({
 	);
 }
 
-function SidebarMenu({ children }: { children: ReactNode }) {
-	return <div className="w-full my-1">{children}</div>;
+function SidebarMenu({
+	children,
+	className,
+}: {
+	children: ReactNode;
+	className?: string;
+}) {
+	return <div className={cn("w-full my-1", className)}>{children}</div>;
 }
 
 function SidebarGroup({
@@ -98,7 +104,7 @@ function SidebarGroup({
 }
 
 function SidebarContent({ children }: { children: ReactNode }) {
-	return <div className="h-full w-full">{children}</div>;
+	return <div className="h-full w-full flex flex-col">{children}</div>;
 }
 
 function SidebarFooter({ children }: { children: ReactNode }) {

@@ -9,7 +9,9 @@ export function Root() {
 			<AppSidebar />
 			<main className="w-full">
 				<Header />
-				<Outlet />
+				<div className="px-4">
+					<Outlet />
+				</div>
 			</main>
 		</SidebarProvider>
 	);
