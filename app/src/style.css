@@ -98,4 +98,12 @@ html {
 	.btn-icon--sm {
 		@apply size-6 [&_svg]:size-4;
 	}
+
+	.checkbox {
+		@apply bg-background size-3.5 rounded-xs flex justify-center items-center shadow-xs border hover:bg-white/5 transition-colors duration-75;
+	}
+
+	.input {
+		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-surface focus:border-primary focus:ring-primary focus:ring-2 transition-all duration-300;
+	}
 }

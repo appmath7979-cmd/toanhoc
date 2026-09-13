@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, ReactNode, useEffect, useState } from "react";
 import { IconButton } from "../button/IconButton";
 import { useAppStore } from "@lavaz/store";
 import { store } from "@/store/store";
@@ -6,19 +6,75 @@ import { SidebarCloseIcon, SidebarOpenIcon } from "lucide-react";
 import { cn } from "@/libs/utils/cn";
 import { Slot } from "radix-ui";
 import { TooltipContent } from "../tootltip/Tooltip";
+import { useMobile } from "@/hooks/use-mobile";
 
 function Sidebar({ children }: { children: ReactNode }) {
 	const [isExpand] = useAppStore(store.sidebar, (s) => s.isExpand);
+	const isMobile = useMobile();
 
 	return (
 		<aside
 			className={cn(
 				"h-dvh shadow-md bg-surface flex flex-col",
+				isMobile && !isExpand && "w-0! overflow-hidden",
 				isExpand && "rounded-r-md",
+				isMobile && isExpand && "fixed left-0 w-80 z-9999",
 			)}
 		>
 			{children}
+			{isMobile && isExpand && (
+				<div className="size-full absolute bg-background/80 left-full backdrop-blur-xs" />
+			)}
 		</aside>
+	);
+}
+
+function SidebarHeader({ children }: { children: ReactNode }) {
+	const [isExpand] = useAppStore(store.sidebar, (s) => s.isExpand);
+	const isMobile = useMobile();
+
+	return (
+		<div className="p-2 flex flex-col">
+			<div className="ms-auto">
+				{isMobile && isExpand && <SidebarTrigger />}
+			</div>
+			<div className="btn-icon">{children}</div>
+		</div>
+	);
+}
+
+function SidebarTitle({
+	isHeading = true,
+	content,
+	className,
+}: {
+	isHeading?: boolean;
+	content: string;
+	className?: string;
+}) {
+	const [isExpand] = useAppStore(store.sidebar, (s) => s.isExpand);
+	const [title, setTitle] = useState<string>("");
+
+	const Comp = isHeading ? "h1" : "p";
+
+	useEffect(() => {
+		if (isExpand) setTitle(content);
+		else {
+			const getCurrentTitle = content.charAt(0);
+			setTitle(getCurrentTitle);
+		}
+	}, [isExpand, content]);
+
+	return (
+		<Comp
+			className={cn(
+				"font-semibold text-lg rounded-md text-left uppercase text-primary w-full",
+				!isExpand && "size-6 flex justify-center items-center bg-primary/20",
+				className,
+			)}
+		>
+			{title}
+		</Comp>
 	);
 }
 
@@ -119,4 +175,6 @@ export {
 	SidebarGroup,
 	SidebarContent,
 	SidebarFooter,
+	SidebarHeader,
+	SidebarTitle,
 };
