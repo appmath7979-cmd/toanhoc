@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../components/core/sidebar/Sidebar";
-import { Header } from "../components/base/Header";
+import Header from "../components/base/Header";
+import SidebarProvider from "@/components/core/sidebar/SidebarProvider";
+import AppSidebar from "@/components/base/system/AppSidebar";
 
 export function Root() {
 	return (
-		<div className="flex">
-			<Sidebar />
-			<div className="w-full">
+		<SidebarProvider>
+			<AppSidebar />
+			<main className="w-full">
 				<Header />
 				<Outlet />
-			</div>
-		</div>
+			</main>
+		</SidebarProvider>
 	);
 }

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
 	--background: oklch(98.5% 0 none);
 	--foreground: oklch(14.5% 0 none);
@@ -7,11 +9,14 @@
 	--primary: oklch(51.849% 0.20779 24.818);
 	--primary-foreground: oklch(97.788% 0.00409 55.493);
 	--secondary: oklch(98.4% 0.003 247.858);
-	--secondary-accent: oklch(96.8% 0.007 247.896);
+	--secondary-accent: oklch(92.9% 0.013 255.508);
+	--secondary-foreground: oklch(12.9% 0.042 264.695);
 	--muted: oklch(92.3% 0.003 48.717);
 	--muted-foreground: oklch(44.4% 0.011 73.639);
 	--border: oklch(87% 0 none);
 	--status-danger: oklch(56.137% 0.20803 10.555);
+	--danger: oklch(39.6% 0.141 25.723);
+	--danger-accent: oklch(97.1% 0.013 17.38);
 }
 
 .dark {
@@ -20,6 +25,12 @@
 	--surface: oklch(21% 0.006 285.885);
 	--primary: oklch(58.139% 0.23486 27.975);
 	--status-danger: oklch(63.019% 0.22968 16.17);
+	--border: oklch(37.1% 0 none);
+	--muted: oklch(44.4% 0.011 73.639);
+	--muted-foreground: oklch(92.3% 0.003 48.717);
+	--secondary-accent: oklch(37.1% 0 none);
+	--danger: oklch(63.7% 0.237 25.331);
+	/* --danger-accent: oklch(88.5% 0.062 18.334); */
 }
 
 @theme inline {
@@ -30,9 +41,12 @@
 	--color-border: var(--border);
 	--color-secondary: var(--secondary);
 	--color-secondary-accent: var(--secondary-accent);
+	--color-secondary-foreground: var(--secondary-foreground);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
 	--color-status-danger: var(--status-danger);
+	--color-danger: var(--danger);
+	--color-danger-accent: var(--danger-accent);
 }
 
 body,
@@ -53,7 +67,7 @@ html {
 	}
 
 	.btn-outline {
-		@apply border bg-secondary hover:bg-secondary-accent;
+		@apply border bg-secondary text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
 	}
 
 	.btn-default {
@@ -65,11 +79,11 @@ html {
 	}
 
 	.btn-icon--outline {
-		@apply border bg-secondary hover:bg-secondary-accent;
+		@apply border bg-secondary text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
 	}
 
 	.btn-icon--ghost {
-		@apply bg-secondary hover:bg-secondary-accent;
+		@apply text-secondary hover:bg-secondary-accent;
 	}
 
 	.btn-icon--default {
@@ -77,6 +91,6 @@ html {
 	}
 
 	.btn-icon--sm {
-		@apply size-6 [&_svg]:size-5;
+		@apply size-6 [&_svg]:size-4;
 	}
 }
