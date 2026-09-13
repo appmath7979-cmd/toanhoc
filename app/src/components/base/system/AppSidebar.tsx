@@ -3,8 +3,10 @@ import {
 	SidebarContent,
 	SidebarFooter,
 	SidebarGroup,
+	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuItem,
+	SidebarTitle,
 } from "@/components/core/sidebar/Sidebar";
 import { store } from "@/store/store";
 import NavItem from "@/types/nav.type";
@@ -59,6 +61,9 @@ export default function AppSidebar() {
 
 	return (
 		<Sidebar>
+			<SidebarHeader>
+				<SidebarTitle content="toán học" />
+			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup title="trang">
 					<SidebarMenu>

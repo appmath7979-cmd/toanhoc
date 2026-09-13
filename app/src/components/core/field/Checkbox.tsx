@@ -8,12 +8,11 @@ export default function Checkbox({
 	checked,
 	...props
 }: CheckboxProps) {
-	console.log(checked);
 	return (
 		<C.Root
 			{...props}
 			className={cn(
-				"bg-background size-3.5 rounded-xs flex justify-center items-center shadow-xs border hover:bg-white/5 transition-colors duration-75",
+				"checkbox",
 				checked && "bg-primary hover:bg-primary/80",
 				className,
 			)}
