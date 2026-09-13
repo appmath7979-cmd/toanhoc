@@ -67,7 +67,7 @@ export default function AppSidebar() {
 							const Icon = nav.icon;
 							return (
 								<SidebarMenuItem key={key} tooltip={nav.label} setChild>
-									<Link to={"/"}>
+									<Link to={nav.path}>
 										<Icon />
 										<span className="first-letter:uppercase">{nav.label}</span>
 									</Link>
