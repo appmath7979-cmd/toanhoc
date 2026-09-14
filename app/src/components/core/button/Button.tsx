@@ -5,6 +5,7 @@ import { ComponentProps } from "react";
 const variants = {
 	primary: "btn-primary",
 	outline: "btn-outline",
+	danger: "btn-danger",
 };
 
 const sizes = {

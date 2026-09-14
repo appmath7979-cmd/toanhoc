@@ -12,7 +12,7 @@ export default function AddCustomer() {
 			<Button
 				className={cn(
 					isMobile &&
-						"absolute btn-icon size-10 bottom-4 right-4 [&_svg]:size-8 bg-primary/20 text-primary hover:bg-primary/40",
+						"absolute btn-icon size-10 bottom-24 right-4 [&_svg]:size-8 bg-primary/20 text-primary hover:bg-primary/40",
 				)}
 				setChild
 			>
