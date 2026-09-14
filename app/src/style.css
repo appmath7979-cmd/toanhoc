@@ -82,19 +82,19 @@ html {
 	}
 
 	.btn-default {
-		@apply h-8 px-2 [&_svg]:size-5;
+		@apply h-8 px-2 [&>svg]:size-4;
 	}
 
 	.btn-icon {
-		@apply inline-flex justify-center items-center rounded-md transition-all duration-300;
+		@apply border inline-flex justify-center items-center rounded-md transition-all duration-300;
 	}
 
 	.btn-icon--outline {
-		@apply border-border text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
+		@apply border-border text-secondary-foreground hover:bg-secondary-accent;
 	}
 
 	.btn-icon--ghost {
-		@apply text-secondary hover:bg-secondary-accent;
+		@apply border-transparent!A text-secondary-foreground hover:bg-secondary-accent;
 	}
 
 	.btn-icon--default {

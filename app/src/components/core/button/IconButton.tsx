@@ -21,12 +21,20 @@ export function IconButton({
 	className,
 	variant = "outline",
 	size = "default",
+	disabled,
 	...props
 }: IconButtonProps & ComponentProps<"button">) {
 	return (
 		<button
 			type="button"
-			className={cn("btn-icon", variants[variant], sizes[size], className)}
+			disabled={disabled}
+			className={cn(
+				"btn-icon",
+				variants[variant],
+				sizes[size],
+				disabled && "opacity-40 pointer-events-none",
+				className,
+			)}
 			{...props}
 		>
 			{children}
