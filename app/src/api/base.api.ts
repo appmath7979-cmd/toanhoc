@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.BASE_URL || "";
+const baseURL = import.meta.env.VITE_BASE_URL || "";
 
 export const baseApi = axios.create({
 	baseURL,
@@ -8,6 +8,8 @@ export const baseApi = axios.create({
 	withCredentials: true,
 	headers: { "Content-Type": "application/json" },
 });
+
+baseApi.interceptors.response.use((response) => response);
 
 baseApi.interceptors.response.use(
 	(response) => response.data,

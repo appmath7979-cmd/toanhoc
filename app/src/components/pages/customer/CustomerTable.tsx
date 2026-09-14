@@ -28,7 +28,7 @@ export default function CustomerTable({
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data.length === 0 ? (
+				{data?.length === 0 ? (
 					<TableRow isHeader>
 						<TableCell colSpan={4}>
 							<div className="py-10 flex flex-col gap-2 justify-center items-center">
@@ -40,7 +40,7 @@ export default function CustomerTable({
 						</TableCell>
 					</TableRow>
 				) : (
-					data.map((item) => (
+					data?.map((item) => (
 						<TableRow key={item.id}>
 							<TableCell>
 								<Checkbox />

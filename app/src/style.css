@@ -94,7 +94,7 @@ html {
 	}
 
 	.btn-icon--ghost {
-		@apply border-transparent!A text-secondary-foreground hover:bg-secondary-accent;
+		@apply border-transparent! text-secondary-foreground hover:bg-secondary-accent;
 	}
 
 	.btn-icon--default {

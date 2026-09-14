@@ -4,9 +4,11 @@ import { IconButton } from "./core/button/IconButton";
 export default function Pagination({
 	page = 1,
 	length = 10,
+	onSetPage,
 }: {
 	page?: number;
 	length?: number;
+	onSetPage: (p: number) => void;
 }) {
 	if (page === 0) return null;
 
@@ -23,6 +25,7 @@ export default function Pagination({
 
 	const handleChangePage = (currPage: number | string) => {
 		if (typeof currPage === "string") return;
+		onSetPage(page);
 	};
 
 	const pages = pageGenerate(page, length);
