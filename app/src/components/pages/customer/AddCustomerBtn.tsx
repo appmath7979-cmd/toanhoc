@@ -5,7 +5,7 @@ import { cn } from "@/libs/utils/cn";
 import { PlusIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function AddCustomer() {
+export default function AddCustomerBtn() {
 	const isMobile = useMobile();
 	return (
 		<TooltipContent content={"Thêm khách hàng"}>

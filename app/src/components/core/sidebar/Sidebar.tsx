@@ -15,7 +15,8 @@ function Sidebar({ children }: { children: ReactNode }) {
 	return (
 		<aside
 			className={cn(
-				"h-dvh shadow-md bg-surface flex flex-col",
+				"sticky top-0 h-dvh shadow-md bg-surface flex flex-col shrink-0 transition-all",
+				!isMobile && (isExpand ? "w-64" : "w-16"),
 				isMobile && !isExpand && "w-0! overflow-hidden",
 				isExpand && "rounded-r-md",
 				isMobile && isExpand && "fixed left-0 w-80 z-9999",

@@ -4,11 +4,11 @@ import SidebarProvider from "@/components/core/sidebar/SidebarProvider";
 import AppSidebar from "@/components/base/system/AppSidebar";
 import Navbar from "@/components/base/Navbar";
 
-export function Root() {
+export default function Root() {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<main className="w-full">
+			<main className=" flex-1 h-dvh overflow-y-auto custom-scrollbar">
 				<Header />
 				<div className="p-4">
 					<Outlet />

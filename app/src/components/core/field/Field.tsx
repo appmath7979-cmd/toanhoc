@@ -13,7 +13,7 @@ export default function Field({
 	return (
 		<div
 			className={cn(
-				"flex gap-1",
+				"flex gap-2",
 				direction === "vertical" ? "flex-col" : "max-md:flex-col",
 				className,
 			)}

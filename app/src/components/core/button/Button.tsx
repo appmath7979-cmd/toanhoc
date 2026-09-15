@@ -10,6 +10,8 @@ const variants = {
 
 const sizes = {
 	default: "btn-default",
+	lg: "btn-large",
+	xl: "btn-xlarge",
 };
 
 interface ButtonProps {
