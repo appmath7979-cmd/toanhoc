@@ -5,14 +5,14 @@ import { cn } from "@/libs/utils/cn";
 import { PlusIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function AddCustomer() {
+export default function AddCustomerBtn() {
 	const isMobile = useMobile();
 	return (
 		<TooltipContent content={"Thêm khách hàng"}>
 			<Button
 				className={cn(
 					isMobile &&
-						"absolute btn-icon size-10 bottom-4 right-4 [&_svg]:size-8 bg-primary/20 text-primary hover:bg-primary/40",
+						"absolute btn-icon size-10 bottom-24 right-4 [&_svg]:size-8 bg-primary/20 text-primary hover:bg-primary/40",
 				)}
 				setChild
 			>

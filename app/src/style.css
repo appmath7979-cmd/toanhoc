@@ -6,6 +6,7 @@
 	--background: oklch(98.5% 0 none);
 	--foreground: oklch(14.5% 0 none);
 	--surface: oklch(96.7% 0.001 286.375);
+	--surface-accent: oklch(92% 0.004 286.32);
 	--primary: oklch(51.849% 0.20779 24.818);
 	--primary-foreground: oklch(97.788% 0.00409 55.493);
 	--secondary: oklch(98.4% 0.003 247.858);
@@ -23,12 +24,15 @@
 	--background: oklch(14.1% 0.005 285.823);
 	--foreground: oklch(98.5% 0 none);
 	--surface: oklch(21% 0.006 285.885);
+	--surface-accent: oklch(27.4% 0.006 286.033);
 	--primary: oklch(58.139% 0.23486 27.975);
 	--status-danger: oklch(63.019% 0.22968 16.17);
 	--border: oklch(37.1% 0 none);
 	--muted: oklch(44.4% 0.011 73.639);
 	--muted-foreground: oklch(92.3% 0.003 48.717);
-	--secondary-accent: oklch(37.1% 0 none);
+	--secondary-accent: oklch(28.908% 0.00003 271.152);
+	--secondary-foreground: oklch(98.4% 0.003 247.858);
+	--secondary: oklch(12.9% 0.042 264.695);
 	--danger: oklch(63.7% 0.237 25.331);
 	/* --danger-accent: oklch(88.5% 0.062 18.334); */
 }
@@ -48,12 +52,13 @@
 	--color-status-danger: var(--status-danger);
 	--color-danger: var(--danger);
 	--color-danger-accent: var(--danger-accent);
+	--color-surface-accent: var(--surface-accent);
 }
 
 body,
 #app,
 html {
-	@apply scroll-smooth bg-background text-foreground **:border-border;
+	@apply h-dvh overflow-hidden scroll-smooth bg-background text-foreground **:border-border;
 }
 
 @layer base {
@@ -62,9 +67,31 @@ html {
 	}
 }
 
+@layer utilities {
+	.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Màu nền của track scroll */
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Màu và bo tròn của thanh nắm kéo (thumb) */
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full transition-colors;
+  }
+
+  /* Hiệu ứng khi rê chuột vào thanh cuộn */
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/60;
+  }
+}
+
 @layer components {
 	.btn {
-		@apply inline-flex items-center gap-1.5 font-medium text-sm rounded-md transition-all duration-300;
+		@apply border border-transparent! inline-flex items-center gap-1.5 font-medium text-sm rounded-md transition-all duration-300;
 	}
 
 	.btn-primary {
@@ -72,23 +99,35 @@ html {
 	}
 
 	.btn-outline {
-		@apply border bg-secondary text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
+		@apply border-border! text-secondary-foreground hover:bg-secondary-accent;
+	}
+
+	.btn-danger {
+		@apply bg-danger text-danger-accent hover:bg-danger/80;
 	}
 
 	.btn-default {
-		@apply h-8 px-2 [&_svg]:size-5;
+		@apply h-8 px-2 [&>svg]:size-4;
+	}
+
+	.btn-large {
+		@apply h-10 px-2 [&>svg]:size-4.5
+	}
+
+	.btn-xlarge {
+		@apply h-11 px-2 [&>svg]:size-5
 	}
 
 	.btn-icon {
-		@apply inline-flex justify-center items-center rounded-md transition-all duration-300;
+		@apply border border-transparent! inline-flex justify-center items-center rounded-md transition-all duration-300;
 	}
 
 	.btn-icon--outline {
-		@apply border bg-secondary text-secondary-foreground hover:bg-secondary-accent dark:hover:bg-gray-200;
+		@apply border-border! text-secondary-foreground hover:bg-secondary-accent;
 	}
 
 	.btn-icon--ghost {
-		@apply text-secondary hover:bg-secondary-accent;
+		@apply border-transparent! text-secondary-foreground hover:bg-secondary-accent;
 	}
 
 	.btn-icon--default {
@@ -104,6 +143,10 @@ html {
 	}
 
 	.input {
-		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-surface focus:border-primary focus:ring-primary focus:ring-2 transition-all duration-300;
+		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-background focus:border-primary focus:ring-primary focus:ring-2 transition-all duration-300;
+	}
+
+	.radio-box {
+		@apply p-4 border rounded-md has-data-[state=checked]:bg-primary/10 has-data-[state=checked]:border-primary! w-full;
 	}
 }

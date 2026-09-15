@@ -1,5 +1,5 @@
 import Input from "@/components/core/field/Input";
-import AddCustomer from "./AddCustomer";
+import AddCustomerBtn from "./AddCustomerBtn";
 
 export default function Interactive() {
 	return (
@@ -8,7 +8,7 @@ export default function Interactive() {
 				placeholder="Tìm kiếm khách hàng theo tên/Số điện thoại..."
 				className="w-full max-w-xl"
 			/>
-			<AddCustomer />
+			<AddCustomerBtn />
 		</div>
 	);
 }

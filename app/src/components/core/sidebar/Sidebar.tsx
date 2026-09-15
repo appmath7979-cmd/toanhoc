@@ -15,7 +15,8 @@ function Sidebar({ children }: { children: ReactNode }) {
 	return (
 		<aside
 			className={cn(
-				"h-dvh shadow-md bg-surface flex flex-col",
+				"sticky top-0 h-dvh shadow-md bg-surface flex flex-col shrink-0 transition-all",
+				!isMobile && (isExpand ? "w-64" : "w-16"),
 				isMobile && !isExpand && "w-0! overflow-hidden",
 				isExpand && "rounded-r-md",
 				isMobile && isExpand && "fixed left-0 w-80 z-9999",
@@ -113,7 +114,7 @@ function SidebarMenuItem({
 					"hover:bg-secondary-accent text-xs [&>svg]:size-4.5",
 					isExpand
 						? "btn btn-default w-full"
-						: "btn-icon btn-icon--default size-10 [&>:not(svg)]:hidden",
+						: "btn-icon btn-icon--ghost btn-icon--default size-10 [&>:not(svg)]:hidden",
 					danger && "text-danger hover:bg-danger-accent",
 				)}
 				{...props}
