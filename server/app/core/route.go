@@ -1,38 +1,17 @@
 package core
 
-import "github.com/gin-gonic/gin"
+import "server/app/routes"
 
-type MethodType string
-
-const (
-	GET    MethodType = "GET"
-	POST   MethodType = "POST"
-	PUT    MethodType = "PUT"
-	PATCH  MethodType = "PATCH"
-	DELETE MethodType = "DELETE"
-)
-
-type Route struct {
-	Path    string
-	Method  MethodType
-	Handler gin.HandlerFunc
-}
-
-type RouteGroup struct {
-	Prefix string
-	Routes []Route
-}
-
-func (a *Application) RegistRoute(ver string, groups []RouteGroup) {
-	var currVer string
+func (a *Application) RegistRoute(ver string, groups []routes.RouteGroup) {
+	var currentVer string
 
 	if ver == "" {
-		currVer = "v1"
+		currentVer = "v1"
 	} else {
-		currVer = ver
+		currentVer = ver
 	}
 
-	api := a.Route.Group("api/" + currVer)
+	api := a.Route.Group("api/" + currentVer)
 
 	for _, g := range groups {
 		group := api.Group(g.Prefix)
