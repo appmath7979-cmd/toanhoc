@@ -1,6 +1,7 @@
-import { getCustomer } from "@/api/customer.api";
+import { createCustomer, getCustomer } from "@/api/customer.api";
+import { CreateCustomer } from "@/schema/customer.schema";
 import { GetCustomersReq } from "@/types/customer.type";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useGetCustomers = (req: GetCustomersReq) =>
 	useQuery({
@@ -10,4 +11,17 @@ const useGetCustomers = (req: GetCustomersReq) =>
 		staleTime: 5000,
 	});
 
-export { useGetCustomers };
+const useCreateCustomer = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: (req: CreateCustomer) => createCustomer(req),
+		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: ["customer"] })
+			console.log(data)
+		},
+		onError: err => { console.log(err) }
+	})
+}
+
+export { useGetCustomers, useCreateCustomer };

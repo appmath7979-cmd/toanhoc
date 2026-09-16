@@ -16,7 +16,7 @@ const betPairSchema = z.object({
 const SettingSchema = z.object({
 	dax_t: z.enum(["ONE", "HALF", "MANY"]),
 	xienMB: z.boolean(),
-	setting: z.array(betPairSchema),
+	bets: z.array(betPairSchema),
 });
 
 const CustomerSchema = z.object({
