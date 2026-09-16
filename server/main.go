@@ -3,8 +3,8 @@ package main
 import (
 	"server/app"
 	"server/app/core"
-	"server/app/handlers"
 	"server/app/models"
+	"server/app/routes"
 	"server/configs"
 
 	_ "server/docs"
@@ -29,9 +29,7 @@ func main() {
 	r := app.Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	app.RegistRoute("v1", []core.RouteGroup{
-		{Prefix: "customers", Routes: []core.Route{{Path: "", Method: "GET", Handler: handlers.CustomerHandlers(configs.DB).GetCustomerList}}},
-	})
+	app.RegistRoute("v1", routes.AppRoutes())
 
 	app.Run(port)
 }

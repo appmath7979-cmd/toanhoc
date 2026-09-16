@@ -3,9 +3,9 @@ package dtos
 import "time"
 
 type CreateCustomer struct {
-	FullName    string        `json:"full_name" validate:"requierd,min=2,max=100"`
-	PhoneNumber string        `json:"phone_number" validate:"required,regexp=^(03|05|07|08|09)\\d{8}$"`
-	Guest       bool          `json:"guest" validate:"requierd"`
+	FullName    string        `json:"full_name" validate:"required,min=2,max=100"`
+	PhoneNumber string        `json:"phone_number" validate:"required"`
+	Guest       bool          `json:"guest" validate:"required"`
 	Setting     CreateSetting `json:"setting" validate:"required"`
 }
 
