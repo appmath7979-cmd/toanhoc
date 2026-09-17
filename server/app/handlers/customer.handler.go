@@ -58,8 +58,45 @@ func (h *Handler) GetCustomers(ctx *gin.Context) {
 // @Param        request  body      dtos.CreateCustomer         true  "Thông tin khách hàng cần tạo"
 // @Success      201      {object}  dtos.CreateCustomerResponse  "Tạo thành công"
 // @Failure      400      {object}  dtos.CreateCustomerResponse  "Dữ liệu không hợp lệ"
+// @Failure      409      {object}  dtos.CreateCustomerResponse  "Số điện thoại đã tồn tại"
 // @Failure      500      {object}  dtos.CreateCustomerResponse  "Lỗi server"
 // @Router       /api/v1/customers [post]
 func (h *Handler) CreateCustomer(ctx *gin.Context) {
-	
+	var req dtos.CreateCustomer
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.CreateCustomerResponse{
+			Message: "Tạo khách hàng thất bại! Dữ liệu không hợp lệ!",
+			Success: false,
+			Status:  400,
+		})
+	}
+
+	status, err := h.Service.Create(req)
+
+	if err != nil {
+		if status == 409 {
+			ctx.JSON(http.StatusConflict, dtos.CreateCustomerResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  500,
+			})
+
+			return
+		} else {
+			ctx.JSON(http.StatusInternalServerError, dtos.CreateCustomerResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  500,
+		})
+		}
+
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, dtos.CreateCustomerResponse{
+		Message: "Tạo khách hàng thành công!",
+		Success: true,
+		Status:  status,
+	})
 }
