@@ -9,12 +9,15 @@ export const baseApi = axios.create({
 	headers: { "Content-Type": "application/json" },
 });
 
-baseApi.interceptors.response.use((response) => response);
-
 baseApi.interceptors.response.use(
-	(response) => response.data,
+	(response) => response,
 	(err) => {
-		const message = err.response?.data?.message || "Đã có lỗi xảy ra";
+		const message =
+			err.response?.data?.error ||
+			err.response?.data?.details ||
+			err.message ||
+			"Đã có lỗi xảy ra";
+
 		return Promise.reject(new Error(message));
 	},
 );

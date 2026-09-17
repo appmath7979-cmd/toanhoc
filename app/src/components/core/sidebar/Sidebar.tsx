@@ -113,7 +113,7 @@ function SidebarMenuItem({
 				className={cn(
 					"hover:bg-secondary-accent text-xs [&>svg]:size-4.5",
 					isExpand
-						? "btn btn-default w-full"
+						? "btn btn-ghost btn-default w-full"
 						: "btn-icon btn-icon--ghost btn-icon--default size-10 [&>:not(svg)]:hidden",
 					danger && "text-danger hover:bg-danger-accent",
 				)}

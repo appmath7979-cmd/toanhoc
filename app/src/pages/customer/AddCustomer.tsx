@@ -7,12 +7,12 @@ import { createCustomerFormOpts } from "@/libs/helper/create-customer-form";
 import { Loader2Icon, SaveIcon } from "lucide-react";
 
 export default function AddCustomer() {
-	const { mutateAsync } = useCreateCustomer()
+	const { mutateAsync } = useCreateCustomer();
 	const form = useAppForm({
 		...createCustomerFormOpts,
 		onSubmit: async ({ value }) => {
-			console.log(value)
-			await mutateAsync(value)
+			console.log(value);
+			await mutateAsync(value);
 		},
 	});
 
@@ -39,7 +39,7 @@ export default function AddCustomer() {
 							size="xl"
 							type="submit"
 							className="w-full justify-center"
-							disabled={!canSubmit}
+							disabled={!canSubmit || isSubmitting}
 						>
 							{isSubmitting ? (
 								<>

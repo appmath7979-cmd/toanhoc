@@ -32,7 +32,7 @@ export function IconButton({
 				"btn-icon",
 				variants[variant],
 				sizes[size],
-				disabled && "opacity-40 pointer-events-none",
+				disabled && "btn-disable",
 				className,
 			)}
 			{...props}

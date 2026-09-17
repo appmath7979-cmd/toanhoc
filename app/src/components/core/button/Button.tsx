@@ -5,6 +5,7 @@ import { ComponentProps } from "react";
 const variants = {
 	primary: "btn-primary",
 	outline: "btn-outline",
+	ghost: "btn-ghost",
 	danger: "btn-danger",
 };
 
@@ -25,6 +26,7 @@ export function Button({
 	className,
 	variant = "primary",
 	size = "default",
+	disabled,
 	setChild,
 	...props
 }: ButtonProps & ComponentProps<"button">) {
@@ -32,7 +34,14 @@ export function Button({
 
 	return (
 		<Comp
-			className={cn("btn", variants[variant], sizes[size], className)}
+			disabled={disabled}
+			className={cn(
+				"btn",
+				variants[variant],
+				sizes[size],
+				disabled && "btn-disable",
+				className,
+			)}
 			{...props}
 		>
 			{children}

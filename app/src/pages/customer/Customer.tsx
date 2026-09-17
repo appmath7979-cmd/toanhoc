@@ -1,4 +1,5 @@
 import { getCustomer } from "@/api/customer.api";
+import Box from "@/components/core/Box";
 import CustomerTable from "@/components/pages/customer/CustomerTable";
 import CustomerTableActions from "@/components/pages/customer/CustomerTableActions";
 import Interactive from "@/components/pages/customer/Interactive";
@@ -8,25 +9,25 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export default function Customer() {
-	const queryClient = useQueryClient();
 	const [page, setPage] = useState<number>(1);
-	const { data, isLoading, isPlaceholderData } = useGetCustomers({ page: 1 });
+	const queryClient = useQueryClient();
+
+	const { data, isLoading, isPlaceholderData } = useGetCustomers({ page });
 
 	useEffect(() => {
 		if (!isPlaceholderData)
 			queryClient.query({
-				queryKey: ["customers", "list", page + 1],
+				queryKey: ["customer", "list", page + 1],
 				queryFn: () => getCustomer({ page }),
 				staleTime: 5000,
 			});
 	}, []);
 
 	return (
-		<div className="space-y-4">
+		<Box>
 			<Interactive />
 			<hr />
 			<div>
-				<CustomerTableActions />
 				{isLoading ? (
 					<>Loading...</>
 				) : (
@@ -40,6 +41,6 @@ export default function Customer() {
 					</>
 				)}
 			</div>
-		</div>
+		</Box>
 	);
 }

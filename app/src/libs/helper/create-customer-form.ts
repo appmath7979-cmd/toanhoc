@@ -9,7 +9,7 @@ export const createCustomerFormOpts = formOptions({
 		setting: {
 			dax_t: "HALF",
 			xienMB: false,
-			setting: [
+			bets: [
 				{
 					type: "b2",
 					percent: false,
