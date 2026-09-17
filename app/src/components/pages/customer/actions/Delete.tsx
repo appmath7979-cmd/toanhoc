@@ -5,16 +5,19 @@ import { useAppStore } from "@lavaz/store";
 import { TrashIcon } from "lucide-react";
 
 export default function Delete({ isMobile }: { isMobile: boolean }) {
-  const [selected] = useAppStore(store.customer, (s) => s.selected);
+	const [selected] = useAppStore(store.customer, (s) => s.selected);
 
-  if (isMobile) return <IconButton variant={"ghost"} disabled={selected.length === 0}>
-    <TrashIcon />
-  </IconButton>
+	if (isMobile)
+		return (
+			<IconButton variant={"ghost"} disabled={selected.length === 0}>
+				<TrashIcon />
+			</IconButton>
+		);
 
-  return (
-    <Button variant={"danger"} disabled={selected.length === 0}>
-      <TrashIcon />
-      <span>Xóa</span>
-    </Button>
-  );
+	return (
+		<Button variant={"danger"} disabled={selected.length === 0}>
+			<TrashIcon />
+			<span>Xóa</span>
+		</Button>
+	);
 }
