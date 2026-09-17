@@ -1,27 +1,21 @@
-import { Button } from "@/components/core/button/Button";
-import {
-	ArrowDownUpIcon,
-	SquareMousePointerIcon,
-	TrashIcon,
-} from "lucide-react";
+import { useMobile } from "@/hooks/use-mobile";
+import SelectAll from "./actions/SelectAll";
+import { memo } from "react";
+import Delete from "./actions/Delete";
+import Sort from "./actions/Sort";
 
-export default function CustomerTableActions() {
+const CustomerTableActions = memo(() => {
+	const isMobile = useMobile(1028);
+	console.log("re-render");
 	return (
 		<div className="pb-4 flex justify-between items-center">
+			<SelectAll isMobile={isMobile} />
 			<div className="flex items-center gap-1">
-				<Button variant="outline">
-					<SquareMousePointerIcon />
-					<span>Chọn tất cả</span>
-				</Button>
-				<Button variant="outline">
-					<ArrowDownUpIcon />
-					<span>Sắp xếp</span>
-				</Button>
+				<Sort isMobile={isMobile} />
+				<Delete isMobile={isMobile} />
 			</div>
-			<Button variant="danger">
-				<TrashIcon />
-				<span>Xóa</span>
-			</Button>
 		</div>
 	);
-}
+});
+
+export default CustomerTableActions;

@@ -6,6 +6,7 @@ import { CheckboxProps } from "radix-ui/checkbox";
 export default function Checkbox({
 	className,
 	checked,
+	onCheckedChange,
 	...props
 }: CheckboxProps) {
 	return (
@@ -16,9 +17,13 @@ export default function Checkbox({
 				checked && "bg-primary hover:bg-primary/80",
 				className,
 			)}
+			onCheckedChange={(val) =>
+				onCheckedChange === undefined ? false : onCheckedChange(val)
+			}
 		>
-			<C.Indicator className="">
-				<CheckIcon className="size-2.5 text-foreground" />
+			<CheckIcon className="size-2.5 text-background" />
+			<C.Indicator>
+				<CheckIcon className="size-2.5 text-background" />
 			</C.Indicator>
 		</C.Root>
 	);

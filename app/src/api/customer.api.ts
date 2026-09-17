@@ -3,7 +3,7 @@ import { baseApi } from "./base.api";
 import { CreateCustomer } from "@/schema/customer.schema";
 import { BaseApi } from "@/types/api.type";
 
-const pathCustomer = "/customers"
+const pathCustomer = "/customers";
 
 async function getCustomer({
 	page,
@@ -24,9 +24,9 @@ async function getCustomer({
 }
 
 async function createCustomer(data: CreateCustomer): Promise<BaseApi> {
-	const res = await baseApi.post(pathCustomer, data)
-	const dt = res.data
-	return dt
+	const res = await baseApi.post(pathCustomer, data);
+	const dt = res.data;
+	return dt;
 }
 
 export { getCustomer, createCustomer };

@@ -1,12 +1,10 @@
 import { Button } from "@/components/core/button/Button";
 import { TooltipContent } from "@/components/core/tootltip/Tooltip";
-import { useMobile } from "@/hooks/use-mobile";
 import { cn } from "@/libs/utils/cn";
 import { PlusIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function AddCustomerBtn() {
-	const isMobile = useMobile();
+export default function AddCustomerBtn({ isMobile }: { isMobile: boolean }) {
 	return (
 		<TooltipContent content={"Thêm khách hàng"}>
 			<Button

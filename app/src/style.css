@@ -69,24 +69,24 @@ html {
 
 @layer utilities {
 	.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+		width: 6px;
+		height: 6px;
+	}
 
-  /* Màu nền của track scroll */
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
+	/* Màu nền của track scroll */
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
 
-  /* Màu và bo tròn của thanh nắm kéo (thumb) */
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full transition-colors;
-  }
+	/* Màu và bo tròn của thanh nắm kéo (thumb) */
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-muted-foreground/30 rounded-full transition-colors;
+	}
 
-  /* Hiệu ứng khi rê chuột vào thanh cuộn */
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/60;
-  }
+	/* Hiệu ứng khi rê chuột vào thanh cuộn */
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-muted-foreground/60;
+	}
 }
 
 @layer components {
@@ -102,6 +102,14 @@ html {
 		@apply border-border! text-secondary-foreground hover:bg-secondary-accent;
 	}
 
+	.btn-disable {
+		@apply opacity-40 pointer-events-none;
+	}
+
+	.btn-ghost {
+		@apply text-secondary-foreground hover:bg-secondary-accent;
+	}
+
 	.btn-danger {
 		@apply bg-danger text-danger-accent hover:bg-danger/80;
 	}
@@ -111,11 +119,11 @@ html {
 	}
 
 	.btn-large {
-		@apply h-10 px-2 [&>svg]:size-4.5
+		@apply h-10 px-2 [&>svg]:size-4.5;
 	}
 
 	.btn-xlarge {
-		@apply h-11 px-2 [&>svg]:size-5
+		@apply h-11 px-2 [&>svg]:size-5;
 	}
 
 	.btn-icon {

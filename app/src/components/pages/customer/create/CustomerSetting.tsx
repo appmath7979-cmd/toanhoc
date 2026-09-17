@@ -46,10 +46,10 @@ const CustomerSetting = withForm({
 							</Radio>
 						)}
 					</form.Field>
-					<form.Field name="setting.setting">
+					<form.Field name="setting.bets">
 						{(field) => (
 							<div className="space-y-6">
-								{field.state.value.map((item, index) => (
+								{field.state.value?.map((item, index) => (
 									<div
 										key={index}
 										className="border rounded-xl p-5 bg-surface space-y-4 shadow-sm"
@@ -64,7 +64,7 @@ const CustomerSetting = withForm({
 											</span>
 
 											{/* Switch phần trăm */}
-											<form.Field name={`setting.setting[${index}].percent`}>
+											<form.Field name={`setting.bets[${index}].percent`}>
 												{(subField) => (
 													<div className="flex items-center gap-2">
 														<span className="text-xs">Tỉ lệ</span>
@@ -89,7 +89,7 @@ const CustomerSetting = withForm({
 
 													{/* Input C của miền này */}
 													<form.Field
-														name={`setting.setting[${index}].c.${region}`}
+														name={`setting.bets[${index}].c.${region}`}
 													>
 														{(subField) => (
 															<div className="flex flex-col gap-1">
@@ -110,7 +110,7 @@ const CustomerSetting = withForm({
 
 													{/* Input T của miền này */}
 													<form.Field
-														name={`setting.setting[${index}].t.${region}`}
+														name={`setting.bets[${index}].t.${region}`}
 													>
 														{(subField) => (
 															<div className="flex flex-col gap-1">
