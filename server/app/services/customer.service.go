@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"server/app/dtos"
 	"server/app/models"
 
@@ -35,7 +36,19 @@ func (s *Service) GetMany() ([]dtos.CustomerItem, error) {
 	return results, nil
 }
 
-func (s *Service) Create(req dtos.CreateCustomer) (bool, error) {
+func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
+	var existingCustomer models.Customer
+
+	err := s.db.Where("phone_number = ?", req.PhoneNumber).First(&existingCustomer).Error
+
+	if err == nil {
+		return 409, errors.New("Số điện thoại đã tồn tại!")
+	}
+
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return 500, err
+	}
+
 	var bets []models.BetPair
 
 	for _, b := range req.Setting.Bets {
@@ -61,8 +74,8 @@ func (s *Service) Create(req dtos.CreateCustomer) (bool, error) {
 	}
 
 	if err := s.db.Create(&customer).Error; err != nil {
-		return false, err
+		return 500, err
 	}
 
-	return true, nil
+	return 201, nil
 }
