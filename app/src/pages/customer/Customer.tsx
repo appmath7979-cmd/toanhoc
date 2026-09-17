@@ -1,7 +1,6 @@
 import { getCustomer } from "@/api/customer.api";
 import Box from "@/components/core/Box";
 import CustomerTable from "@/components/pages/customer/CustomerTable";
-import CustomerTableActions from "@/components/pages/customer/CustomerTableActions";
 import Interactive from "@/components/pages/customer/Interactive";
 import Pagination from "@/components/Pagination";
 import { useGetCustomers } from "@/hooks/query/useCustomerQuery";
