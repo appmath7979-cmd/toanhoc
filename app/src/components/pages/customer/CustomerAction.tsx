@@ -8,6 +8,8 @@ import {
 } from "@/components/core/Dropdown";
 import { Tooltip, TooltipContent } from "@/components/core/tootltip/Tooltip";
 import { useMobile } from "@/hooks/use-mobile";
+import { store } from "@/store/store";
+import { useAppStore } from "@lavaz/store";
 import {
 	CopyIcon,
 	EditIcon,
@@ -15,8 +17,15 @@ import {
 	TrashIcon,
 } from "lucide-react";
 
-export default function CustomerAction() {
+export default function CustomerAction({ id }: { id: string }) {
 	const isMobile = useMobile();
+	const [, { copy }] = useAppStore(store.copyCustomer, (s) => s);
+
+	const handleCopy = () => {};
+	const handleEdit = () => {};
+	const handleDelete = () => {};
+
+	console.log(copy, id);
 
 	if (isMobile)
 		return (
@@ -27,19 +36,19 @@ export default function CustomerAction() {
 					</IconButton>
 				</DropdownTrigger>
 				<DropdownBox>
-					<DropdownItem asChild>
+					<DropdownItem onClick={handleCopy} asChild>
 						<Button variant="ghost" className="w-full">
 							<CopyIcon />
 							<span>Sao chép</span>
 						</Button>
 					</DropdownItem>
-					<DropdownItem asChild>
+					<DropdownItem onClick={handleEdit} asChild>
 						<Button variant="ghost" className="w-full">
 							<EditIcon />
 							<span>Sửa thông tin</span>
 						</Button>
 					</DropdownItem>
-					<DropdownItem asChild>
+					<DropdownItem onClick={handleDelete} asChild>
 						<Button variant="ghost" className="w-full">
 							<TrashIcon />
 							<span>Xóa khách hàng</span>
