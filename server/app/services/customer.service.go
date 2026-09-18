@@ -4,21 +4,68 @@ import (
 	"errors"
 	"server/app/dtos"
 	"server/app/models"
+	"strconv"
 
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
+type Pagination struct {
+	Page   int
+	Search string
+	Acitve string
+	Guest  string
+	Sort   string
+}
+
 func CustomerService(db *gorm.DB) *Service {
 	return &Service{db: db}
 }
 
-func (s *Service) GetMany() ([]dtos.CustomerItem, error) {
+func (s *Service) GetMany(pagination *Pagination) ([]dtos.CustomerItem, error) {
 	var customers []models.Customer
 
-	if err := s.db.Find(&customers).Error; err != nil {
-		return nil, err
+	limit := 10
+	offset := (pagination.Page - 1) * limit
+
+	query := s.db.Model(&customers)
+
+	if pagination.Search != "" {
+		if pagination.Acitve != "" && pagination.Guest != "" {}
+		
+		query = query.Where(
+			"full_name ILIKE ? OR phone_number ILIKE ?",
+			"%"+pagination.Search+"%",
+			"%"+pagination.Search+"%",
+		)
 	}
+
+	if pagination.Acitve != "" {
+		if active, err := strconv.ParseBool(pagination.Acitve); err == nil {
+			query = query.Where("active = ?", active)
+		}
+	}
+
+	if pagination.Guest != "" {
+		if guest, err := strconv.ParseBool(pagination.Guest); err == nil {
+			query = query.Where("guest = ?", guest)
+		}
+	}
+
+	switch pagination.Sort {
+	case "latest":
+		query = query.Order("created_at DESC")
+	case "oldest":
+		query = query.Order("created_at ASC")
+	case "name_ASC":
+		query = query.Order("fullname ASC")
+	case "name_DESC":
+		query = query.Order("fullname DESC")
+	default:
+		query = query.Order("created_at DESC")
+	}
+
+	query.Offset(offset).Limit(limit).Find(&customers)
 
 	var results []dtos.CustomerItem
 	for _, c := range customers {
