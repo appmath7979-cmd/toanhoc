@@ -2,31 +2,29 @@ import Checkbox from "@/components/core/field/Checkbox";
 import { TableCell, TableRow } from "@/components/core/Table";
 import { CustomerListItemRes } from "@/types/customer.type";
 import CustomerAction from "./CustomerAction";
-import { useState } from "react";
-import { CheckedState } from "radix-ui/checkbox";
 import { useAppStore } from "@lavaz/store";
 import { store } from "@/store/store";
 
 export default function CustomerTableItem({
 	item,
-	isSelectAll,
 }: {
 	item: CustomerListItemRes;
-	isSelectAll: boolean;
 }) {
-	const [, { setSelected }] = useAppStore(store.customer, (s) => s);
-	const [select, setIsSelect] = useState<CheckedState>(false);
+	const [selected, { setSelected }] = useAppStore(store.customer, s => s.selected)
 	const { full_name, id } = item;
 
-	console.log(isSelectAll);
+	const handleSelect = () => {
+		setSelected(id)
+	}
+
+	const isCheck = selected.includes(id)
 
 	return (
 		<TableRow>
 			<TableCell>
 				<Checkbox
-					checked={isSelectAll || select}
-					onClick={() => setSelected(id)}
-					onCheckedChange={setIsSelect}
+					checked={isCheck}
+					onCheckedChange={handleSelect}
 				/>
 			</TableCell>
 			<TableCell>{full_name}</TableCell>

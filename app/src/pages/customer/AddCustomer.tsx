@@ -40,6 +40,7 @@ export default function AddCustomer() {
 							type="submit"
 							className="w-full justify-center"
 							disabled={!canSubmit || isSubmitting}
+							loading={isSubmitting}
 						>
 							{isSubmitting ? (
 								<>
