@@ -24,7 +24,7 @@ function TooltipContent({
 				{!content ? null : (
 					<T.Content
 						side={side}
-						className="text-xs p-2 bg-background shadow-md rounded-md m-0.5 transition-all duration-300"
+						className="text-xs p-2 bg-background shadow-md rounded-md m-0.5 transition-all duration-300 z-9999"
 					>
 						{content}
 						<T.Arrow className="fill-background" />

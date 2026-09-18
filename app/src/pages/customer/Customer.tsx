@@ -21,7 +21,7 @@ export default function Customer() {
 
 	useEffect(() => {
 		const hasMore = page < (data?.total_pages ?? 0);
-		console.log(data?.total_pages)
+		console.log(data?.total_pages);
 
 		if (!isPlaceholderData && hasMore)
 			queryClient.prefetchQuery({
@@ -36,11 +36,9 @@ export default function Customer() {
 	if (!search && data?.data?.length === 0) return <CustomerEmpty />;
 
 	const handleSearch = (newSeach: string) => {
-		setSearch(newSeach)
-		setPage(1)
-	}
-
-
+		setSearch(newSeach);
+		setPage(1);
+	};
 
 	return (
 		<Box>

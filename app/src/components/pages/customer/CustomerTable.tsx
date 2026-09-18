@@ -20,29 +20,27 @@ export default function CustomerTable({
 }: {
 	data: CustomerListItemRes[];
 }) {
-	const [
-		{ isSelectAll, selected },
-		{ setIsSelectAll, setSelectAll },
-	] = useAppStore(store.customer, (s) => s);
+	const [{ isSelectAll, selected }, { setIsSelectAll, setSelectAll }] =
+		useAppStore(store.customer, (s) => s);
 
 	useEffect(() => {
 		if (selected.length === data.length && data.length > 0)
-			setIsSelectAll(true)
-		else setIsSelectAll(false)
-	}, [data, selected])
+			setIsSelectAll(true);
+		else setIsSelectAll(false);
+	}, [data, selected]);
 
 	const handleSelectAll = () => {
 		if (!isSelectAll) {
-			const ids = data.map(item => item.id)
-			setSelectAll(ids)
-		} else setSelectAll([])
-		setIsSelectAll(!isSelectAll)
-	}
+			const ids = data.map((item) => item.id);
+			setSelectAll(ids);
+		} else setSelectAll([]);
+		setIsSelectAll(!isSelectAll);
+	};
 
 	const ids = useMemo((): string[] => {
-		if (!data) return []
-		return data.map(item => item.id)
-	}, [])
+		if (!data) return [];
+		return data.map((item) => item.id);
+	}, []);
 
 	return (
 		<>
@@ -73,12 +71,7 @@ export default function CustomerTable({
 							</TableCell>
 						</TableRow>
 					) : (
-						data?.map((item) => (
-							<CustomerTableItem
-								key={item.id}
-								item={item}
-							/>
-						))
+						data?.map((item) => <CustomerTableItem key={item.id} item={item} />)
 					)}
 				</TableBody>
 			</Table>
