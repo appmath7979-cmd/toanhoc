@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -23,17 +24,34 @@ func CustomerHandler(db *gorm.DB) *Handler {
 // @Failure      500  {object}  dtos.CustomerListResponse  "Lỗi server"
 // @Router       /api/v1/customers [get]
 func (h *Handler) GetCustomers(ctx *gin.Context) {
-	customers, err := h.Service.GetMany()
+	pageStr := ctx.DefaultQuery("page", "1")
+	search := ctx.DefaultQuery("search", "")
+	sort := ctx.DefaultQuery("sort", "latest")
+	active := ctx.Query("active")
+	guest := ctx.Query("guest")
+
+	page, error := strconv.Atoi(pageStr)
+	if error != nil || page < 1 {
+		page = 1
+	}
+
+	customers, totalItem, totalPage, err := h.Service.GetMany(&services.Pagination{
+		Page:   page,
+		Search: search,
+		Sort:   sort,
+		Acitve: active,
+		Guest:  guest,
+	})
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.CustomerListResponse{
 			Message:   err.Error(),
 			Success:   false,
 			Status:    500,
-			Data:      nil,
+			Data:      []dtos.CustomerItem{},
 			Page:      0,
-			TotalItem: 0,
-			TotalPage: 0,
+			TotalItem: int(totalItem),
+			TotalPage: int(totalPage),
 		})
 		return
 	}
@@ -43,9 +61,9 @@ func (h *Handler) GetCustomers(ctx *gin.Context) {
 		Success:   true,
 		Status:    200,
 		Data:      customers,
-		Page:      0,
-		TotalItem: 0,
-		TotalPage: 0,
+		Page:      page,
+		TotalItem: int(totalItem),
+		TotalPage: int(totalPage),
 	})
 }
 
@@ -85,10 +103,10 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 			return
 		} else {
 			ctx.JSON(http.StatusInternalServerError, dtos.CreateCustomerResponse{
-			Message: err.Error(),
-			Success: false,
-			Status:  500,
-		})
+				Message: err.Error(),
+				Success: false,
+				Status:  500,
+			})
 		}
 
 		return
