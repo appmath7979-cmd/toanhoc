@@ -18,7 +18,6 @@ export const customerBox = createBox(initialState, (set) => ({
 			if (existingId)
 				selected = prev.selected.filter((item) => item !== existingId);
 			else selected = [...prev.selected, id];
-
 			return { ...prev, selected };
 		}),
 	setToggleSelectAll: () =>

@@ -13,7 +13,7 @@ import CustomerTableItem from "./CustomerTableItem";
 import CustomerTableActions from "./CustomerTableActions";
 import { useAppStore } from "@lavaz/store";
 import { store } from "@/store/store";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function CustomerTable({
 	data,
@@ -22,33 +22,38 @@ export default function CustomerTable({
 }) {
 	const [
 		{ isSelectAll, selected },
-		{ setToggleSelectAll, setSelectAll, setIsSelectAll },
+		{ setIsSelectAll, setSelectAll },
 	] = useAppStore(store.customer, (s) => s);
 
 	useEffect(() => {
-		if (isSelectAll && data.length > 0) {
-			const ids = data.map((item) => item.id);
-			setSelectAll(ids);
-		} else setSelectAll([]);
-	}, [isSelectAll, data]);
-
-	useEffect(() => {
 		if (selected.length === data.length && data.length > 0)
-			setIsSelectAll(true);
-		else setIsSelectAll(false);
-	}, [selected, data]);
+			setIsSelectAll(true)
+		else setIsSelectAll(false)
+	}, [data, selected])
 
-	console.log("table render");
+	const handleSelectAll = () => {
+		if (!isSelectAll) {
+			const ids = data.map(item => item.id)
+			setSelectAll(ids)
+		} else setSelectAll([])
+		setIsSelectAll(!isSelectAll)
+	}
+
+	const ids = useMemo((): string[] => {
+		if (!data) return []
+		return data.map(item => item.id)
+	}, [])
+
 	return (
 		<>
-			<CustomerTableActions />
+			<CustomerTableActions ids={ids} />
 			<Table>
 				<TableHeader>
 					<TableRow isHeader={true}>
 						<TableHead className="w-10">
 							<Checkbox
 								checked={isSelectAll}
-								onCheckedChange={setToggleSelectAll}
+								onCheckedChange={handleSelectAll}
 							/>
 						</TableHead>
 						<TableHead>Tên khách hàng</TableHead>
@@ -72,7 +77,6 @@ export default function CustomerTable({
 							<CustomerTableItem
 								key={item.id}
 								item={item}
-								isSelectAll={selected.some((s) => s === item.id)}
 							/>
 						))
 					)}

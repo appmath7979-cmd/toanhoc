@@ -40,6 +40,8 @@ export default function Customer() {
 		setPage(1)
 	}
 
+
+
 	return (
 		<Box>
 			<Interactive search={search} onSearch={handleSearch} />

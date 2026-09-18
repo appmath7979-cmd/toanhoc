@@ -4,12 +4,12 @@ import { memo } from "react";
 import Delete from "./actions/Delete";
 import Sort from "./actions/Sort";
 
-const CustomerTableActions = memo(() => {
+const CustomerTableActions = memo(({ ids }: { ids: string[] }) => {
 	const isMobile = useMobile(1028);
-	console.log("re-render");
+
 	return (
 		<div className="pb-4 flex justify-between items-center">
-			<SelectAll isMobile={isMobile} />
+			<SelectAll isMobile={isMobile} ids={ids} />
 			<div className="flex items-center gap-1">
 				<Sort isMobile={isMobile} />
 				<Delete isMobile={isMobile} />
