@@ -1,6 +1,7 @@
 import { cn } from "@/libs/utils/cn";
 import { Slot } from "radix-ui";
 import { ComponentProps } from "react";
+import Spinner from "../Spinner";
 
 const variants = {
 	primary: "btn-primary",
@@ -19,6 +20,7 @@ interface ButtonProps {
 	setChild?: boolean;
 	variant?: keyof typeof variants;
 	size?: keyof typeof sizes;
+	loading?: boolean;
 }
 
 export function Button({
@@ -27,6 +29,7 @@ export function Button({
 	variant = "primary",
 	size = "default",
 	disabled,
+	loading = false,
 	setChild,
 	...props
 }: ButtonProps & ComponentProps<"button">) {
@@ -40,11 +43,18 @@ export function Button({
 				variants[variant],
 				sizes[size],
 				disabled && "btn-disable",
+				loading && "btn-disable [&_svg:not([aria-label=loading-icon])]:hidden",
 				className,
 			)}
 			{...props}
 		>
-			{children}
+			{loading ? (
+				<>
+					<Spinner /> {children}
+				</>
+			) : (
+				children
+			)}
 		</Comp>
 	);
 }

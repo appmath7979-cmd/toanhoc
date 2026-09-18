@@ -10,7 +10,7 @@ import {
 
 const useGetCustomers = (req: GetCustomersReq) =>
 	useQuery({
-		queryKey: ["customer", "list", req.page],
+		queryKey: ["customer", "list", req],
 		queryFn: () => getCustomer(req),
 		placeholderData: keepPreviousData,
 		staleTime: 5000,

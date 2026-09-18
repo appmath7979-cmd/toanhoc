@@ -10,7 +10,7 @@ export default function Pagination({
 	length?: number;
 	onSetPage: (p: number) => void;
 }) {
-	if (page === 0) return null;
+	if (page === 0 || length <= 1) return null;
 
 	const pageGenerate = (current: number, total: number) => {
 		if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);

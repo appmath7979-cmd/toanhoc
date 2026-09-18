@@ -11,40 +11,46 @@ import Pending from "../status/Pending";
 
 export default function Customer() {
 	const [page, setPage] = useState<number>(1);
+	const [search, setSearch] = useState<string>("");
 	const queryClient = useQueryClient();
 
-	const { data, isLoading, isPlaceholderData } = useGetCustomers({ page });
+	const { data, isLoading, isPlaceholderData } = useGetCustomers({
+		page,
+		search,
+	});
 
 	useEffect(() => {
-		if (!isPlaceholderData)
-			queryClient.query({
+		const hasMore = page < (data?.total_pages ?? 0);
+		console.log(data?.total_pages)
+
+		if (!isPlaceholderData && hasMore)
+			queryClient.prefetchQuery({
 				queryKey: ["customer", "list", page + 1],
-				queryFn: () => getCustomer({ page }),
+				queryFn: () => getCustomer({ page, search }),
 				staleTime: 5000,
 			});
-	}, []);
+	}, [data, isPlaceholderData, page, search, queryClient]);
 
-	if (!data) return null;
+	if (isLoading) return <Pending />;
+	if (!search && !data) return null;
+	if (!search && data?.data?.length === 0) return <CustomerEmpty />;
 
-	if (data.data.length === 0) return <CustomerEmpty />;
+	const handleSearch = (newSeach: string) => {
+		setSearch(newSeach)
+		setPage(1)
+	}
 
 	return (
 		<Box>
-			<Interactive />
+			<Interactive search={search} onSearch={handleSearch} />
 			<hr />
-			<div>
-				{isLoading ? (
-					<Pending />
-				) : (
-					<>
-						<CustomerTable data={data?.data ?? []} />
-						<Pagination
-							page={data?.page ?? 0}
-							length={data?.total_pages ?? 0}
-							onSetPage={setPage}
-						/>
-					</>
-				)}
+			<div className="space-y-6">
+				<CustomerTable data={data?.data ?? []} />
+				<Pagination
+					page={data?.page ?? 0}
+					length={data?.total_pages ?? 0}
+					onSetPage={setPage}
+				/>
 			</div>
 		</Box>
 	);

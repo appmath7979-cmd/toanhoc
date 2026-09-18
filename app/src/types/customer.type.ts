@@ -4,6 +4,7 @@ interface GetCustomersReq {
 	page: number;
 	search?: string;
 	active?: "true" | "false";
+	guest?: "true" | "false";
 	sort?: "latest" | "oldest";
 }
 
