@@ -2,23 +2,74 @@ package services
 
 import (
 	"errors"
+	"math"
 	"server/app/dtos"
 	"server/app/models"
+	"server/app/utils"
+	"strconv"
 
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
+type Pagination struct {
+	Page   int
+	Search string
+	Acitve string
+	Guest  string
+	Sort   string
+}
+
 func CustomerService(db *gorm.DB) *Service {
 	return &Service{db: db}
 }
 
-func (s *Service) GetMany() ([]dtos.CustomerItem, error) {
+func (s *Service) GetMany(pagination *Pagination) ([]dtos.CustomerItem, int64, int64, error) {
 	var customers []models.Customer
 
-	if err := s.db.Find(&customers).Error; err != nil {
-		return nil, err
+	limit := 10
+	offset := (pagination.Page - 1) * limit
+
+	var total int64
+
+	query := s.db.Model(&customers)
+
+	if pagination.Search != "" {
+		cleanSearch := utils.RemoveAccent(pagination.Search)
+		searchPattern := "%" + cleanSearch + "%"
+		query = query.Where(
+			"unaccent(full_name) ILIKE ? OR unaccent(phone_number) ILIKE ?",
+			searchPattern,
+			searchPattern,
+		)
 	}
+
+	if pagination.Acitve != "" {
+		if active, err := strconv.ParseBool(pagination.Acitve); err == nil {
+			query = query.Where("active = ?", active)
+		}
+	}
+
+	if pagination.Guest != "" {
+		if guest, err := strconv.ParseBool(pagination.Guest); err == nil {
+			query = query.Where("guest = ?", guest)
+		}
+	}
+
+	switch pagination.Sort {
+	case "latest":
+		query = query.Order("created_at DESC")
+	case "oldest":
+		query = query.Order("created_at ASC")
+	case "name_ASC":
+		query = query.Order("full_name ASC")
+	case "name_DESC":
+		query = query.Order("full_name DESC")
+	default:
+		query = query.Order("created_at DESC")
+	}
+
+	query.Debug().Count(&total).Offset(offset).Limit(limit).Find(&customers)
 
 	var results []dtos.CustomerItem
 	for _, c := range customers {
@@ -33,7 +84,9 @@ func (s *Service) GetMany() ([]dtos.CustomerItem, error) {
 		})
 	}
 
-	return results, nil
+	totalPage := math.Ceil(float64(total) / float64(limit))
+
+	return results, total, int64(totalPage), nil
 }
 
 func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
