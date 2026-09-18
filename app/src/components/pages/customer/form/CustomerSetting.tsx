@@ -13,7 +13,7 @@ import { withForm } from "@/hooks/use-form";
 import { createCustomerFormOpts } from "@/libs/helper/create-customer-form";
 
 const CustomerSetting = withForm({
-	...createCustomerFormOpts,
+	...createCustomerFormOpts(),
 	render: function Render({ form }) {
 		return (
 			<Card>

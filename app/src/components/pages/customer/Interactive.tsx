@@ -21,7 +21,7 @@ export default function Interactive({
 		onSearch(debounced);
 	}, [debounced]);
 
-	console.log("re-render")
+	console.log("re-render");
 
 	return (
 		<div className="flex justify-between items-center">

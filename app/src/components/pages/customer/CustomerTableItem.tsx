@@ -10,26 +10,26 @@ export default function CustomerTableItem({
 }: {
 	item: CustomerListItemRes;
 }) {
-	const [selected, { setSelected }] = useAppStore(store.customer, s => s.selected)
+	const [selected, { setSelected }] = useAppStore(
+		store.customer,
+		(s) => s.selected,
+	);
 	const { full_name, id } = item;
 
 	const handleSelect = () => {
-		setSelected(id)
-	}
+		setSelected(id);
+	};
 
-	const isCheck = selected.includes(id)
+	const isCheck = selected.includes(id);
 
 	return (
 		<TableRow>
 			<TableCell>
-				<Checkbox
-					checked={isCheck}
-					onCheckedChange={handleSelect}
-				/>
+				<Checkbox checked={isCheck} onCheckedChange={handleSelect} />
 			</TableCell>
 			<TableCell>{full_name}</TableCell>
 			<TableCell className="text-end">
-				<CustomerAction />
+				<CustomerAction id={id} />
 			</TableCell>
 		</TableRow>
 	);

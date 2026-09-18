@@ -13,7 +13,7 @@ import { withForm } from "@/hooks/use-form";
 import { createCustomerFormOpts } from "@/libs/helper/create-customer-form";
 
 const CustomerInfo = withForm({
-	...createCustomerFormOpts,
+	...createCustomerFormOpts(),
 	render: function Render({ form }) {
 		return (
 			<Card>
@@ -30,7 +30,7 @@ const CustomerInfo = withForm({
 								<Input
 									id={name}
 									type="text"
-									value={state.value}
+									value={state.value ?? ""}
 									placeholder="Nguyễn Văn A..."
 									onChange={(e) => handleChange(e.target.value)}
 									onBlur={handleBlur}
