@@ -34,6 +34,14 @@ type DeleteCustomerManyRequest struct {
 	Ids []string `json:"ids" binding:"required"`
 }
 
+type GetCustomersQuery struct {
+	Page   int    `form:"page" default:"1"`
+	Search string `form:"search"`
+	Sort   string `form:"sort" default:"latest"`
+	Active *bool  `form:"active"`
+	Guest  *bool  `form:"guest"`
+}
+
 type MutateCustomerResponse struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
