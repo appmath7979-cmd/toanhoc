@@ -1,6 +1,6 @@
-import { createCustomer, getCustomer } from "@/api/customer.api";
+import { createCustomer, deleteCustomer, getCustomer } from "@/api/customer.api";
 import { CreateCustomer } from "@/schema/customer.schema";
-import { GetCustomersReq } from "@/types/customer.type";
+import { DeleteCustomerReq, GetCustomersReq } from "@/types/customer.type";
 import {
 	keepPreviousData,
 	useMutation,
@@ -31,4 +31,19 @@ const useCreateCustomer = () => {
 	});
 };
 
-export { useGetCustomers, useCreateCustomer };
+const useDelteCustomer = () => {
+		const queryClient = useQueryClient();
+
+		return useMutation({
+			mutationFn: (req: DeleteCustomerReq) => deleteCustomer(req),
+			onSuccess: (data) => {
+				queryClient.invalidateQueries({ queryKey: ["customer"] });
+				console.log(data);
+			},
+			onError: (err) => {
+				console.log(err);
+			},
+		});
+}
+
+export { useGetCustomers, useCreateCustomer, useDelteCustomer };
