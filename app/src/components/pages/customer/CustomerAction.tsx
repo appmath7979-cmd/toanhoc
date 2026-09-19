@@ -7,6 +7,7 @@ import {
 	DropdownTrigger,
 } from "@/components/core/Dropdown";
 import { Tooltip, TooltipContent } from "@/components/core/tootltip/Tooltip";
+import { useDeleteCustomerById } from "@/hooks/query/useCustomerQuery";
 import { useMobile } from "@/hooks/use-mobile";
 import { store } from "@/store/store";
 import { useAppStore } from "@lavaz/store";
@@ -17,13 +18,22 @@ import {
 	TrashIcon,
 } from "lucide-react";
 
-export default function CustomerAction({ id }: { id: string }) {
+export default function CustomerAction({ id, onSelected }: {
+	id: string, onSelected: (value: string) => void
+}) {
 	const isMobile = useMobile();
 	const [, { copy }] = useAppStore(store.copyCustomer, (s) => s);
 
-	const handleCopy = () => {};
-	const handleEdit = () => {};
-	const handleDelete = () => {};
+	const { mutate } = useDeleteCustomerById()
+
+	const handleCopy = () => { };
+
+	const handleEdit = () => { };
+
+	const handleDelete = () => {
+		mutate(id)
+		onSelected(id)
+	};
 
 	console.log(copy, id);
 

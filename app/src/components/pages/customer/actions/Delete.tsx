@@ -6,14 +6,17 @@ import { useAppStore } from "@lavaz/store";
 import { TrashIcon } from "lucide-react";
 
 export default function Delete({ isMobile }: { isMobile: boolean }) {
-	const [selected, { setIsSelectAll, setSelectAll }] = useAppStore(store.customer, (s) => s.selected);
-	const { mutate } = useDelteCustomer()
+	const [selected, { setIsSelectAll, setSelectAll }] = useAppStore(
+		store.customer,
+		(s) => s.selected,
+	);
+	const { mutate } = useDelteCustomer();
 
 	const handleDelete = () => {
-		mutate({ ids: selected })
-		setIsSelectAll(false)
-		setSelectAll([])
-	}
+		mutate({ ids: selected });
+		setIsSelectAll(false);
+		setSelectAll([]);
+	};
 
 	return (
 		<Tooltip>
