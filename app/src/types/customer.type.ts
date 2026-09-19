@@ -5,7 +5,7 @@ interface GetCustomersReq {
 	search?: string;
 	active?: "true" | "false";
 	guest?: "true" | "false";
-	sort?: "latest" | "oldest";
+	sort?: "latest" | "oldest" | "name_ASC" | "name_DESC";
 }
 
 interface CustomerListItemRes {
@@ -22,4 +22,13 @@ interface CustomerListRes extends BaseApi, ListApi {
 	data: CustomerListItemRes[];
 }
 
-export type { CustomerListItemRes, CustomerListRes, GetCustomersReq };
+interface DeleteCustomerReq {
+	ids: string[];
+}
+
+export type {
+	CustomerListItemRes,
+	CustomerListRes,
+	GetCustomersReq,
+	DeleteCustomerReq,
+};

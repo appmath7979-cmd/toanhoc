@@ -12,7 +12,10 @@ import { useAppStore } from "@lavaz/store";
 import { store } from "@/store/store";
 
 export default function Customer() {
-	const [{ active }] = useAppStore(store.customerPagination, s => s)
+	const [{ active, guest, sort }] = useAppStore(
+		store.customerPagination,
+		(s) => s,
+	);
 
 	const [page, setPage] = useState<number>(1);
 	const [search, setSearch] = useState<string>("");
@@ -21,7 +24,9 @@ export default function Customer() {
 	const { data, isLoading, isPlaceholderData } = useGetCustomers({
 		page,
 		search,
-		active
+		active,
+		guest,
+		sort,
 	});
 
 	useEffect(() => {
@@ -37,8 +42,9 @@ export default function Customer() {
 	}, [data, isPlaceholderData, page, search, queryClient]);
 
 	if (isLoading) return <Pending />;
-	if (!search && !data) return null;
-	if (!search && data?.data?.length === 0) return <CustomerEmpty />;
+	if ((!search || active === undefined) && !data) return null;
+	if ((!search || active === undefined) && data?.data?.length === 0)
+		return <CustomerEmpty />;
 
 	const handleSearch = (newSeach: string) => {
 		setSearch(newSeach);
