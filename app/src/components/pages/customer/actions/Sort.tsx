@@ -52,16 +52,18 @@ export default function Sort({ isMobile }: { isMobile: boolean }) {
 
 		return { name: sortNamed, icon };
 	};
+
+	const content = sortTitle().name
 	const Icon = sortTitle().icon;
 
 	return (
 		<Dropdown>
 			<Tooltip>
-				<TooltipContent content={sortTitle().name}>
+				<TooltipContent content={content}>
 					<DropdownTrigger asChild>
 						<Button variant={isMobile ? "ghost" : "outline"}>
 							<Icon />
-							{!isMobile && <span>sortTitle().name</span>}
+							{!isMobile && <span>{content}</span>}
 						</Button>
 					</DropdownTrigger>
 				</TooltipContent>

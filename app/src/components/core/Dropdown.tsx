@@ -40,7 +40,7 @@ function DropdownSubBox({ ...props }: DropdownMenuSubContentProps) {
 function DropdownItem({ ...props }: DropdownMenuItemProps) {
 	return (
 		<DropdownMenuItem
-			className="btn w-full border-0 outline-0 min-w-40 hover:bg-background/80 text-sm [&_svg]:size-4.5 py-1 px-2 h-8 hover:text-primary transition-all duration-300 cursor-auto"
+			className="btn w-full border-0 outline-0 min-w-40 hover:bg-background/80 text-sm [&_svg]:size-4.5 py-1 px-2 h-8 hover:text-primary transition-all duration-300 cursor-default"
 			{...props}
 		/>
 	);

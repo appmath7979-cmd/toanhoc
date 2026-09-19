@@ -20,17 +20,24 @@ export default function ActiveSort({ isMobile }: { isMobile: boolean }) {
 		(s) => s.active,
 	);
 
+	const getContent = () => {
+		let content: string
+		switch (active) {
+			case "false": content = "Khách hàng ngưng hoạt động"; break;
+			case "true": content = "Khách hàng hoạt động"; break;
+			default: content = "Loại tài khoản"; break;
+		}
+
+		return content
+	}
+
+	const content = getContent()
+
 	return (
 		<Dropdown>
 			<Tooltip>
 				<TooltipContent
-					content={
-						!active
-							? "Loại tài khoản"
-							: active === "true"
-								? "Khách hàng hoạt động"
-								: "Khách hàng ngưng hoạt động"
-					}
+					content={content}
 				>
 					<DropdownTrigger asChild>
 						<Button variant={isMobile ? "ghost" : "outline"}>
@@ -41,7 +48,7 @@ export default function ActiveSort({ isMobile }: { isMobile: boolean }) {
 							) : (
 								<UserRoundXIcon />
 							)}
-							{!isMobile && <span>Loại tài khoản</span>}
+							{!isMobile && <span>{content}</span>}
 						</Button>
 					</DropdownTrigger>
 				</TooltipContent>
