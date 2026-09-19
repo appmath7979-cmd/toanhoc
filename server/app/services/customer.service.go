@@ -76,6 +76,10 @@ func (s *Service) GetMany(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerIt
 	return results, total, int64(totalPage), nil
 }
 
+func (s *Service) GetOne(id string) {
+	
+}
+
 func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
 	var existingCustomer models.Customer
 

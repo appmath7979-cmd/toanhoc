@@ -47,3 +47,13 @@ type MutateCustomerResponse struct {
 	Success bool   `json:"success"`
 	Status  uint16 `json:"status"`
 }
+
+type CustomerById struct {
+	ID          string    `json:"id"`
+	FullName    string    `json:"full_name"`
+	PhoneNumber string    `json:"phone_number"`
+	Guest       bool      `json:"guest"`
+	Active      bool      `json:"active"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
