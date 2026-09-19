@@ -132,3 +132,15 @@ func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
 
 	return 201, nil
 }
+
+// func (s *Service) DeleteOne() {
+
+// }
+
+func (s *Service) DeleteMany(req dtos.DeleteCustomerManyRequest) error {
+	if err := s.db.Where("id IN ?", req.Ids).Delete(&models.Customer{}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
