@@ -1,4 +1,9 @@
-import { createCustomer, deleteCustomer, getCustomer } from "@/api/customer.api";
+import {
+	createCustomer,
+	deleteCustomer,
+	deleteCustomerById,
+	getCustomer,
+} from "@/api/customer.api";
 import { CreateCustomer } from "@/schema/customer.schema";
 import { DeleteCustomerReq, GetCustomersReq } from "@/types/customer.type";
 import {
@@ -32,18 +37,38 @@ const useCreateCustomer = () => {
 };
 
 const useDelteCustomer = () => {
-		const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-		return useMutation({
-			mutationFn: (req: DeleteCustomerReq) => deleteCustomer(req),
-			onSuccess: (data) => {
-				queryClient.invalidateQueries({ queryKey: ["customer"] });
-				console.log(data);
-			},
-			onError: (err) => {
-				console.log(err);
-			},
-		});
-}
+	return useMutation({
+		mutationFn: (req: DeleteCustomerReq) => deleteCustomer(req),
+		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: ["customer"] });
+			console.log(data);
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+	});
+};
 
-export { useGetCustomers, useCreateCustomer, useDelteCustomer };
+const useDeleteCustomerById = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteCustomerById(id),
+		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: ["customer"] });
+			console.log(data);
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+	});
+};
+
+export {
+	useGetCustomers,
+	useCreateCustomer,
+	useDelteCustomer,
+	useDeleteCustomerById,
+};

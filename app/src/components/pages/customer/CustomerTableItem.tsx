@@ -29,7 +29,7 @@ export default function CustomerTableItem({
 			</TableCell>
 			<TableCell>{full_name}</TableCell>
 			<TableCell className="text-end">
-				<CustomerAction id={id} />
+				<CustomerAction id={id} onSelected={setSelected} />
 			</TableCell>
 		</TableRow>
 	);

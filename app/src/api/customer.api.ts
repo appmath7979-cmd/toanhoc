@@ -1,4 +1,8 @@
-import { CustomerListRes, DeleteCustomerReq, GetCustomersReq } from "@/types/customer.type";
+import {
+	CustomerListRes,
+	DeleteCustomerReq,
+	GetCustomersReq,
+} from "@/types/customer.type";
 import { baseApi } from "./base.api";
 import { CreateCustomer } from "@/schema/customer.schema";
 import { BaseApi } from "@/types/api.type";
@@ -21,20 +25,22 @@ async function getCustomer({
 			guest,
 		},
 	});
-	const data: CustomerListRes = res.data;
-	return data;
+	return res.data;
 }
 
 async function createCustomer(data: CreateCustomer): Promise<BaseApi> {
 	const res = await baseApi.post(pathCustomer, data);
-	const dt = res.data;
-	return dt;
+	return res.data;
 }
 
 async function deleteCustomer(data: DeleteCustomerReq): Promise<BaseApi> {
-	const res = await baseApi.delete(pathCustomer, { data })
-	const dt = res.data
-	return dt
+	const res = await baseApi.delete(pathCustomer, { data });
+	return res.data;
 }
 
-export { getCustomer, createCustomer, deleteCustomer };
+async function deleteCustomerById(id: string): Promise<BaseApi> {
+	const res = await baseApi.delete(`${pathCustomer}/${id}`);
+	return res.data;
+}
+
+export { getCustomer, createCustomer, deleteCustomer, deleteCustomerById };
