@@ -29,7 +29,12 @@ type CustomerListResponse struct {
 	TotalPage int            `json:"total_pages"`
 }
 
-type CreateCustomerResponse struct {
+
+type DeleteCustomerManyRequest struct {
+	Ids []string `json:"ids" binding:"required"`
+}
+
+type MutateCustomerResponse struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
 	Status  uint16 `json:"status"`

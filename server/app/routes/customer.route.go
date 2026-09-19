@@ -16,7 +16,10 @@ func CustomerRoute() []RouteGroup {
 					Path: "", Method: "GET", Handler: handlers.GetCustomers,
 				},
 				{
-					Path: "",Method: "POST", Handler: handlers.CreateCustomer,
+					Path: "", Method: "POST", Handler: handlers.CreateCustomer,
+				},
+				{
+					Path: "", Method: "DELETE", Handler: handlers.DeleteCustomers,
 				},
 			},
 		},
