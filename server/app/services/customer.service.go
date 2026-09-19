@@ -6,25 +6,16 @@ import (
 	"server/app/dtos"
 	"server/app/models"
 	"server/app/utils"
-	"strconv"
 
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
-type Pagination struct {
-	Page   int
-	Search string
-	Acitve string
-	Guest  string
-	Sort   string
-}
-
 func CustomerService(db *gorm.DB) *Service {
 	return &Service{db: db}
 }
 
-func (s *Service) GetMany(pagination *Pagination) ([]dtos.CustomerItem, int64, int64, error) {
+func (s *Service) GetMany(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerItem, int64, int64, error) {
 	var customers []models.Customer
 
 	limit := 10
@@ -44,16 +35,12 @@ func (s *Service) GetMany(pagination *Pagination) ([]dtos.CustomerItem, int64, i
 		)
 	}
 
-	if pagination.Acitve != "" {
-		if active, err := strconv.ParseBool(pagination.Acitve); err == nil {
-			query = query.Where("active = ?", active)
-		}
+	if pagination.Active != nil {
+		query = query.Where("active = ?", *pagination.Active)
 	}
 
-	if pagination.Guest != "" {
-		if guest, err := strconv.ParseBool(pagination.Guest); err == nil {
-			query = query.Where("guest = ?", guest)
-		}
+	if pagination.Guest != nil {
+		query = query.Where("guest = ?", *pagination.Guest)
 	}
 
 	switch pagination.Sort {
@@ -133,9 +120,13 @@ func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
 	return 201, nil
 }
 
-// func (s *Service) DeleteOne() {
+func (s *Service) Delete(id string) error {
+	if err := s.db.Delete(&models.Customer{}, "id = ?", id).Error; err != nil {
+		return err
+	}
 
-// }
+	return nil
+}
 
 func (s *Service) DeleteMany(req dtos.DeleteCustomerManyRequest) error {
 	if err := s.db.Where("id IN ?", req.Ids).Delete(&models.Customer{}).Error; err != nil {

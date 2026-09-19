@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,32 +15,41 @@ func CustomerHandler(db *gorm.DB) *Handler {
 
 // GetCustomers godoc
 // @Summary      Lấy danh sách khách hàng
-// @Description  Trả về toàn bộ danh sách khách hàng có trong hệ thống
+// @Description  Trả về danh sách khách hàng có phân trang, hỗ trợ tìm kiếm không dấu, lọc theo trạng thái active, khách vãng lai (guest) và sắp xếp.
 // @Tags         customers
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  dtos.CustomerListResponse  "Thành công"
-// @Failure      500  {object}  dtos.CustomerListResponse  "Lỗi server"
-// @Router       /api/v1/customers [get]
+// @Param        page    query     int     false  "Số trang hiện tại (mặc định là 1)"
+// @Param        search  query     string  false  "Từ khóa tìm kiếm theo họ tên hoặc số điện thoại"
+// @Param        active  query     boolean false  "Lọc theo trạng thái active (true/false)"
+// @Param        guest   query     boolean false  "Lọc theo khách vãng lai (true/false)"
+// @Param        sort    query     string  false  "Kiểu sắp xếp" Enums(latest, oldest, name_ASC, name_DESC)
+// @Success      200     {object}  dtos.CustomerListResponse "Lấy danh sách thành công"
+// @Failure      400     {object}  dtos.CustomerListResponse "Query parameters không hợp lệ"
+// @Failure      500     {object}  dtos.CustomerListResponse "Lỗi server nội bộ"
+// @Router       /api/customers [get]
 func (h *Handler) GetCustomers(ctx *gin.Context) {
-	pageStr := ctx.DefaultQuery("page", "1")
-	search := ctx.DefaultQuery("search", "")
-	sort := ctx.DefaultQuery("sort", "latest")
-	active := ctx.Query("active")
-	guest := ctx.Query("guest")
+	var query dtos.GetCustomersQuery
 
-	page, error := strconv.Atoi(pageStr)
-	if error != nil || page < 1 {
-		page = 1
+	// Bind query params tự động
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.CustomerListResponse{
+			Message: "Query parameters không hợp lệ: " + err.Error(),
+			Success: false,
+			Status:  400,
+		})
+		return
 	}
 
-	customers, totalItem, totalPage, err := h.Service.GetMany(&services.Pagination{
-		Page:   page,
-		Search: search,
-		Sort:   sort,
-		Acitve: active,
-		Guest:  guest,
-	})
+	if query.Page < 1 {
+		query.Page = 1
+	}
+
+	if query.Sort == "" {
+		query.Sort = "latest"
+	}
+
+	customers, totalItem, totalPage, err := h.Service.GetMany(&query)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.CustomerListResponse{
@@ -61,7 +69,7 @@ func (h *Handler) GetCustomers(ctx *gin.Context) {
 		Success:   true,
 		Status:    200,
 		Data:      customers,
-		Page:      page,
+		Page:      query.Page,
 		TotalItem: int(totalItem),
 		TotalPage: int(totalPage),
 	})
@@ -88,6 +96,8 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 			Success: false,
 			Status:  400,
 		})
+
+		return
 	}
 
 	status, err := h.Service.Create(req)
@@ -97,7 +107,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 			ctx.JSON(http.StatusConflict, dtos.MutateCustomerResponse{
 				Message: err.Error(),
 				Success: false,
-				Status:  500,
+				Status:  status,
 			})
 
 			return
@@ -105,7 +115,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
 				Message: err.Error(),
 				Success: false,
-				Status:  500,
+				Status:  status,
 			})
 		}
 
@@ -116,6 +126,35 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 		Message: "Tạo khách hàng thành công!",
 		Success: true,
 		Status:  status,
+	})
+}
+
+// DeleteCustomer godoc
+// @Summary      Xóa một khách hàng
+// @Description  Xóa một khách hàng trong cơ sở dữ liệu (Xóa cả phần setting)
+// @Tags         customers
+// @Accept       json
+// @Produce      json
+// @Param        id  path     string        true  "Id khách hàng cần xóa"
+// @Success      200      {object}  dtos.MutateCustomerResponse  "Xóa thành công"
+// @Failure      500      {object}  dtos.MutateCustomerResponse  "Lỗi server"
+// @Router       /api/v1/customers/{id} [delete]
+func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	if err := h.Service.Delete(id); err != nil {
+		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  500,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dtos.MutateCustomerResponse{
+		Message: "Xóa khách hàng thành công!",
+		Success: true,
+		Status:  200,
 	})
 }
 
@@ -132,12 +171,12 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 // @Router       /api/v1/customers [delete]
 func (h *Handler) DeleteCustomers(ctx *gin.Context) {
 	var req dtos.DeleteCustomerManyRequest
-	
+
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, dtos.MutateCustomerResponse{
 			Message: "Xóa thất bại! Dữ liệu không hợp lệ!",
 			Success: false,
-			Status: 400,
+			Status:  400,
 		})
 
 		return
@@ -147,7 +186,7 @@ func (h *Handler) DeleteCustomers(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, dtos.MutateCustomerResponse{
 			Message: "Xóa thất bại! Không có khách hàng nào có thể xóa!",
 			Success: false,
-			Status: 400,
+			Status:  400,
 		})
 
 		return
@@ -157,15 +196,15 @@ func (h *Handler) DeleteCustomers(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
 			Message: err.Error(),
 			Success: false,
-			Status: 500,
+			Status:  500,
 		})
 
 		return
 	}
 
 	ctx.JSON(http.StatusOK, dtos.MutateCustomerResponse{
-			Message: "Xóa khách hàng thành công!",
-			Success: true,
-			Status: 200,
-		})
+		Message: "Xóa khách hàng thành công!",
+		Success: true,
+		Status:  200,
+	})
 }

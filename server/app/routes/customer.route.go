@@ -21,6 +21,9 @@ func CustomerRoute() []RouteGroup {
 				{
 					Path: "", Method: "DELETE", Handler: handlers.DeleteCustomers,
 				},
+				{
+					Path: "/:id", Method: "DELETE", Handler: handlers.DeleteCustomerById,
+				},
 			},
 		},
 	}
