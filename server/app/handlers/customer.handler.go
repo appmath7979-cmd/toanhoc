@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
@@ -73,6 +74,11 @@ func (h *Handler) GetCustomers(ctx *gin.Context) {
 		TotalItem: int(totalItem),
 		TotalPage: int(totalPage),
 	})
+}
+
+func (h *Handler) GetCustomerById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	log.Fatalln(id)
 }
 
 // CreateCustomer godoc
