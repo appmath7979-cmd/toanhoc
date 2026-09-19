@@ -8,8 +8,12 @@ import { useGetCustomers } from "@/hooks/query/useCustomerQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Pending from "../status/Pending";
+import { useAppStore } from "@lavaz/store";
+import { store } from "@/store/store";
 
 export default function Customer() {
+	const [{ active }] = useAppStore(store.customerPagination, s => s)
+
 	const [page, setPage] = useState<number>(1);
 	const [search, setSearch] = useState<string>("");
 	const queryClient = useQueryClient();
@@ -17,6 +21,7 @@ export default function Customer() {
 	const { data, isLoading, isPlaceholderData } = useGetCustomers({
 		page,
 		search,
+		active
 	});
 
 	useEffect(() => {
