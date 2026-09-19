@@ -62,21 +62,21 @@ export default function CustomerAction({ id }: { id: string }) {
 		<div className="flex justify-end items-center gap-2">
 			<Tooltip>
 				<TooltipContent content="Sao chép">
-					<IconButton size="sm">
+					<IconButton variant="ghost" size="sm">
 						<CopyIcon />
 					</IconButton>
 				</TooltipContent>
 			</Tooltip>
 			<Tooltip>
 				<TooltipContent content="Sửa thông tin khách hàng">
-					<IconButton size="sm">
+					<IconButton variant="ghost" size="sm">
 						<EditIcon />
 					</IconButton>
 				</TooltipContent>
 			</Tooltip>
 			<Tooltip>
 				<TooltipContent content="Xóa khách hàng">
-					<IconButton size="sm">
+					<IconButton variant="ghost" size="sm">
 						<TrashIcon />
 					</IconButton>
 				</TooltipContent>
