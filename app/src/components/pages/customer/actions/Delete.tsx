@@ -1,3 +1,10 @@
+import {
+	Alert,
+	AlertAction,
+	AlertCancel,
+	AlertContent,
+	AlertTrigger,
+} from "@/components/core/Alert";
 import { Button } from "@/components/core/button/Button";
 import { Tooltip, TooltipContent } from "@/components/core/tootltip/Tooltip";
 import { useDelteCustomer } from "@/hooks/query/useCustomerQuery";
@@ -19,17 +26,31 @@ export default function Delete({ isMobile }: { isMobile: boolean }) {
 	};
 
 	return (
-		<Tooltip>
-			<TooltipContent content="Xóa">
-				<Button
-					variant={isMobile ? "ghost" : "danger"}
-					disabled={selected.length === 0}
-					onClick={handleDelete}
-				>
-					<TrashIcon />
-					{!isMobile && <span>Xóa</span>}
-				</Button>
-			</TooltipContent>
-		</Tooltip>
+		<Alert>
+			<Tooltip>
+				<TooltipContent content="Xóa">
+					<AlertTrigger setChild>
+						<Button
+							variant={isMobile ? "ghost" : "danger"}
+							disabled={selected.length === 0}
+						>
+							<TrashIcon />
+							{!isMobile && <span>Xóa</span>}
+						</Button>
+					</AlertTrigger>
+				</TooltipContent>
+			</Tooltip>
+			<AlertContent
+				title="Bạn có chắc muốn xóa những khách hàng này?"
+				description="Điều này sẽ xóa vĩnh viễn những khách hàng bạn đã chọn"
+			>
+				<AlertCancel>Hủy bỏ</AlertCancel>
+				<AlertAction setChild>
+					<Button onClick={handleDelete}>
+						Xác nhận xóa
+					</Button>
+				</AlertAction>
+			</AlertContent>
+		</Alert>
 	);
 }
