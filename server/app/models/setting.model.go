@@ -40,7 +40,7 @@ const (
 )
 
 type Setting struct {
-	Id     string                       `gorm:"type:uuid;primaryKey;default:gen_random_id()"`
+	ID     string                       `gorm:"type:uuid;primaryKey;default:gen_random_id()"`
 	XienMB bool                         `gorm:"type:boolean;default:false"`
 	DaXT   DaX_T                        `gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
 	Bets   datatypes.JSONSlice[BetPair] `gorm:"type:jsonb"`

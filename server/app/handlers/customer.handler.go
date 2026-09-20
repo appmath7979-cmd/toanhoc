@@ -14,7 +14,7 @@ func CustomerHandler(db *gorm.DB) *Handler {
 	return &Handler{Service: services.CustomerService(db)}
 }
 
-// GetCustomers godoc
+// GetCustomer godoc
 // @Summary      Lấy danh sách khách hàng
 // @Description  Trả về danh sách khách hàng có phân trang, hỗ trợ tìm kiếm không dấu, lọc theo trạng thái active, khách vãng lai (guest) và sắp xếp.
 // @Tags         customers
@@ -29,7 +29,7 @@ func CustomerHandler(db *gorm.DB) *Handler {
 // @Failure      400     {object}  dtos.CustomerListResponse "Query parameters không hợp lệ"
 // @Failure      500     {object}  dtos.CustomerListResponse "Lỗi server nội bộ"
 // @Router       /api/customers [get]
-func (h *Handler) GetCustomers(ctx *gin.Context) {
+func (h *Handler) GetCustomer(ctx *gin.Context) {
 	var query dtos.GetCustomersQuery
 
 	// Bind query params tự động
@@ -50,7 +50,7 @@ func (h *Handler) GetCustomers(ctx *gin.Context) {
 		query.Sort = "latest"
 	}
 
-	customers, totalItem, totalPage, err := h.Service.GetMany(&query)
+	customers, totalItem, totalPage, err := h.Service.GetManyCustomer(&query)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.CustomerListResponse{
@@ -106,7 +106,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 		return
 	}
 
-	status, err := h.Service.Create(req)
+	status, err := h.Service.CreateCustomer(req)
 
 	if err != nil {
 		if status == 409 {
@@ -135,7 +135,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 	})
 }
 
-// DeleteCustomer godoc
+// DeleteCustomerById godoc
 // @Summary      Xóa một khách hàng
 // @Description  Xóa một khách hàng trong cơ sở dữ liệu (Xóa cả phần setting)
 // @Tags         customers
@@ -148,7 +148,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	if err := h.Service.Delete(id); err != nil {
+	if err := h.Service.DeleteCustomerById(id); err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
 			Message: err.Error(),
 			Success: false,
@@ -175,7 +175,7 @@ func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
 // @Failure      400      {object}  dtos.MutateCustomerResponse  "Dữ liệu không hợp lệ"
 // @Failure      500      {object}  dtos.MutateCustomerResponse  "Lỗi server"
 // @Router       /api/v1/customers [delete]
-func (h *Handler) DeleteCustomers(ctx *gin.Context) {
+func (h *Handler) DeleteCustomer(ctx *gin.Context) {
 	var req dtos.DeleteCustomerManyRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -198,7 +198,7 @@ func (h *Handler) DeleteCustomers(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.Service.DeleteMany(req); err != nil {
+	if err := h.Service.DeleteManyCustomer(req); err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
 			Message: err.Error(),
 			Success: false,

@@ -15,7 +15,7 @@ func CustomerService(db *gorm.DB) *Service {
 	return &Service{db: db}
 }
 
-func (s *Service) GetMany(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerItem, int64, int64, error) {
+func (s *Service) GetManyCustomer(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerItem, int64, int64, error) {
 	var customers []models.Customer
 
 	limit := 10
@@ -61,7 +61,7 @@ func (s *Service) GetMany(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerIt
 	var results []dtos.CustomerItem
 	for _, c := range customers {
 		results = append(results, dtos.CustomerItem{
-			ID:          c.Id,
+			ID:          c.ID,
 			FullName:    c.FullName,
 			PhoneNumber: c.PhoneNumber,
 			Guest:       c.Guest,
@@ -76,11 +76,11 @@ func (s *Service) GetMany(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerIt
 	return results, total, int64(totalPage), nil
 }
 
-func (s *Service) GetOne(id string) {
+func (s *Service) GetCustomerById(id string) {
 	
 }
 
-func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
+func (s *Service) CreateCustomer(req dtos.CreateCustomer) (uint16, error) {
 	var existingCustomer models.Customer
 
 	err := s.db.Where("phone_number = ?", req.PhoneNumber).First(&existingCustomer).Error
@@ -124,7 +124,7 @@ func (s *Service) Create(req dtos.CreateCustomer) (uint16, error) {
 	return 201, nil
 }
 
-func (s *Service) Delete(id string) error {
+func (s *Service) DeleteCustomerById(id string) error {
 	if err := s.db.Delete(&models.Customer{}, "id = ?", id).Error; err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func (s *Service) Delete(id string) error {
 	return nil
 }
 
-func (s *Service) DeleteMany(req dtos.DeleteCustomerManyRequest) error {
+func (s *Service) DeleteManyCustomer(req dtos.DeleteCustomerManyRequest) error {
 	if err := s.db.Where("id IN ?", req.Ids).Delete(&models.Customer{}).Error; err != nil {
 		return err
 	}

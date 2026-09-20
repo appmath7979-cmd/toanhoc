@@ -29,7 +29,6 @@ type CustomerListResponse struct {
 	TotalPage int            `json:"total_pages"`
 }
 
-
 type DeleteCustomerManyRequest struct {
 	Ids []string `json:"ids" binding:"required"`
 }
@@ -40,12 +39,6 @@ type GetCustomersQuery struct {
 	Sort   string `form:"sort" default:"latest"`
 	Active *bool  `form:"active"`
 	Guest  *bool  `form:"guest"`
-}
-
-type MutateCustomerResponse struct {
-	Message string `json:"message"`
-	Success bool   `json:"success"`
-	Status  uint16 `json:"status"`
 }
 
 type CustomerById struct {

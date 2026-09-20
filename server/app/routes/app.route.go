@@ -29,6 +29,7 @@ func AppRoutes() []RouteGroup {
 	var allRouteGroups []RouteGroup
 
 	allRouteGroups = append(allRouteGroups, CustomerRoute()...)
+	allRouteGroups = append(allRouteGroups, SettingRoute()...)
 
 	return allRouteGroups
 }
