@@ -1,5 +1,9 @@
 package dtos
 
+import (
+	"time"
+)
+
 type BetType string
 type DaX_T string
 
@@ -28,6 +32,38 @@ type CreateBetPair struct {
 
 type CreateSetting struct {
 	XienMB bool            `json:"xien_mb" gorm:"type:boolean;default:false"`
-	DaXT   DaX_T           `json:"dax_t" validate:"required,oneof=ONE HALFMANY"` // Đã sửa requierd -> required
+	DaXT   DaX_T           `json:"dax_t" validate:"required,oneof=ONE HALFMANY"`
 	Bets   []CreateBetPair `json:"bets" validate:"required"`
+}
+
+//==============================================================================
+
+type BetValueResponse struct {
+	MB float32 `json:"mb"`
+	MN float32 `json:"mn"`
+	MT float32 `json:"mt"`
+}
+
+type BetPairResponse struct {
+	Type    BetType          `json:"type"`
+	C       BetValueResponse `json:"c"`
+	T       BetValueResponse `json:"t"`
+	Percent bool             `json:"percent"`
+}
+
+type SettingItem struct {
+	ID         string          `json:"id"`
+	XienMB     bool            `json:"xien_mb"`
+	DaXT       DaX_T           `json:"dax_t"`
+	Bets       []BetPairResponse `json:"bets"`
+	CustomerId string          `json:"customer_id"`
+	CreatedAt  time.Time       `json:"created_at"`
+	UpdatedAt  time.Time       `json:"updated_at"`
+}
+
+type SettingResponse struct {
+	Message string      `json:"message"`
+	Success bool        `json:"success"`
+	Data    SettingItem `json:"data"`
+	Status  uint16      `json:"status"`
 }
