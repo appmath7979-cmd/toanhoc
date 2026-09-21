@@ -50,3 +50,10 @@ type CustomerById struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
+
+type UpdateCustomerWithSetting struct {
+	FullName    string        `json:"full_name" validate:"required,min=2,max=100"`
+	PhoneNumber string        `json:"phone_number" validate:"required"`
+	Guest       *bool         `json:"guest"`
+	Setting     CreateSetting `json:"setting"`
+}

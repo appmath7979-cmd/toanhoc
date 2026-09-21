@@ -19,6 +19,9 @@ func CustomerRoute() []RouteGroup {
 					Path: "", Method: "POST", Handler: handlers.CreateCustomer,
 				},
 				{
+					Path: "/:id", Method: "PUT", Handler: handlers.UpdateCustomer,
+				},
+				{
 					Path: "", Method: "DELETE", Handler: handlers.DeleteCustomer,
 				},
 				{

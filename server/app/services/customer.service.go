@@ -77,7 +77,7 @@ func (s *Service) GetManyCustomer(pagination *dtos.GetCustomersQuery) ([]dtos.Cu
 }
 
 func (s *Service) GetCustomerById(id string) {
-	
+
 }
 
 func (s *Service) CreateCustomer(req dtos.CreateCustomer) (uint16, error) {
@@ -122,6 +122,82 @@ func (s *Service) CreateCustomer(req dtos.CreateCustomer) (uint16, error) {
 	}
 
 	return 201, nil
+}
+
+func (s *Service) UpdateCustomerWithSetting(
+	id string,
+	req dtos.UpdateCustomerWithSetting,
+) (uint16, error) {
+	var existingCustomer models.Customer
+
+	err := s.db.Where("phone_number = ? AND id = ?", req.PhoneNumber, id).First(&existingCustomer).Error
+
+	if err != nil {
+		return 409, errors.New("Không thể cập nhật với số điện thoại này!")
+	}
+
+	err = s.db.Transaction(func(tx *gorm.DB) error {
+		var customer models.Customer
+
+		if err := tx.Where("id = ?", id).First(&customer).Error; err != nil {
+			return err
+		}
+
+		customer.FullName = req.FullName
+		customer.PhoneNumber = req.PhoneNumber
+
+		if req.Guest != nil {
+			customer.Guest = *req.Guest
+		}
+
+		var bets []models.BetPair
+
+		for _, b := range req.Setting.Bets {
+			bets = append(bets, models.BetPair{
+				Type:    models.BetType(b.Type),
+				C:       models.BetValue(b.C),
+				T:       models.BetValue(b.T),
+				Percent: b.Percent,
+			})
+		}
+
+		var setting models.Setting
+
+		err := tx.Where("customer_id", id).First(&setting).Error
+
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				setting = models.Setting{
+					XienMB:     req.Setting.XienMB,
+					DaXT:       models.DaX_T(req.Setting.DaXT),
+					Bets:       datatypes.JSONSlice[models.BetPair](bets),
+					CustomerId: id,
+				}
+
+				if err := tx.Create(&setting).Error; err != nil {
+					return err
+				}
+			} else {
+				return err
+			}
+		} else {
+			setting.DaXT = models.DaX_T(req.Setting.DaXT)
+			setting.XienMB = req.Setting.XienMB
+			setting.Bets = datatypes.JSONSlice[models.BetPair](bets)
+
+			if err := tx.Save(&setting).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return 500, err
+	}
+
+	return 200, nil
 }
 
 func (s *Service) DeleteCustomerById(id string) error {
