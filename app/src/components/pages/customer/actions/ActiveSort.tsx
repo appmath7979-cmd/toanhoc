@@ -21,24 +21,28 @@ export default function ActiveSort({ isMobile }: { isMobile: boolean }) {
 	);
 
 	const getContent = () => {
-		let content: string
+		let content: string;
 		switch (active) {
-			case "false": content = "Khách hàng ngưng hoạt động"; break;
-			case "true": content = "Khách hàng hoạt động"; break;
-			default: content = "Loại tài khoản"; break;
+			case "false":
+				content = "Khách hàng ngưng hoạt động";
+				break;
+			case "true":
+				content = "Khách hàng hoạt động";
+				break;
+			default:
+				content = "Loại tài khoản";
+				break;
 		}
 
-		return content
-	}
+		return content;
+	};
 
-	const content = getContent()
+	const content = getContent();
 
 	return (
 		<Dropdown>
 			<Tooltip>
-				<TooltipContent
-					content={content}
-				>
+				<TooltipContent content={content}>
 					<DropdownTrigger asChild>
 						<Button variant={isMobile ? "ghost" : "outline"}>
 							{!active ? (

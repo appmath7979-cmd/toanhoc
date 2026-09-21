@@ -4,7 +4,7 @@ import CustomerForm from "@/components/pages/customer/form/CustomerForm";
 import { store } from "@/store/store";
 import { useAppStore } from "@lavaz/store";
 
-export default function AddCustomer() {
+export default function EditCustomer() {
 	const [data, { setDefault }] = useAppStore(store.copyCustomer, (s) => s);
 	return (
 		<Box>

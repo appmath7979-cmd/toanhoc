@@ -1,26 +1,27 @@
-import { useAppStore } from "@lavaz/store";
-import { store } from "@/store/store";
-import { useCreateCustomer } from "@/hooks/query/useCustomerQuery";
+import {
+	useCreateCustomer,
+	useUpdateCustomerWithSetting,
+} from "@/hooks/query/useCustomerQuery";
 import { useAppForm } from "@/hooks/use-form";
 import { createCustomerFormOpts } from "@/libs/helper/create-customer-form";
 import CustomerInfo from "./CustomerInfo";
 import CustomerSetting from "./CustomerSetting";
 import { Loader2Icon, SaveIcon } from "lucide-react";
 import { Button } from "@/components/core/button/Button";
+import { CopyCustomerState } from "@/store/boxes/customer/copy-customer.box";
 
-export default function CustomerForm({ id }: { id?: string }) {
-	const [data] = useAppStore(store.copyCustomer, (s) => s);
+export default function CustomerForm({ data }: { data: CopyCustomerState }) {
+	const { data: dt, isCopy, isEdit, customerId } = data;
 
-	const { mutateAsync } = useCreateCustomer();
-
+	const { mutateAsync: createMutate } = useCreateCustomer();
+	const { mutateAsync: updateMutate } = useUpdateCustomerWithSetting();
 	const form = useAppForm({
-		...createCustomerFormOpts(data),
+		...createCustomerFormOpts(isCopy || isEdit ? dt : undefined),
 		onSubmit: async ({ value }) => {
-			await mutateAsync(value);
+			if (isCopy || (!isCopy && !isEdit)) await createMutate(value);
+			if (isEdit && customerId) await updateMutate({ customerId, req: dt });
 		},
 	});
-
-	console.log(id);
 
 	return (
 		<form

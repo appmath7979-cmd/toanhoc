@@ -50,7 +50,6 @@ function AlertAction({
 }: {
 	children: ReactNode;
 	setChild?: boolean;
-  
 }) {
 	return (
 		<AlertDialog.Action

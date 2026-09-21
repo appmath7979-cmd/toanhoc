@@ -53,7 +53,7 @@ export default function Sort({ isMobile }: { isMobile: boolean }) {
 		return { name: sortNamed, icon };
 	};
 
-	const content = sortTitle().name
+	const content = sortTitle().name;
 	const Icon = sortTitle().icon;
 
 	return (

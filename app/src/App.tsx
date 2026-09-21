@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Root from "./layouts/Root";
 import Customer from "./pages/customer/Customer";
 import AddCustomer from "./pages/customer/AddCustomer";
+import EditCustomer from "./pages/customer/EditCustomer";
 
 export function App() {
 	return (
@@ -13,6 +14,7 @@ export function App() {
 					<Route path="/customer">
 						<Route index element={<Customer />} />
 						<Route path="add" element={<AddCustomer />} />
+						<Route path="edit" element={<EditCustomer />} />
 					</Route>
 				</Route>
 			</Routes>
