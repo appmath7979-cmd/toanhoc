@@ -3,6 +3,7 @@ import {
 	deleteCustomer,
 	deleteCustomerById,
 	getCustomer,
+	updateCustomerWithSetting,
 } from "@/api/customer.api";
 import { CreateCustomer } from "@/schema/customer.schema";
 import { DeleteCustomerReq, GetCustomersReq } from "@/types/customer.type";
@@ -26,6 +27,27 @@ const useCreateCustomer = () => {
 
 	return useMutation({
 		mutationFn: (req: CreateCustomer) => createCustomer(req),
+		onSuccess: (data) => {
+			queryClient.invalidateQueries({ queryKey: ["customer"] });
+			console.log(data);
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+	});
+};
+
+const useUpdateCustomerWithSetting = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({
+			customerId,
+			req,
+		}: {
+			customerId: string;
+			req: Partial<CreateCustomer>;
+		}) => updateCustomerWithSetting(customerId, req),
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: ["customer"] });
 			console.log(data);
@@ -69,6 +91,7 @@ const useDeleteCustomerById = () => {
 export {
 	useGetCustomers,
 	useCreateCustomer,
+	useUpdateCustomerWithSetting,
 	useDelteCustomer,
 	useDeleteCustomerById,
 };

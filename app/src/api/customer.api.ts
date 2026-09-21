@@ -43,4 +43,18 @@ async function deleteCustomerById(id: string): Promise<BaseApi> {
 	return res.data;
 }
 
-export { getCustomer, createCustomer, deleteCustomer, deleteCustomerById };
+async function updateCustomerWithSetting(
+	customerId: string,
+	data: Partial<CreateCustomer>,
+): Promise<BaseApi> {
+	const res = await baseApi.patch(`${pathCustomer}/${customerId}`, data);
+	return res.data;
+}
+
+export {
+	getCustomer,
+	createCustomer,
+	deleteCustomer,
+	deleteCustomerById,
+	updateCustomerWithSetting,
+};

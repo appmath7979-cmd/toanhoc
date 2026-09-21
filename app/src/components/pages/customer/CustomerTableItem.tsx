@@ -14,7 +14,7 @@ export default function CustomerTableItem({
 		store.customer,
 		(s) => s.selected,
 	);
-	const { full_name, id } = item;
+	const { full_name, id, guest, phone_number } = item;
 
 	const handleSelect = () => {
 		setSelected(id);
@@ -29,7 +29,13 @@ export default function CustomerTableItem({
 			</TableCell>
 			<TableCell>{full_name}</TableCell>
 			<TableCell className="text-end">
-				<CustomerAction id={id} onSelected={setSelected} />
+				<CustomerAction
+					id={id}
+					full_name={full_name}
+					phone_number={phone_number}
+					guest={guest}
+					onSelected={setSelected}
+				/>
 			</TableCell>
 		</TableRow>
 	);

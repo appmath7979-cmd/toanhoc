@@ -15,6 +15,7 @@ import {
 } from "@/components/core/Dropdown";
 import { Tooltip, TooltipContent } from "@/components/core/tootltip/Tooltip";
 import { useDeleteCustomerById } from "@/hooks/query/useCustomerQuery";
+import { useGetSettingById } from "@/hooks/query/useSettingQuery";
 import { useMobile } from "@/hooks/use-mobile";
 import { store } from "@/store/store";
 import { useAppStore } from "@lavaz/store";
@@ -24,22 +25,44 @@ import {
 	EllipsisVerticalIcon,
 	TrashIcon,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerAction({
 	id,
+	full_name,
+	guest,
+	phone_number,
 	onSelected,
 }: {
 	id: string;
+	full_name: string;
+	phone_number: string;
+	guest: boolean;
 	onSelected: (value: string) => void;
 }) {
 	const isMobile = useMobile();
-	const [, { copy }] = useAppStore(store.copyCustomer, (s) => s);
-
+	const [customer, { copy, setIsCopy, setIsEdit }] = useAppStore(
+		store.copyCustomer,
+		(s) => s,
+	);
+	const { data } = useGetSettingById(id);
 	const { mutate } = useDeleteCustomerById();
 
-	const handleCopy = () => { };
+	const navigate = useNavigate();
 
-	const handleEdit = () => { };
+	const handleCopy = () => {
+		if (!data) return;
+		copy({ ...customer.data, setting: data.data });
+		setIsCopy();
+		navigate("/customer/add");
+	};
+
+	const handleEdit = () => {
+		if (!data) return;
+		copy({ full_name, guest, phone_number, setting: data.data }, id);
+		setIsEdit();
+		navigate("/customer/edit");
+	};
 
 	const handleDelete = () => {
 		mutate(id);
@@ -86,9 +109,7 @@ export default function CustomerAction({
 				>
 					<AlertCancel>Hủy bỏ</AlertCancel>
 					<AlertAction setChild>
-						<Button onClick={handleDelete}>
-							Xác nhận xóa
-						</Button>
+						<Button onClick={handleDelete}>Xác nhận xóa</Button>
 					</AlertAction>
 				</AlertContent>
 			</Alert>
@@ -98,14 +119,14 @@ export default function CustomerAction({
 		<div className="flex justify-end items-center gap-2">
 			<Tooltip>
 				<TooltipContent content="Sao chép">
-					<IconButton variant="ghost" size="sm" onClick={handleCopy} >
+					<IconButton variant="ghost" size="sm" onClick={handleCopy}>
 						<CopyIcon />
 					</IconButton>
 				</TooltipContent>
 			</Tooltip>
 			<Tooltip>
 				<TooltipContent content="Sửa thông tin khách hàng">
-					<IconButton variant="ghost" size="sm" onClick={handleEdit} >
+					<IconButton variant="ghost" size="sm" onClick={handleEdit}>
 						<EditIcon />
 					</IconButton>
 				</TooltipContent>
@@ -114,7 +135,7 @@ export default function CustomerAction({
 				<Tooltip>
 					<TooltipContent content="Xóa khách hàng">
 						<AlertTrigger setChild>
-							<IconButton variant="ghost" size="sm" >
+							<IconButton variant="ghost" size="sm">
 								<TrashIcon />
 							</IconButton>
 						</AlertTrigger>
@@ -126,9 +147,7 @@ export default function CustomerAction({
 				>
 					<AlertCancel>Hủy bỏ</AlertCancel>
 					<AlertAction setChild>
-						<Button onClick={handleDelete}>
-							Xác nhận xóa
-						</Button>
+						<Button onClick={handleDelete}>Xác nhận xóa</Button>
 					</AlertAction>
 				</AlertContent>
 			</Alert>

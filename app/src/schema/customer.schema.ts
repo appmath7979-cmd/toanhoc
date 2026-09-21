@@ -35,5 +35,11 @@ const CustomerSchema = z.object({
 });
 
 type CreateCustomer = z.infer<typeof CustomerSchema>;
+type CreateSetting = z.infer<typeof SettingSchema>;
 
-export { CustomerSchema, SettingSchema, type CreateCustomer };
+export {
+	CustomerSchema,
+	SettingSchema,
+	type CreateCustomer,
+	type CreateSetting,
+};

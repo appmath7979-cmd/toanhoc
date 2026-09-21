@@ -46,9 +46,7 @@ export default function Delete({ isMobile }: { isMobile: boolean }) {
 			>
 				<AlertCancel>Hủy bỏ</AlertCancel>
 				<AlertAction setChild>
-					<Button onClick={handleDelete}>
-						Xác nhận xóa
-					</Button>
+					<Button onClick={handleDelete}>Xác nhận xóa</Button>
 				</AlertAction>
 			</AlertContent>
 		</Alert>
