@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
+	"server/app/validator"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -88,16 +89,16 @@ func (h *Handler) GetCustomerById(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        request  body      dtos.CreateCustomer         true  "Thông tin khách hàng cần tạo"
-// @Success      201      {object}  dtos.MutateCustomerResponse  "Tạo thành công"
-// @Failure      400      {object}  dtos.MutateCustomerResponse  "Dữ liệu không hợp lệ"
-// @Failure      409      {object}  dtos.MutateCustomerResponse  "Số điện thoại đã tồn tại"
-// @Failure      500      {object}  dtos.MutateCustomerResponse  "Lỗi server"
+// @Success      201      {object}  dtos.MutateResponse  "Tạo thành công"
+// @Failure      400      {object}  dtos.MutateResponse  "Dữ liệu không hợp lệ"
+// @Failure      409      {object}  dtos.MutateResponse  "Số điện thoại đã tồn tại"
+// @Failure      500      {object}  dtos.MutateResponse  "Lỗi server"
 // @Router       /api/v1/customers [post]
 func (h *Handler) CreateCustomer(ctx *gin.Context) {
 	var req dtos.CreateCustomer
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, dtos.MutateCustomerResponse{
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
 			Message: "Tạo khách hàng thất bại! Dữ liệu không hợp lệ!",
 			Success: false,
 			Status:  400,
@@ -110,7 +111,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 
 	if err != nil {
 		if status == 409 {
-			ctx.JSON(http.StatusConflict, dtos.MutateCustomerResponse{
+			ctx.JSON(http.StatusConflict, dtos.MutateResponse{
 				Message: err.Error(),
 				Success: false,
 				Status:  status,
@@ -118,7 +119,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 
 			return
 		} else {
-			ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
+			ctx.JSON(http.StatusInternalServerError, dtos.MutateResponse{
 				Message: err.Error(),
 				Success: false,
 				Status:  status,
@@ -128,11 +129,66 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, dtos.MutateCustomerResponse{
+	ctx.JSON(http.StatusCreated, dtos.MutateResponse{
 		Message: "Tạo khách hàng thành công!",
 		Success: true,
 		Status:  status,
 	})
+}
+
+// UpdateCustomer godoc
+// @Summary      Sửa thông tin khách hàng
+// @Description  Sửa thông tin khách hàng trong cơ sở dữ liệu (Sửa cả phần setting)
+// @Tags         customers
+// @Accept       json
+// @Produce      json
+// @Param        id  path     string        true  "Id khách hàng cần sửa"
+// @Param        request  body     string        true  "Thông tin cần sửa"
+// @Success      200      {object}  dtos.MutateResponse  "Sửa thành công"
+// @Failure      500      {object}  dtos.MutateResponse  "Lỗi server"
+// @Router       /api/v1/customers/{id} [delete]
+func (h *Handler) UpdateCustomer(ctx *gin.Context) {
+	customerId := ctx.Param("id")
+
+	if err := validator.ValidateUUID(customerId); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	var req dtos.UpdateCustomerWithSetting
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	status, err := h.Service.UpdateCustomerWithSetting(customerId, req)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, dtos.MutateResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  status,
+		})
+
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dtos.MutateResponse{
+		Message: "Thành công!",
+		Success: true,
+		Status:  status,
+	})
+
 }
 
 // DeleteCustomerById godoc
@@ -142,14 +198,14 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id  path     string        true  "Id khách hàng cần xóa"
-// @Success      200      {object}  dtos.MutateCustomerResponse  "Xóa thành công"
-// @Failure      500      {object}  dtos.MutateCustomerResponse  "Lỗi server"
+// @Success      200      {object}  dtos.MutateResponse  "Xóa thành công"
+// @Failure      500      {object}  dtos.MutateResponse  "Lỗi server"
 // @Router       /api/v1/customers/{id} [delete]
 func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if err := h.Service.DeleteCustomerById(id); err != nil {
-		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
+		ctx.JSON(http.StatusInternalServerError, dtos.MutateResponse{
 			Message: err.Error(),
 			Success: false,
 			Status:  500,
@@ -157,7 +213,7 @@ func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, dtos.MutateCustomerResponse{
+	ctx.JSON(http.StatusOK, dtos.MutateResponse{
 		Message: "Xóa khách hàng thành công!",
 		Success: true,
 		Status:  200,
@@ -171,15 +227,15 @@ func (h *Handler) DeleteCustomerById(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        request  body      dtos.DeleteCustomerManyRequest         true  "Id khách hàng cần xóa"
-// @Success      200      {object}  dtos.MutateCustomerResponse  "Xóa thành công"
-// @Failure      400      {object}  dtos.MutateCustomerResponse  "Dữ liệu không hợp lệ"
-// @Failure      500      {object}  dtos.MutateCustomerResponse  "Lỗi server"
+// @Success      200      {object}  dtos.MutateResponse  "Xóa thành công"
+// @Failure      400      {object}  dtos.MutateResponse  "Dữ liệu không hợp lệ"
+// @Failure      500      {object}  dtos.MutateResponse  "Lỗi server"
 // @Router       /api/v1/customers [delete]
 func (h *Handler) DeleteCustomer(ctx *gin.Context) {
 	var req dtos.DeleteCustomerManyRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, dtos.MutateCustomerResponse{
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
 			Message: "Xóa thất bại! Dữ liệu không hợp lệ!",
 			Success: false,
 			Status:  400,
@@ -189,7 +245,7 @@ func (h *Handler) DeleteCustomer(ctx *gin.Context) {
 	}
 
 	if len(req.Ids) == 0 {
-		ctx.JSON(http.StatusBadRequest, dtos.MutateCustomerResponse{
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
 			Message: "Xóa thất bại! Không có khách hàng nào có thể xóa!",
 			Success: false,
 			Status:  400,
@@ -199,7 +255,7 @@ func (h *Handler) DeleteCustomer(ctx *gin.Context) {
 	}
 
 	if err := h.Service.DeleteManyCustomer(req); err != nil {
-		ctx.JSON(http.StatusInternalServerError, dtos.MutateCustomerResponse{
+		ctx.JSON(http.StatusInternalServerError, dtos.MutateResponse{
 			Message: err.Error(),
 			Success: false,
 			Status:  500,
@@ -208,7 +264,7 @@ func (h *Handler) DeleteCustomer(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, dtos.MutateCustomerResponse{
+	ctx.JSON(http.StatusOK, dtos.MutateResponse{
 		Message: "Xóa khách hàng thành công!",
 		Success: true,
 		Status:  200,
