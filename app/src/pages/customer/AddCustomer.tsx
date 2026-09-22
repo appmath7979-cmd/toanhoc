@@ -9,7 +9,7 @@ export default function AddCustomer() {
 	return (
 		<Box>
 			<BackBtn onClick={setDefault} />
-			<CustomerForm data={data} />
+			<CustomerForm data={data} onReset={setDefault} />
 		</Box>
 	);
 }

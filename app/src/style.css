@@ -151,7 +151,7 @@ html {
 	}
 
 	.input {
-		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-background focus:border-primary focus:ring-primary focus:ring-2 transition-all duration-300;
+		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-background focus:border-primary focus:ring-primary focus:ring-2  transition-all duration-300;
 	}
 
 	.radio-box {
@@ -173,3 +173,4 @@ input[type="number"] {
 	-moz-appearance: textfield;
 	appearance: textfield;
 }
+

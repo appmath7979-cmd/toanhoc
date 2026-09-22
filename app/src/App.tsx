@@ -4,6 +4,7 @@ import Root from "./layouts/Root";
 import Customer from "./pages/customer/Customer";
 import AddCustomer from "./pages/customer/AddCustomer";
 import EditCustomer from "./pages/customer/EditCustomer";
+import { Toaster } from "sonner";
 
 export function App() {
 	return (
@@ -18,6 +19,7 @@ export function App() {
 					</Route>
 				</Route>
 			</Routes>
+			<Toaster closeButton expand richColors />
 		</BrowserRouter>
 	);
 }

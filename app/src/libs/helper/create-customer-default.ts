@@ -6,7 +6,7 @@ export const createCustomerDefault = {
 	phone_number: "",
 	setting: {
 		dax_t: "HALF",
-		xienMB: false,
+		xien_mb: false,
 		bets: [
 			{
 				type: "b2",
