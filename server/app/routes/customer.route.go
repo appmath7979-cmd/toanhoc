@@ -16,6 +16,9 @@ func CustomerRoute() []RouteGroup {
 					Path: "", Method: "GET", Handler: handlers.GetCustomer,
 				},
 				{
+					Path: "/:id", Method: "GET", Handler: handlers.GetCustomerById,
+				},
+				{
 					Path: "", Method: "POST", Handler: handlers.CreateCustomer,
 				},
 				{

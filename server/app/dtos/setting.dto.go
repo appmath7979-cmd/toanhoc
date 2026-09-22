@@ -4,18 +4,7 @@ import (
 	"time"
 )
 
-type BetType string
 type DaX_T string
-
-const (
-	BetB2  BetType = "b2"
-	BetDD2 BetType = "dd2"
-	BetDa  BetType = "da"
-	BetDax BetType = "dax"
-	BetB3  BetType = "b3"
-	BetDD3 BetType = "dd3"
-	BetB4  BetType = "b4"
-)
 
 type CreateBetPairValue struct {
 	MB float32 `json:"mb" validate:"required,min=0"`
@@ -31,7 +20,7 @@ type CreateBetPair struct {
 }
 
 type CreateSetting struct {
-	XienMB bool            `json:"xien_mb" gorm:"type:boolean;default:false"`
+	XienMB bool            `json:"xien_mb" gorm:"type:boolean"`
 	DaXT   DaX_T           `json:"dax_t" validate:"required,oneof=ONE HALFMANY"`
 	Bets   []CreateBetPair `json:"bets" validate:"required"`
 }

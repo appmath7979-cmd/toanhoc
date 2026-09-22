@@ -12,18 +12,6 @@ type BetValue struct {
 	MT float32 `json:"mt"`
 }
 
-type BetType string
-
-const (
-	B2  BetType = "b2"
-	DD2 BetType = "dd2"
-	DA  BetType = "da"
-	DAX BetType = "dax"
-	B3  BetType = "b3"
-	DD3 BetType = "dd3"
-	B4  BetType = "b4"
-)
-
 type BetPair struct {
 	Type    BetType  `json:"type"`
 	C       BetValue `json:"c"`
