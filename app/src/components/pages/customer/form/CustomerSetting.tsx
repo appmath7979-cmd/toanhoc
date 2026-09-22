@@ -5,6 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/core/Card";
+import Field from "@/components/core/field/Field";
 import Input from "@/components/core/field/Input";
 import Label from "@/components/core/field/Label";
 import { Radio, RadioItem } from "@/components/core/field/Radio";
@@ -24,26 +25,29 @@ const CustomerSetting = withForm({
 					</CardDescription>
 				</CardHeader>
 				<CardBody>
-					<form.Field name="setting.xienMB">
+					<form.Field name="setting.xien_mb">
 						{({ state, handleChange }) => (
-							<Radio
-								value={state.value ? "true" : "false"}
-								defaultValue="false"
-								onValueChange={(val) => handleChange(val === "true")}
-							>
-								<RadioItem
-									value="true"
-									label="Cho phép"
-									description="Cho phép khách hàng đá thẳng cho miền Bắc. Điều này sẽ áp dụng cho tính đá xiên"
-									isBox
-								/>
-								<RadioItem
-									value="false"
-									label="Không"
-									description="Không cho phép khách hàng đá thẳng cho miền Bắc. Điều này sẽ không áp dụng cho tính đá xiên"
-									isBox
-								/>
-							</Radio>
+							<Field>
+								<Label>Xiên Miền Bắc</Label>
+								<Radio
+									value={state.value ? "true" : "false"}
+									defaultValue="false"
+									onValueChange={(val) => handleChange(val === "true")}
+								>
+									<RadioItem
+										value="true"
+										label="Cho phép"
+										description="Cho phép khách hàng đá xiên miền Bắc."
+										isBox
+									/>
+									<RadioItem
+										value="false"
+										label="Không"
+										description="Không cho phép khách hàng đá xiên miền Bắc."
+										isBox
+									/>
+								</Radio>
+							</Field>
 						)}
 					</form.Field>
 					<form.Field name="setting.bets">

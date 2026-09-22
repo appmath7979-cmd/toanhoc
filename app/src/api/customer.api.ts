@@ -47,7 +47,7 @@ async function updateCustomerWithSetting(
 	customerId: string,
 	data: Partial<CreateCustomer>,
 ): Promise<BaseApi> {
-	const res = await baseApi.patch(`${pathCustomer}/${customerId}`, data);
+	const res = await baseApi.put(`${pathCustomer}/${customerId}`, data);
 	return res.data;
 }
 
