@@ -76,8 +76,25 @@ func (s *Service) GetManyCustomer(pagination *dtos.GetCustomersQuery) ([]dtos.Cu
 	return results, total, int64(totalPage), nil
 }
 
-func (s *Service) GetCustomerById(id string) {
+func (s *Service) GetCustomerById(id string, release string) (dtos.CustomerById, uint16, error) {
+	var customer dtos.CustomerById
 
+	err := s.db.Model(&models.Customer{}).
+		Where("id = ?", id).
+		Preload("Messages", "release = ?", release).
+		Preload("Messages.Details").
+		First(&customer).
+		Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dtos.CustomerById{}, 404, errors.New("Không tìm thấy khách hàng!")
+		}
+
+		return dtos.CustomerById{}, 500, err
+	}
+
+	return customer, 200, nil
 }
 
 func (s *Service) CreateCustomer(req dtos.CreateCustomer) (uint16, error) {

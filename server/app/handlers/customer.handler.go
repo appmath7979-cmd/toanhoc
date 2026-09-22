@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
@@ -77,9 +76,71 @@ func (h *Handler) GetCustomer(ctx *gin.Context) {
 	})
 }
 
+// GetCustomerById godoc
+// @Summary      Lấy chi tiết thông tin khách hàng
+// @Description  Lấy chi tiết thông tin khách hàng bao gồm thông tin cơ bản và tin nhắn theo ngày
+// @Tags         customers
+// @Accept       json
+// @Produce      json
+// @Param        id  path      string      true  "Id khách hàng cần tìm"
+// @Param        release  query      string      true  "Ngày tạo"
+// @Success      200      {object}  dtos.CustomerByIdResponse  "Tìm kiếm thành công"
+// @Failure      400      {object}  dtos.CustomerByIdResponse  "Dữ liệu không hợp lệ"
+// @Failure      404      {object}  dtos.CustomerByIdResponse  "Không tìm thấy khách hàng"
+// @Failure      500      {object}  dtos.CustomerByIdResponse  "Lỗi server"
+// @Router       /api/v1/customers/{id} [get]
 func (h *Handler) GetCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	log.Fatalln(id)
+	release := ctx.Query("release")
+
+	if release == "" {
+		ctx.JSON(http.StatusBadRequest, dtos.CustomerByIdResponse{
+			Message: "Thông tin yêu cầu không hợp lệ!",
+			Success: false,
+			Status:  400,
+			Data:    dtos.CustomerById{},
+		})
+
+		return
+	}
+
+	if err := validator.ValidateUUID(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.CustomerByIdResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  400,
+			Data:    dtos.CustomerById{},
+		})
+	}
+
+	customer, status, err := h.Service.GetCustomerById(id, release)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, dtos.CustomerByIdResponse{
+				Message: err.Error(),
+				Status:  status,
+				Success: false,
+				Data:    customer,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, dtos.CustomerByIdResponse{
+				Message: err.Error(),
+				Status:  status,
+				Success: false,
+				Data:    customer,
+			})
+		}
+
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dtos.CustomerByIdResponse{
+		Message: "Thành công!",
+		Success: true,
+		Status:  200,
+		Data:    customer,
+	})
 }
 
 // CreateCustomer godoc
@@ -143,10 +204,10 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id  path     string        true  "Id khách hàng cần sửa"
-// @Param        request  body     string        true  "Thông tin cần sửa"
+// @Param        request  body     dtos.UpdateCustomerWithSetting        true  "Thông tin cần sửa"
 // @Success      200      {object}  dtos.MutateResponse  "Sửa thành công"
 // @Failure      500      {object}  dtos.MutateResponse  "Lỗi server"
-// @Router       /api/v1/customers/{id} [delete]
+// @Router       /api/v1/customers/{id} [put]
 func (h *Handler) UpdateCustomer(ctx *gin.Context) {
 	customerId := ctx.Param("id")
 

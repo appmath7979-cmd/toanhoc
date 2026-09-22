@@ -47,8 +47,16 @@ type CustomerById struct {
 	PhoneNumber string    `json:"phone_number"`
 	Guest       bool      `json:"guest"`
 	Active      bool      `json:"active"`
+	Messages    []Message `json:"messages"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+type CustomerByIdResponse struct {
+	Message string       `json:"message"`
+	Success bool         `json:"success"`
+	Status  uint16       `json:"status"`
+	Data    CustomerById `json:"data"`
 }
 
 type UpdateCustomerWithSetting struct {

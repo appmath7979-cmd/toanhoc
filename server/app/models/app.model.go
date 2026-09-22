@@ -1,10 +1,4 @@
-package dtos
-
-type MutateResponse struct {
-	Message string `json:"message"`
-	Success bool   `json:"success"`
-	Status  uint16 `json:"status"`
-}
+package models
 
 type BetType string
 
@@ -72,3 +66,4 @@ const (
 	P_KT  Province = "kt"
 	P_MB  Province = "mb"
 )
+
