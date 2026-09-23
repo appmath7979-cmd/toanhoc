@@ -1,13 +1,11 @@
 package services
 
 import (
-	"errors"
 	"math"
 	"server/app/dtos"
 	"server/app/models"
 	"server/app/utils"
 
-	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -15,35 +13,33 @@ func CustomerService(db *gorm.DB) *Service {
 	return &Service{db: db}
 }
 
-func (s *Service) GetManyCustomer(pagination *dtos.GetCustomersQuery) ([]dtos.CustomerItem, int64, int64, error) {
+func (s *Service) GetManyCustomer(queries *dtos.CustomerQuery) (
+	[]dtos.GetCustomer,
+	int64,
+	int64,
+	error,
+) {
 	var customers []models.Customer
 
 	limit := 10
-	offset := (pagination.Page - 1) * limit
-
-	var total int64
+	offset := (queries.Page - 1) * limit
+	var totalItem int64
 
 	query := s.db.Model(&customers)
 
-	if pagination.Search != "" {
-		cleanSearch := utils.RemoveAccent(pagination.Search)
+	if queries.Search != "" {
+		cleanSearch := utils.RemoveAccent(queries.Search)
 		searchPattern := "%" + cleanSearch + "%"
-		query = query.Where(
-			"unaccent(full_name) ILIKE ? OR unaccent(phone_number) ILIKE ?",
-			searchPattern,
+		query = query.Where("unaccent(full_name) ILIKE ? OR unaccent(phone_number) ILIKE ?", searchPattern,
 			searchPattern,
 		)
 	}
 
-	if pagination.Active != nil {
-		query = query.Where("active = ?", *pagination.Active)
+	if queries.Active != nil {
+		query = query.Where("active = ?", queries.Active)
 	}
 
-	if pagination.Guest != nil {
-		query = query.Where("guest = ?", *pagination.Guest)
-	}
-
-	switch pagination.Sort {
+	switch queries.Sort {
 	case "latest":
 		query = query.Order("created_at DESC")
 	case "oldest":
@@ -56,179 +52,26 @@ func (s *Service) GetManyCustomer(pagination *dtos.GetCustomersQuery) ([]dtos.Cu
 		query = query.Order("created_at DESC")
 	}
 
-	query.Debug().Count(&total).Offset(offset).Limit(limit).Find(&customers)
+	err := query.Count(&totalItem).Offset(offset).Limit(limit).Find(&customers).Error
 
-	var results []dtos.CustomerItem
+	if err != nil {
+		return nil, 0, 0, err
+	}
+
+	var results []dtos.GetCustomer
+
 	for _, c := range customers {
-		results = append(results, dtos.CustomerItem{
-			ID:          c.ID,
-			FullName:    c.FullName,
-			PhoneNumber: c.PhoneNumber,
-			Guest:       c.Guest,
-			Active:      c.Active,
-			CreatedAt:   c.CreatedAt,
-			UpdatedAt:   c.UpdatedAt,
+		results = append(results, dtos.GetCustomer{
+			ID:        c.ID,
+			FullName:  c.FullName,
+			IsGuest:   c.IsGuest,
+			IsSend:    c.IsSend,
+			CreatedAt: c.CreatedAt,
+			UpdatedAt: c.UpdatedAt,
 		})
 	}
 
-	totalPage := math.Ceil(float64(total) / float64(limit))
+	totalPage := math.Ceil(float64(totalItem) / float64(limit))
 
-	return results, total, int64(totalPage), nil
-}
-
-func (s *Service) GetCustomerById(id string, release string) (dtos.CustomerById, uint16, error) {
-	var customer dtos.CustomerById
-
-	err := s.db.Model(&models.Customer{}).
-		Where("id = ?", id).
-		Preload("Messages", "release = ?", release).
-		Preload("Messages.Details").
-		First(&customer).
-		Error
-
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return dtos.CustomerById{}, 404, errors.New("Không tìm thấy khách hàng!")
-		}
-
-		return dtos.CustomerById{}, 500, err
-	}
-
-	return customer, 200, nil
-}
-
-func (s *Service) CreateCustomer(req dtos.CreateCustomer) (uint16, error) {
-	var existingCustomer models.Customer
-
-	err := s.db.Where("phone_number = ?", req.PhoneNumber).First(&existingCustomer).Error
-
-	if err == nil {
-		return 409, errors.New("Số điện thoại đã tồn tại!")
-	}
-
-	if !errors.Is(err, gorm.ErrRecordNotFound) {
-		return 500, err
-	}
-
-	var bets []models.BetPair
-
-	for _, b := range req.Setting.Bets {
-		bets = append(bets, models.BetPair{
-			Type:    models.BetType(b.Type),
-			C:       models.BetValue(b.C),
-			T:       models.BetValue(b.T),
-			Percent: b.Percent,
-		})
-	}
-
-	setting := models.Setting{
-		XienMB: req.Setting.XienMB,
-		DaXT:   models.DaX_T(req.Setting.DaXT),
-		Bets:   datatypes.JSONSlice[models.BetPair](bets),
-	}
-
-	customer := models.Customer{
-		FullName:    req.FullName,
-		PhoneNumber: req.PhoneNumber,
-		Guest:       req.Guest,
-		Setting:     &setting,
-	}
-
-	if err := s.db.Create(&customer).Error; err != nil {
-		return 500, err
-	}
-
-	return 201, nil
-}
-
-func (s *Service) UpdateCustomerWithSetting(
-	id string,
-	req dtos.UpdateCustomerWithSetting,
-) (uint16, error) {
-	var existingCustomer models.Customer
-
-	err := s.db.Where("phone_number = ? AND id = ?", req.PhoneNumber, id).First(&existingCustomer).Error
-
-	if err != nil {
-		return 409, errors.New("Không thể cập nhật với số điện thoại này!")
-	}
-
-	err = s.db.Transaction(func(tx *gorm.DB) error {
-		var customer models.Customer
-
-		if err := tx.Where("id = ?", id).First(&customer).Error; err != nil {
-			return err
-		}
-
-		customer.FullName = req.FullName
-		customer.PhoneNumber = req.PhoneNumber
-
-		if req.Guest != nil {
-			customer.Guest = *req.Guest
-		}
-
-		var bets []models.BetPair
-
-		for _, b := range req.Setting.Bets {
-			bets = append(bets, models.BetPair{
-				Type:    models.BetType(b.Type),
-				C:       models.BetValue(b.C),
-				T:       models.BetValue(b.T),
-				Percent: b.Percent,
-			})
-		}
-
-		var setting models.Setting
-
-		err := tx.Where("customer_id", id).First(&setting).Error
-
-		if err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				setting = models.Setting{
-					XienMB:     req.Setting.XienMB,
-					DaXT:       models.DaX_T(req.Setting.DaXT),
-					Bets:       datatypes.JSONSlice[models.BetPair](bets),
-					CustomerId: id,
-				}
-
-				if err := tx.Create(&setting).Error; err != nil {
-					return err
-				}
-			} else {
-				return err
-			}
-		} else {
-			setting.DaXT = models.DaX_T(req.Setting.DaXT)
-			setting.XienMB = req.Setting.XienMB
-			setting.Bets = datatypes.JSONSlice[models.BetPair](bets)
-
-			if err := tx.Save(&setting).Error; err != nil {
-				return err
-			}
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		return 500, err
-	}
-
-	return 200, nil
-}
-
-func (s *Service) DeleteCustomerById(id string) error {
-	if err := s.db.Delete(&models.Customer{}, "id = ?", id).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (s *Service) DeleteManyCustomer(req dtos.DeleteCustomerManyRequest) error {
-	if err := s.db.Where("id IN ?", req.Ids).Delete(&models.Customer{}).Error; err != nil {
-		return err
-	}
-
-	return nil
+	return results, totalItem, int64(totalPage), nil
 }

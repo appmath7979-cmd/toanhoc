@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"server/configs"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,8 +30,7 @@ type RouteGroup struct {
 func AppRoutes() []RouteGroup {
 	var allRouteGroups []RouteGroup
 
-	allRouteGroups = append(allRouteGroups, CustomerRoute()...)
-	allRouteGroups = append(allRouteGroups, SettingRoute()...)
+	allRouteGroups = append(allRouteGroups, CustomerRoute(configs.DB))
 
 	return allRouteGroups
 }
