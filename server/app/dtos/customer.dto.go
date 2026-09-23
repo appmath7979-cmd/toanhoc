@@ -3,9 +3,10 @@ package dtos
 import "time"
 
 type CreateCustomer struct {
-	FullName    string `json:"full_name" binding:"required,min=2,max=100"`
-	PhoneNumber string `json:"phone_number" binding:"required,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
-	IsGuest     bool   `json:"is_guest" binding:"required"`
+	FullName    string        `json:"full_name" binding:"required,min=2,max=100"`
+	PhoneNumber string        `json:"phone_number" binding:"required,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
+	IsGuest     bool          `json:"is_guest" binding:"required"`
+	Setting     CreateSetting `json:"setting" binding:"required"`
 }
 
 type CustomerQuery struct {

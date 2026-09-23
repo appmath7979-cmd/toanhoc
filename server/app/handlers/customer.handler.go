@@ -68,3 +68,53 @@ func (h *Handler) GetManyCustomer(ctx *gin.Context) {
 		TotalPage: totalPage,
 	})
 }
+
+// CreateCustomer godoc
+// @Summary      Tạo khách hàng mới
+// @Description  Tạo khách hàng cùng thiết lập cho khách hàng
+// @Tags         customers
+// @Accept       json
+// @Produce      json
+// @Param        request    body   dtos.CreateCustomer  false  "Thông tin khách hàng"
+// @Success      201     {object}  dtos.MutateResponse "Tạo khách hàng thành công"
+// @Failure      400     {object}  dtos.MutateResponse "Thông tin không hợp lệ"
+// @Failure      409     {object}  dtos.MutateResponse "Số điện thoại bị trùng"
+// @Failure      500     {object}  dtos.MutateResponse "Lỗi server nội bộ"
+// @Router			 /api/v1/customers [post]
+func (h *Handler) CreateCustomer(ctx *gin.Context) {
+	var req dtos.CreateCustomer
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{
+			Message: err.Error(),
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	status, err := h.Service.CreateCustomer(&req)
+
+	if err != nil {
+		if status == 409 {
+			ctx.JSON(http.StatusConflict, dtos.MutateResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, dtos.MutateResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusCreated, dtos.MutateResponse{
+			Message: "Tạo khách hàng thành công!",
+			Success: true,
+			Status:  status,
+		})
+	}
+}

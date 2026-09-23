@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"math"
 	"server/app/dtos"
 	"server/app/models"
@@ -74,4 +75,48 @@ func (s *Service) GetManyCustomer(queries *dtos.CustomerQuery) (
 	totalPage := math.Ceil(float64(totalItem) / float64(limit))
 
 	return results, totalItem, int64(totalPage), nil
+}
+
+func (s *Service) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
+	var existing models.Customer
+
+	err := s.db.Where("phone_number = ?", req.PhoneNumber).First(&existing).Error
+
+	if err == nil {
+		return 409, errors.New("Không thể tạo với số điện thoại này!")
+	}
+
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return 500, err
+	}
+
+	var bets []models.BetPair
+
+	for _, b := range req.Setting.Bets {
+		bets = append(bets, models.BetPair{
+			Type:    models.BetType(b.Type),
+			C:       models.BetValue(b.C),
+			T:       models.BetValue(b.T),
+			Percent: b.Percent,
+		})
+	}
+
+	setting := models.Setting{
+		XienMb: req.Setting.XienMb,
+		DaxT:   models.DaxT(req.Setting.DaxT),
+		Bets:   bets,
+	}
+
+	customer := models.Customer{
+		FullName:    req.FullName,
+		PhoneNumber: req.PhoneNumber,
+		IsGuest:     req.IsGuest,
+		Setting:     &setting,
+	}
+
+	if err := s.db.Create(&customer).Error; err != nil {
+		return 500, err
+	}
+
+	return 201, nil
 }
