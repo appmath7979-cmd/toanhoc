@@ -10,7 +10,7 @@ type Customer struct {
 	Active      bool      `gorm:"type:boolean;default:true"`
 	IsSend      bool      `gorm:"type:boolean;default:false"`
 
-	Setting     *Setting  `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE;" json:"setting"`
+	Setting     *Setting  `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"setting"`
 	
 	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP"`

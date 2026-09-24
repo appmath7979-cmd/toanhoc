@@ -1,6 +1,9 @@
 package dtos
 
-import "server/app/models"
+import (
+	"server/app/models"
+	"time"
+)
 
 type DaxT string
 
@@ -21,4 +24,34 @@ type CreateSetting struct {
 	XienMb bool            `json:"xien_mb" gorm:"type:boolean"`
 	DaxT   DaxT            `json:"dax_t" binding:"required,oneof=ONE HALF MANY"`
 	Bets   []CreateBetPair `json:"bets" binding:"required"`
+}
+
+type GetBetPairValue struct {
+	MB float32 `json:"mb"`
+	MN float32 `json:"mn"`
+	MT float32 `json:"mt"`
+}
+
+type GetBetPair struct {
+	Type    models.BetType  `json:"type"`
+	C       GetBetPairValue `json:"c"`
+	T       GetBetPairValue `json:"t"`
+	Percent bool            `json:"percent"`
+}
+
+type GetSetting struct {
+	ID         string       `json:"id"`
+	XienMb     bool         `json:"xien_mb"`
+	DaxT       DaxT         `json:"dax_t"`
+	Bets       []GetBetPair `json:"bets"`
+	CustomerID string       `json:"customer_id"`
+	CreatedAt  time.Time    `json:"created_at"`
+	UpdatedAt  time.Time    `json:"updated_at"`
+}
+
+type GetSettingResponse struct {
+	Message string      `json:"message"`
+	Success bool        `json:"success"`
+	Status  uint16      `json:"status"`
+	Data    *GetSetting `json:"data"`
 }

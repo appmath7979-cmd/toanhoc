@@ -118,3 +118,5 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 		})
 	}
 }
+
+// func (h *Handler) {}

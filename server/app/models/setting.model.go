@@ -33,7 +33,7 @@ type Setting struct {
 	DaxT   DaxT                         `gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
 	Bets   datatypes.JSONSlice[BetPair] `gorm:"type:jsonb"`
 
-	CustomerId string `gorm:"type:uuid;unique;not null;index"`
+	CustomerID string `gorm:"type:uuid;unique;not null;index"`
 
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`

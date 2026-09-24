@@ -29,8 +29,9 @@ type RouteGroup struct {
 
 func AppRoutes() []RouteGroup {
 	var allRouteGroups []RouteGroup
+	db := configs.DB
 
-	allRouteGroups = append(allRouteGroups, CustomerRoute(configs.DB))
+	allRouteGroups = append(allRouteGroups, CustomerRoute(db), SettingRoute(db))
 
 	return allRouteGroups
 }
