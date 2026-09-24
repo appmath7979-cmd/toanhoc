@@ -2,34 +2,32 @@ package routes
 
 import (
 	"server/app/handlers"
-	"server/configs"
+	"server/app/services"
+
+	"gorm.io/gorm"
 )
 
-func CustomerRoute() []RouteGroup {
-	handlers := handlers.CustomerHandler(configs.DB)
+func CustomerRoute(db *gorm.DB) RouteGroup {
+	service := services.CustomerService(db)
+	handler := handlers.CustomerHandler(service)
 
-	return []RouteGroup{
-		{
-			Prefix: "customers",
-			Routes: []Route{
-				{
-					Path: "", Method: "GET", Handler: handlers.GetCustomer,
-				},
-				{
-					Path: "/:id", Method: "GET", Handler: handlers.GetCustomerById,
-				},
-				{
-					Path: "", Method: "POST", Handler: handlers.CreateCustomer,
-				},
-				{
-					Path: "/:id", Method: "PUT", Handler: handlers.UpdateCustomer,
-				},
-				{
-					Path: "", Method: "DELETE", Handler: handlers.DeleteCustomer,
-				},
-				{
-					Path: "/:id", Method: "DELETE", Handler: handlers.DeleteCustomerById,
-				},
+	return RouteGroup{
+		Prefix: "/customers",
+		Routes: []Route{
+			{
+				Path: "", Method: "GET", Handler: handler.GetManyCustomer,
+			},
+			{
+				Path: "", Method: "POST", Handler: handler.CreateCustomer,
+			},
+			{
+				Path: "/:id", Method: "PATCH", Handler: handler.UpdateCustomer,
+			},
+			{
+				Path: "", Method: "DELETE", Handler: handler.DeleteManyCustomer,
+			},
+			{
+				Path: "/:id", Method: "DELETE", Handler: handler.DeleteCustomerById,
 			},
 		},
 	}

@@ -3,65 +3,46 @@ package dtos
 import "time"
 
 type CreateCustomer struct {
-	FullName    string        `json:"full_name" validate:"required,min=2,max=100"`
-	PhoneNumber string        `json:"phone_number" validate:"required"`
-	Guest       bool          `json:"guest" validate:"required"`
-	Setting     CreateSetting `json:"setting" validate:"required"`
+	FullName    string        `json:"full_name" binding:"required,min=2,max=100"`
+	PhoneNumber string        `json:"phone_number" binding:"required,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
+	IsGuest     bool          `json:"is_guest" binding:"required"`
+	Setting     CreateSetting `json:"setting" binding:"required"`
 }
 
-type CustomerItem struct {
-	ID          string    `json:"id"`
-	FullName    string    `json:"full_name"`
-	PhoneNumber string    `json:"phone_number"`
-	Guest       bool      `json:"guest"`
-	Active      bool      `json:"active"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+type UpdateCustomer struct {
+	FullName    *string        `json:"full_name" binding:"omitempty,min=2,max=100"`
+	PhoneNumber *string        `json:"phone_number" binding:"omitempty,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
+	IsGuest     *bool          `json:"is_guest" binding:"omitempty"`
+	Active      *bool          `json:"active" binding:"omitempty"`
+	Setting     *UpdateSetting `json:"setting" binding:"omitempty"`
 }
 
-type CustomerListResponse struct {
-	Message   string         `json:"message"`
-	Success   bool           `json:"success"`
-	Status    uint16         `json:"status"`
-	Data      []CustomerItem `json:"data"`
-	Page      int            `json:"page"`
-	TotalItem int            `json:"total_items"`
-	TotalPage int            `json:"total_pages"`
-}
-
-type DeleteCustomerManyRequest struct {
+type DeleteManyCustomer struct {
 	Ids []string `json:"ids" binding:"required"`
 }
 
-type GetCustomersQuery struct {
+type CustomerQuery struct {
 	Page   int    `form:"page" default:"1"`
 	Search string `form:"search"`
-	Sort   string `form:"sort" default:"latest"`
 	Active *bool  `form:"active"`
-	Guest  *bool  `form:"guest"`
+	Guest  bool   `form:"guest"`
+	Sort   string `form:"sort"`
 }
 
-type CustomerById struct {
-	ID          string    `json:"id"`
-	FullName    string    `json:"full_name"`
-	PhoneNumber string    `json:"phone_number"`
-	Guest       bool      `json:"guest"`
-	Active      bool      `json:"active"`
-	Messages    []Message `json:"messages"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+type GetCustomer struct {
+	ID        string    `json:"id"`
+	FullName  string    `json:"full_name"`
+	IsGuest   bool      `json:"is_guest"`
+	IsSend    bool      `json:"is_send"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type CustomerByIdResponse struct {
-	Message string       `json:"message"`
-	Success bool         `json:"success"`
-	Status  uint16       `json:"status"`
-	Data    CustomerById `json:"data"`
-}
-
-type UpdateCustomerWithSetting struct {
-	FullName    string        `json:"full_name" validate:"required,min=2,max=100"`
-	PhoneNumber string        `json:"phone_number" validate:"required"`
-	Guest       *bool         `json:"guest"`
-	Setting     CreateSetting `json:"setting"`
+type GetManyCustomerRes struct {
+	Message   string        `json:"message"`
+	Success   bool          `json:"success"`
+	Status    uint16        `json:"status"`
+	Data      []GetCustomer `json:"data"`
+	TotalItem int64         `json:"total_item"`
+	TotalPage int64         `json:"total_page"`
 }

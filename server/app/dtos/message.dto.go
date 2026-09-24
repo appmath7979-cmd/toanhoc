@@ -1,32 +1,36 @@
 package dtos
 
-import "time"
+import (
+	"server/app/models"
+	"time"
+)
 
-type MessageDetail = struct {
-	ID        string `json:"id"`
-	MessageId string `json:"message_id"`
+type GetMessageDetail struct {
+	ID       string          `json:"id"`
+	Region   models.Region   `json:"region"`
+	Type     models.BetType  `json:"type"`
+	Syntax   models.Syntax   `json:"syntax"`
+	Province models.Province `json:"province"`
 
-	Type     BetType  `json:"type"`
-	Syntax   Syntax   `json:"syntax"`
-	Province Province `json:"province"`
-	Number   string   `json:"number"`
-
-	Score float32 `json:"score"`
-	Co    float32 `json:"co"`
-	Trung float32 `json:"trung"`
+	Score     float32 `json:"score"`
+	Co        float32 `json:"co"`
+	Trung     float32 `json:"trung"`
+	Number    string  `json:"number"`
+	MessageID string  `json:"message_id"`
 
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type Message = struct {
-	ID         string          `json:"id"`
-	Content    string          `json:"content"`
-	Region     Region          `json:"region"`
-	CustomerId string          `json:"customer_id"`
-	Release    string          `json:"release"`
-	Send       bool            `json:"is_send"`
-	Details    []MessageDetail `json:"details"`
-	CreatedAt  time.Time       `json:"created_at"`
-	UpdatedAt  time.Time       `json:"updated_at"`
+type GetMessage struct {
+	ID      string `json:"id"`
+	Send    bool   `json:"is_send"`
+	At      string `json:"at"`
+	Content string `json:"content"`
+
+	MessageDetails []GetMessageDetail `json:"message_details"`
+	CustomerID string `json:"customer_id"`
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

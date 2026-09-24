@@ -4,57 +4,73 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
+	"server/app/validator"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func SettingHandler(db *gorm.DB) *Handler {
-	return &Handler{Service: services.SettingService(db)}
+
+
+func SettingHandler(service services.SettingServices) *SettingHandlers {
+	return &SettingHandlers{service: service}
 }
 
-// GetSettingById godoc
-// @Summary      Tìm kiếm thiết lập của khách hàng
-// @Description  Lấy thông tin thiết lập của khách hàng
+// GetSettingByCustomerId godoc
+// @Summary      Lấy cấu hình của khách hàng
+// @Description  Lấy tất cả thông tin cấu hình của khách hàng
 // @Tags         settings
 // @Accept       json
 // @Produce      json
-// @Param        id  path      string      true  "Id của khách hàng cần lấy"
-// @Success      200      {object}  dtos.SettingResponse  "Lấy cấu hình thành công"
-// @Failure      404      {object}  dtos.SettingResponse  "Dữ liệu không tồn tại"
-// @Failure      500      {object}  dtos.SettingResponse  "Lỗi server"
-// @Router       /api/v1/settings/{id} [get]
-func (h *Handler) GetSettingById(ctx *gin.Context) {
+// @Param        customerId    path     string     true  "Thông tin người dùng"
+// @Success      200     {object}  dtos.GetManyCustomerRes "Lấy danh sách thành công"
+// @Failure      400     {object}  dtos.GetManyCustomerRes "Thông tin người dùng không hợp lệ"
+// @Failure      404     {object}  dtos.GetManyCustomerRes "Không tìm thấy cấu hình hoặc người dùng"
+// @Failure      500     {object}  dtos.GetManyCustomerRes "Lỗi server nội bộ"
+// @Router			 /api/v1/settings/{id} [get]
+func (h *SettingHandlers) GetSettingByCustomerId(ctx *gin.Context) {
 	customerId := ctx.Param("id")
 
-	setting, status, err := h.Service.GetSettingByCustomerId(customerId)
-
-	if err != nil {
-		if status == 404 {
-			ctx.JSON(http.StatusNotFound, dtos.SettingResponse{
-				Message: err.Error(),
-				Success: false,
-				Data:    dtos.SettingItem{},
-				Status:  status,
-			})
-
-			return
-		}
-
-		ctx.JSON(http.StatusInternalServerError, dtos.SettingResponse{
-			Message: err.Error(),
+	if err := validator.ValidateUUID(customerId); err != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.GetSettingResponse{
+			Message: "Người dùng không hợp lệ!",
 			Success: false,
-			Data:    dtos.SettingItem{},
-			Status:  status,
+			Status:  400,
+			Data:    nil,
 		})
-
-		return
 	}
 
-	ctx.JSON(http.StatusOK, dtos.SettingResponse{
-		Message: "Thành công!",
-		Success: true,
-		Data:    setting,
-		Status:  status,
-	})
+	setting, status, err := h.service.GetSettingByCustomerId(customerId)
+
+	if err != nil {
+		switch status {
+		case 400:
+			ctx.JSON(http.StatusBadRequest, dtos.GetSettingResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    setting,
+			})
+		case 404:
+			ctx.JSON(http.StatusNotFound, dtos.GetSettingResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    setting,
+			})
+		default:
+			ctx.JSON(http.StatusInternalServerError, dtos.GetSettingResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    setting,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, dtos.GetSettingResponse{
+			Message: "Thành công!",
+			Success: true,
+			Status:  status,
+			Data:    setting,
+		})
+	}
 }

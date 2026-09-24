@@ -22,7 +22,12 @@ func main() {
 	port := app.LoadEnv("PORT")
 
 	configs.DbConfig()
-	configs.DbMigrate(&models.Customer{}, &models.Setting{})
+	configs.DbMigrate(
+		&models.Customer{},
+		&models.Setting{},
+		&models.Message{},
+		&models.MessageDetail{},
+	)
 
 	app := core.NewApplication()
 

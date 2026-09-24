@@ -2,19 +2,20 @@ package routes
 
 import (
 	"server/app/handlers"
-	"server/configs"
+	"server/app/services"
+
+	"gorm.io/gorm"
 )
 
-func SettingRoute() []RouteGroup {
-	handlers := handlers.SettingHandler(configs.DB)
+func SettingRoute(db *gorm.DB) RouteGroup {
+	service := services.SettingService(db)
+	handler := handlers.SettingHandler(service)
 
-	return []RouteGroup{
-		{
-			Prefix: "settings",
-			Routes: []Route{
-				{
-					Path: "/:id", Method: "GET", Handler: handlers.GetSettingById,
-				},
+	return RouteGroup{
+		Prefix: "/settings",
+		Routes: []Route{
+			{
+				Path: "/:id", Method: "GET", Handler: handler.GetSettingByCustomerId,
 			},
 		},
 	}

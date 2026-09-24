@@ -19,21 +19,21 @@ type BetPair struct {
 	Percent bool     `json:"percent"`
 }
 
-type DaX_T string
+type DaxT string
 
 const (
-	ONE  DaX_T = "ONE"
-	HALF DaX_T = "HALF"
-	MANY DaX_T = "MANY"
+	ONE  DaxT = "ONE"
+	HALF DaxT = "HALF"
+	MANY DaxT = "MANY"
 )
 
 type Setting struct {
-	ID     string                       `gorm:"type:uuid;primaryKey;default:gen_random_id()"`
-	XienMB bool                         `gorm:"type:boolean;default:false"`
-	DaXT   DaX_T                        `gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
+	ID     string                       `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	XienMb bool                         `gorm:"type:boolean;default:false"`
+	DaxT   DaxT                         `gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
 	Bets   datatypes.JSONSlice[BetPair] `gorm:"type:jsonb"`
 
-	CustomerId string `gorm:"type:uuid;unique;not null;index"`
+	CustomerID string `gorm:"type:uuid;unique;not null;index"`
 
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
