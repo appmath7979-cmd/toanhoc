@@ -10,8 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
 func CustomerService(db *gorm.DB) CustomerServices {
 	return &Service{db: db}
 }
@@ -121,4 +119,94 @@ func (s *Service) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
 	}
 
 	return 201, nil
+}
+
+func (s *Service) UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, error) {
+	var customer models.Customer
+
+	if err := s.db.Preload("Setting").First(&customer, "id = ?", id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 404, errors.New("Không tìm thấy người dùng!")
+		}
+		return 500, err
+	}
+
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		customerUpdates := map[string]interface{}{}
+
+		if req.FullName != nil {
+			customerUpdates["full_name"] = *req.FullName
+		}
+
+		if req.Active != nil {
+			customerUpdates["active"] = *req.Active
+		}
+
+		if req.PhoneNumber != nil {
+			customerUpdates["phone_number"] = *req.PhoneNumber
+		}
+
+		if req.IsGuest != nil {
+			customerUpdates["is_guest"] = *req.IsGuest
+		}
+
+		if len(customerUpdates) > 0 {
+			if err := tx.Model(&models.Customer{}).Where("id = ?", id).Updates(customerUpdates).Error; err != nil {
+				return err
+			}
+		}
+
+		if req.Setting != nil {
+			settingUpdates := map[string]interface{}{}
+
+			if req.Setting.XienMb != nil {
+				settingUpdates["xien_mb"] = *req.Setting.XienMb
+			}
+
+			if req.Setting.DaxT != nil {
+				settingUpdates["dax_t"] = *req.Setting.DaxT
+			}
+
+			if req.Setting.Bets != nil {
+				settingUpdates["bets"] = req.Setting.Bets
+			}
+
+			if len(settingUpdates) > 0 {
+				if err := tx.Model(&models.Setting{}).Where("id = ?", customer.Setting.ID).Updates(settingUpdates).Error; err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return 500, err
+	}
+
+	return 200, nil
+}
+
+func (s *Service) DeleteManyCustomer(req *dtos.DeleteManyCustomer) (uint16, error) {
+	err := s.db.Where("id IN ?", req.Ids).Delete(&models.Customer{}).Error
+
+	if err != nil {
+		return 500, err
+	}
+
+	return 200, nil
+}
+
+func (s *Service) DeleteCustomerById(id string) (uint16, error) {
+	err := s.db.Delete(&models.Customer{}, id).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 404, errors.New("Khách hàng không tồn tại!")
+		} else {
+			return 500, err
+		}
+	} else {
+		return 200, nil
+	}
 }

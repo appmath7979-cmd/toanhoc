@@ -4,10 +4,6 @@ import (
 	"server/app/services"
 )
 
-type Handler struct {
-	*services.Service
-}
-
 type CustomerHandlers struct {
 	service services.CustomerServices
 }

@@ -18,6 +18,9 @@ type CustomerServices interface {
 		error,
 	)
 	CreateCustomer(req *dtos.CreateCustomer) (uint16, error)
+	UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, error)
+	DeleteManyCustomer(req *dtos.DeleteManyCustomer) (uint16, error)
+	DeleteCustomerById(id string) (uint16, error)
 }
 
 type SettingServices interface {
