@@ -6,11 +6,10 @@ import (
 	"server/app/services"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func CustomerHandler(db *gorm.DB) *Handler {
-	return &Handler{Service: services.CustomerService(db)}
+func CustomerHandler(service services.CustomerServices) *CustomerHandlers {
+	return &CustomerHandlers{service: service}
 }
 
 // GetCustomer godoc
@@ -28,7 +27,7 @@ func CustomerHandler(db *gorm.DB) *Handler {
 // @Failure      400     {object}  dtos.GetManyCustomerRes "Query parameters không hợp lệ"
 // @Failure      500     {object}  dtos.GetManyCustomerRes "Lỗi server nội bộ"
 // @Router			 /api/v1/customers [get]
-func (h *Handler) GetManyCustomer(ctx *gin.Context) {
+func (h *CustomerHandlers) GetManyCustomer(ctx *gin.Context) {
 	var query dtos.CustomerQuery
 
 	if err := ctx.ShouldBindQuery(&query); err != nil {
@@ -44,7 +43,7 @@ func (h *Handler) GetManyCustomer(ctx *gin.Context) {
 		return
 	}
 
-	customers, totalItem, totalPage, err := h.Service.GetManyCustomer(&query)
+	customers, totalItem, totalPage, err := h.service.GetManyCustomer(&query)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, dtos.GetManyCustomerRes{
@@ -81,7 +80,7 @@ func (h *Handler) GetManyCustomer(ctx *gin.Context) {
 // @Failure      409     {object}  dtos.MutateResponse "Số điện thoại bị trùng"
 // @Failure      500     {object}  dtos.MutateResponse "Lỗi server nội bộ"
 // @Router			 /api/v1/customers [post]
-func (h *Handler) CreateCustomer(ctx *gin.Context) {
+func (h *CustomerHandlers) CreateCustomer(ctx *gin.Context) {
 	var req dtos.CreateCustomer
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -94,7 +93,7 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 		return
 	}
 
-	status, err := h.Service.CreateCustomer(&req)
+	status, err := h.service.CreateCustomer(&req)
 
 	if err != nil {
 		if status == 409 {
@@ -119,4 +118,4 @@ func (h *Handler) CreateCustomer(ctx *gin.Context) {
 	}
 }
 
-// func (h *Handler) {}
+// func (h *CustomerHandlers) {}

@@ -9,9 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SettingHandlers struct {
-	service services.SettingServices
-}
+
 
 func SettingHandler(service services.SettingServices) *SettingHandlers {
 	return &SettingHandlers{service: service}

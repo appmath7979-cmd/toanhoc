@@ -8,9 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type SettingServices interface {
-	GetSettingByCustomerId(customerId string) (*dtos.GetSetting, uint16, error)
-}
 
 func SettingService(db *gorm.DB) SettingServices {
 	return &Service{db: db}

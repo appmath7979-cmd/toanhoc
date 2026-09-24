@@ -10,7 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func CustomerService(db *gorm.DB) *Service {
+
+
+func CustomerService(db *gorm.DB) CustomerServices {
 	return &Service{db: db}
 }
 
