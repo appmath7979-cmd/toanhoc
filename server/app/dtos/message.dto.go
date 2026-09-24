@@ -51,4 +51,5 @@ type CreateMessage struct {
 	Content        string             `json:"content" binding:"required"`
 	Region         models.Region      `json:"region" binding:"required,oneof=,mb mt mn"`
 	MessageDetails []GetMessageDetail `json:"message_details"`
+	CustomerID     string             `json:"customer_id"`
 }
