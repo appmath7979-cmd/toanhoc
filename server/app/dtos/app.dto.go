@@ -37,6 +37,6 @@ type QueryErrListRes struct {
 
 type MutateErrRes struct {
 	Message string `json:"message" example:"Thông tin không hợp lệ"`
-	Success bool   `json:"success" example:"400"`
-	Status  uint16 `json:"status" example:"false"`
+	Success bool   `json:"success" example:"false"`
+	Status  uint16 `json:"status" example:"400"`
 }
