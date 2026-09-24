@@ -69,6 +69,65 @@ func (h *CustomerHandlers) GetManyCustomer(ctx *gin.Context) {
 	})
 }
 
+// GetCustomerById godoc
+// @Summary      Tìm kiếm khách hàng
+// @Description  Tìm khách hàng cùng với các tin nhắn theo thời gian chỉ định
+// @Tags         customers
+// @Accept       json
+// @Produce      json
+// @Param        id    path   string  false  "Id khách hàng"
+// @Param        at    path   string  false  "Ngày gửi tin"
+// @Success      200     {object}  dtos.GetCustomerByIdRes "Tìm khách hàng thành công"
+// @Failure      400     {object}  dtos.GetCustomerByIdRes "Thông tin không hợp lệ"
+// @Failure      404     {object}  dtos.GetCustomerByIdRes "Không tìm thấy khách hàng"
+// @Failure      500     {object}  dtos.GetCustomerByIdRes "Lỗi server nội bộ"
+// @Router			 /api/v1/customers/{id} [get]
+func (h *CustomerHandlers) GetCustomerById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	at := ctx.Query("at")
+
+	isAt := validator.ValidateDate(at)
+	isUUID := validator.ValidateUUID(id)
+
+	if isUUID != nil || isAt != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.GetCustomerByIdRes{
+			Message: "Thông tin không hợp lệ!",
+			Success: false,
+			Status:  400,
+			Data:    nil,
+		})
+
+		return
+	}
+
+	customer, status, err := h.service.GetCustomerById(id, at)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, dtos.GetCustomerByIdRes{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    customer,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, dtos.GetCustomerByIdRes{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    customer,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, dtos.GetCustomerByIdRes{
+			Message: "Thành công!",
+			Success: true,
+			Status:  status,
+			Data:    customer,
+		})
+	}
+}
+
 // CreateCustomer godoc
 // @Summary      Tạo khách hàng mới
 // @Description  Tạo khách hàng cùng thiết lập cho khách hàng
@@ -127,7 +186,7 @@ func (h *CustomerHandlers) CreateCustomer(ctx *gin.Context) {
 // @Produce      json
 // @Param 			 id 			path		string			false "Id khách hàng"
 // @Param        request    body   dtos.UpdateCustomer  false  "Thông tin khách hàng"
-// @Success      201     {object}  dtos.MutateResponse "Tạo khách hàng thành công"
+// @Success      201     {object}  dtos.MutateResponse "Cập nhật thông tin khách hàng thành công"
 // @Failure      400     {object}  dtos.MutateResponse "Thông tin không hợp lệ"
 // @Failure      409     {object}  dtos.MutateResponse "Số điện thoại bị trùng"
 // @Failure      500     {object}  dtos.MutateResponse "Lỗi server nội bộ"

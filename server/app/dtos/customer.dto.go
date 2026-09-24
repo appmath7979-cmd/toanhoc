@@ -30,12 +30,14 @@ type CustomerQuery struct {
 }
 
 type GetCustomer struct {
-	ID        string    `json:"id"`
-	FullName  string    `json:"full_name"`
-	IsGuest   bool      `json:"is_guest"`
-	IsSend    bool      `json:"is_send"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          string    `json:"id"`
+	FullName    string    `json:"full_name"`
+	PhoneNumber string    `json:"phone_number"`
+	IsGuest     bool      `json:"is_guest"`
+	IsSend      bool      `json:"is_send"`
+	IsActive    bool      `json:"active"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type GetManyCustomerRes struct {
@@ -45,4 +47,23 @@ type GetManyCustomerRes struct {
 	Data      []GetCustomer `json:"data"`
 	TotalItem int64         `json:"total_item"`
 	TotalPage int64         `json:"total_page"`
+}
+
+type GetCustomerById struct {
+	ID          string       `json:"id"`
+	FullName    string       `json:"full_name"`
+	PhoneNumber string       `json:"phone_number"`
+	IsGuest     bool         `json:"is_guest"`
+	IsSend      bool         `json:"is_send"`
+	IsActive    bool         `json:"active"`
+	Messages    []GetMessage `json:"messages"`
+	CreatedAt   time.Time    `json:"created_at"`
+	UpdatedAt   time.Time    `json:"updated_at"`
+}
+
+type GetCustomerByIdRes struct {
+	Message string          `json:"message"`
+	Success bool            `json:"success"`
+	Status  uint16          `json:"status"`
+	Data    *GetCustomerById `json:"data"`
 }
