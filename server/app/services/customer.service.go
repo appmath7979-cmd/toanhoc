@@ -110,7 +110,7 @@ func (s *Service) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
 	customer := models.Customer{
 		FullName:    req.FullName,
 		PhoneNumber: req.PhoneNumber,
-		IsGuest:     req.IsGuest,
+		IsGuest:     *req.IsGuest,
 		Setting:     &setting,
 	}
 
