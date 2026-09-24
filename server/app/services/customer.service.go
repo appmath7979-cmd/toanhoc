@@ -110,7 +110,7 @@ func (s *Service) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
 	customer := models.Customer{
 		FullName:    req.FullName,
 		PhoneNumber: req.PhoneNumber,
-		IsGuest:     req.IsGuest,
+		IsGuest:     *req.IsGuest,
 		Setting:     &setting,
 	}
 
@@ -133,6 +133,21 @@ func (s *Service) UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, e
 
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		customerUpdates := map[string]interface{}{}
+		var existingCustomer models.Customer
+
+		if req.PhoneNumber == nil {
+			err := tx.Where("phone_number = ?", *req.PhoneNumber).First(&existingCustomer).Error
+
+			if err == nil {
+				return errors.New("Không thể cập nhật với số điện thoại này!")
+			}
+
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+
+			customerUpdates["phone_number"] = *req.PhoneNumber
+		}
 
 		if req.FullName != nil {
 			customerUpdates["full_name"] = *req.FullName
@@ -140,10 +155,6 @@ func (s *Service) UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, e
 
 		if req.Active != nil {
 			customerUpdates["active"] = *req.Active
-		}
-
-		if req.PhoneNumber != nil {
-			customerUpdates["phone_number"] = *req.PhoneNumber
 		}
 
 		if req.IsGuest != nil {
@@ -209,4 +220,72 @@ func (s *Service) DeleteCustomerById(id string) (uint16, error) {
 	} else {
 		return 200, nil
 	}
+}
+
+func (s *Service) GetCustomerById(id string, at string) (
+	*dtos.GetCustomerById,
+	uint16,
+	error,
+) {
+	var customer models.Customer
+
+	err := s.db.
+		Preload("Messages", func(db *gorm.DB) *gorm.DB {
+			return db.Where("at = ?", at)
+		}).
+		Preload("Messages.MessageDetails").
+		First(&customer, "id = ?", id).
+		Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, 404, errors.New("Không tìm thấy khách hàng này!")
+		} else {
+			return nil, 500, err
+		}
+	}
+
+	var messages []dtos.GetMessage
+
+	for _, c := range customer.Messages {
+		var details []dtos.GetMessageDetail
+		for _, d := range c.MessageDetails {
+			details = append(details, dtos.GetMessageDetail{
+				ID:        d.ID,
+				Type:      d.Type,
+				Syntax:    d.Syntax,
+				Province:  d.Province,
+				Score:     d.Score,
+				Co:        d.Co,
+				Trung:     d.Trung,
+				Number:    d.Number,
+				MessageID: d.MessageID,
+				CreatedAt: d.CreatedAt,
+				UpdatedAt: d.UpdatedAt,
+			})
+		}
+		messages = append(messages, dtos.GetMessage{
+			ID:             c.ID,
+			Send:           c.Send,
+			At:             c.At,
+			Content:        c.Content,
+			Region:         c.Region,
+			CustomerID:     c.CustomerID,
+			CreatedAt:      c.CreatedAt,
+			UpdatedAt:      c.UpdatedAt,
+			MessageDetails: details,
+		})
+	}
+
+	result := dtos.GetCustomerById{
+		ID:          customer.ID,
+		FullName:    customer.FullName,
+		PhoneNumber: customer.PhoneNumber,
+		IsGuest:     customer.IsGuest,
+		Messages:    messages,
+		CreatedAt:   customer.CreatedAt,
+		UpdatedAt:   customer.UpdatedAt,
+	}
+
+	return &result, 200, nil
 }

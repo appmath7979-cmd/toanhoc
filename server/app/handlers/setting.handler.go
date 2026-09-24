@@ -23,9 +23,9 @@ func SettingHandler(service services.SettingServices) *SettingHandlers {
 // @Produce      json
 // @Param        customerId    path     string     true  "Thông tin người dùng"
 // @Success      200     {object}  dtos.GetManyCustomerRes "Lấy danh sách thành công"
-// @Failure      400     {object}  dtos.GetManyCustomerRes "Thông tin người dùng không hợp lệ"
-// @Failure      404     {object}  dtos.GetManyCustomerRes "Không tìm thấy cấu hình hoặc người dùng"
-// @Failure      500     {object}  dtos.GetManyCustomerRes "Lỗi server nội bộ"
+// @Failure      400     {object}  dtos.QueryErrItemRes "Thông tin người dùng không hợp lệ"
+// @Failure      404     {object}  dtos.QueryErrItemRes "Không tìm thấy cấu hình hoặc người dùng"
+// @Failure      500     {object}  dtos.QueryErrItemRes "Lỗi server nội bộ"
 // @Router			 /api/v1/settings/{id} [get]
 func (h *SettingHandlers) GetSettingByCustomerId(ctx *gin.Context) {
 	customerId := ctx.Param("id")

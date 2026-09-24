@@ -4,8 +4,8 @@ import "time"
 
 type CreateCustomer struct {
 	FullName    string        `json:"full_name" binding:"required,min=2,max=100"`
-	PhoneNumber string        `json:"phone_number" binding:"required,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
-	IsGuest     bool          `json:"is_guest" binding:"required"`
+	PhoneNumber string        `json:"phone_number" binding:"required,regexp=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
+	IsGuest     *bool          `json:"is_guest" binding:"required"`
 	Setting     CreateSetting `json:"setting" binding:"required"`
 }
 
@@ -29,20 +29,22 @@ type CustomerQuery struct {
 	Sort   string `form:"sort"`
 }
 
-type GetCustomer struct {
-	ID        string    `json:"id"`
-	FullName  string    `json:"full_name"`
-	IsGuest   bool      `json:"is_guest"`
-	IsSend    bool      `json:"is_send"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+type CustomerBaseResponse struct {
+	ID          string    `json:"id"`
+	FullName    string    `json:"full_name"`
+	PhoneNumber string    `json:"phone_number"`
+	IsGuest     bool      `json:"is_guest"`
+	IsSend      bool      `json:"is_send"`
+	IsActive    bool      `json:"active"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-type GetManyCustomerRes struct {
-	Message   string        `json:"message"`
-	Success   bool          `json:"success"`
-	Status    uint16        `json:"status"`
-	Data      []GetCustomer `json:"data"`
-	TotalItem int64         `json:"total_item"`
-	TotalPage int64         `json:"total_page"`
+type GetCustomer struct {
+	CustomerBaseResponse
+}
+
+type GetCustomerById struct {
+	CustomerBaseResponse
+	Messages []GetMessage `json:"messages"`
 }
