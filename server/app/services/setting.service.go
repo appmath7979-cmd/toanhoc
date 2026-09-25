@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 func SettingService(db *gorm.DB) SettingServices {
 	return &Service{db: db}
 }
@@ -42,7 +41,7 @@ func (s *Service) GetSettingByCustomerId(customerId string) (*dtos.GetSetting, u
 
 	for _, b := range setting.Bets {
 		bets = append(bets, dtos.GetBetPair{
-			Type:    b.Type,
+			BetType: b.BetType,
 			C:       dtos.GetBetPairValue(b.C),
 			T:       dtos.GetBetPairValue(b.T),
 			Percent: b.Percent,

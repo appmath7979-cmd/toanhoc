@@ -56,7 +56,7 @@ func (s *Service) GetManyCustomer(queries *dtos.CustomerQuery) (
 	err := query.Count(&totalItem).Offset(offset).Limit(limit).Find(&customers).Error
 
 	if err != nil {
-		return nil, 0, 0, err
+		return []dtos.GetCustomer{}, 0, 0, err
 	}
 
 	var results []dtos.GetCustomer
@@ -94,7 +94,7 @@ func (s *Service) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
 
 	for _, b := range req.Setting.Bets {
 		bets = append(bets, models.BetPair{
-			Type:    models.BetType(b.Type),
+			BetType: b.BetType,
 			C:       models.BetValue(b.C),
 			T:       models.BetValue(b.T),
 			Percent: b.Percent,
@@ -252,7 +252,7 @@ func (s *Service) GetCustomerById(id string, at string) (
 		for _, d := range c.MessageDetails {
 			details = append(details, dtos.GetMessageDetail{
 				ID:        d.ID,
-				Type:      d.Type,
+				BetType:   d.BetType,
 				Syntax:    d.Syntax,
 				Province:  d.Province,
 				Score:     d.Score,

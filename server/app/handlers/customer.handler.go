@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
-	"server/app/validator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,7 +35,7 @@ func (h *CustomerHandlers) GetManyCustomer(ctx *gin.Context) {
 			Message:   err.Error(),
 			Success:   false,
 			Status:    400,
-			Data:      nil,
+			Data:      []dtos.GetCustomer{},
 			TotalItem: 0,
 			TotalPage: 0,
 		})
@@ -86,8 +85,8 @@ func (h *CustomerHandlers) GetCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	at := ctx.Query("at")
 
-	isAt := validator.ValidateDate(at)
-	isUUID := validator.ValidateUUID(id)
+	isAt := h.validator.ValidateDate(at)
+	isUUID := h.validator.ValidateUUID(id)
 
 	if isUUID != nil || isAt != nil {
 		ctx.JSON(http.StatusBadRequest, dtos.GetCustomerByIdRes{
@@ -136,9 +135,9 @@ func (h *CustomerHandlers) GetCustomerById(ctx *gin.Context) {
 // @Produce      json
 // @Param        request  body      dtos.CreateCustomer  true   "Thông tin khách hàng"
 // @Success      201      {object}  dtos.MutateResponse  "Tạo khách hàng thành công"
-// @Failure      400      {object}  dtos.ErrorRes        "Thông tin không hợp lệ"
-// @Failure      409      {object}  dtos.ErrorRes        "Số điện thoại bị trùng"
-// @Failure      500      {object}  dtos.ErrorRes        "Lỗi server nội bộ"
+// @Failure      400      {object}  dtos.MutateErrRes        "Thông tin không hợp lệ"
+// @Failure      409      {object}  dtos.MutateErrRes        "Số điện thoại bị trùng"
+// @Failure      500      {object}  dtos.MutateErrRes        "Lỗi server nội bộ"
 // @Router       /api/v1/customers [post]
 func (h *CustomerHandlers) CreateCustomer(ctx *gin.Context) {
 	var req dtos.CreateCustomer
@@ -187,15 +186,15 @@ func (h *CustomerHandlers) CreateCustomer(ctx *gin.Context) {
 // @Param        id       path      string              true   "Id khách hàng"
 // @Param        request  body      dtos.UpdateCustomer true   "Thông tin khách hàng"
 // @Success      200      {object}  dtos.MutateResponse "Cập nhật thông tin khách hàng thành công"
-// @Failure      400      {object}  dtos.ErrorRes       "Thông tin không hợp lệ"
-// @Failure      409      {object}  dtos.ErrorRes       "Số điện thoại bị trùng"
-// @Failure      500      {object}  dtos.ErrorRes       "Lỗi server nội bộ"
+// @Failure      400      {object}  dtos.MutateErrRes       "Thông tin không hợp lệ"
+// @Failure      409      {object}  dtos.MutateErrRes       "Số điện thoại bị trùng"
+// @Failure      500      {object}  dtos.MutateErrRes       "Lỗi server nội bộ"
 // @Router       /api/v1/customers/{id} [patch]
 func (h *CustomerHandlers) UpdateCustomer(ctx *gin.Context) {
 	var req dtos.UpdateCustomer
 	id := ctx.Param("id")
 
-	isUUIDErr := validator.ValidateUUID(id)
+	isUUIDErr := h.validator.ValidateUUID(id)
 
 	err := ctx.ShouldBindJSON(&req)
 
@@ -242,8 +241,8 @@ func (h *CustomerHandlers) UpdateCustomer(ctx *gin.Context) {
 // @Produce      json
 // @Param        request  body      dtos.DeleteManyCustomer  true   "Danh sách ID khách hàng cần xóa"
 // @Success      200      {object}  dtos.MutateResponse      "Xóa khách hàng thành công"
-// @Failure      400      {object}  dtos.ErrorRes            "Thông tin không hợp lệ (Mảng rỗng hoặc sai định dạng)"
-// @Failure      500      {object}  dtos.ErrorRes            "Lỗi server nội bộ"
+// @Failure      400      {object}  dtos.MutateErrRes            "Thông tin không hợp lệ (Mảng rỗng hoặc sai định dạng)"
+// @Failure      500      {object}  dtos.MutateErrRes            "Lỗi server nội bộ"
 // @Router       /api/v1/customers [delete]
 func (h *CustomerHandlers) DeleteManyCustomer(ctx *gin.Context) {
 	var ids dtos.DeleteManyCustomer
@@ -283,14 +282,14 @@ func (h *CustomerHandlers) DeleteManyCustomer(ctx *gin.Context) {
 // @Produce      json
 // @Param        id      path      string              true   "Id khách hàng cần xóa"
 // @Success      200     {object}  dtos.MutateResponse "Xóa khách hàng thành công"
-// @Failure      400     {object}  dtos.ErrorRes       "Thông tin ID không hợp lệ"
-// @Failure      404     {object}  dtos.ErrorRes       "Không tìm thấy hoặc khách hàng không tồn tại"
-// @Failure      500     {object}  dtos.ErrorRes       "Lỗi server nội bộ"
+// @Failure      400     {object}  dtos.MutateErrRes       "Thông tin ID không hợp lệ"
+// @Failure      404     {object}  dtos.MutateErrRes       "Không tìm thấy hoặc khách hàng không tồn tại"
+// @Failure      500     {object}  dtos.MutateErrRes       "Lỗi server nội bộ"
 // @Router       /api/v1/customers/{id} [delete]
 func (h *CustomerHandlers) DeleteCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	err := validator.ValidateUUID(id)
+	err := h.validator.ValidateUUID(id)
 
 	if id == "" || err != nil {
 		ctx.JSON(http.StatusBadRequest, dtos.MutateResponse{

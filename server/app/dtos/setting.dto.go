@@ -14,7 +14,7 @@ type CreateBetPairValue struct {
 }
 
 type CreateBetPair struct {
-	Type    models.BetType     `json:"type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
+	BetType models.BetType     `json:"bet_type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
 	C       CreateBetPairValue `json:"c" binding:"required"`
 	T       CreateBetPairValue `json:"t" binding:"required"`
 	Percent bool               `json:"percent"`
@@ -33,7 +33,7 @@ type UpdateBetPairValue struct {
 }
 
 type UpdateBetPair struct {
-	Type    models.BetType     `json:"type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
+	BetType models.BetType     `json:"bet_type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
 	C       UpdateBetPairValue `json:"c" binding:"required"`
 	T       UpdateBetPairValue `json:"t" binding:"required"`
 	Percent bool               `json:"percent" binding:"required"`
@@ -52,7 +52,7 @@ type GetBetPairValue struct {
 }
 
 type GetBetPair struct {
-	Type    models.BetType  `json:"type"`
+	BetType models.BetType  `json:"bet_type"`
 	C       GetBetPairValue `json:"c"`
 	T       GetBetPairValue `json:"t"`
 	Percent bool            `json:"percent"`
