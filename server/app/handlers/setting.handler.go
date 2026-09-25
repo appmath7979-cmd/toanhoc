@@ -4,12 +4,9 @@ import (
 	"net/http"
 	"server/app/dtos"
 	"server/app/services"
-	"server/app/validator"
 
 	"github.com/gin-gonic/gin"
 )
-
-
 
 func SettingHandler(service services.SettingServices) *SettingHandlers {
 	return &SettingHandlers{service: service}
@@ -30,7 +27,7 @@ func SettingHandler(service services.SettingServices) *SettingHandlers {
 func (h *SettingHandlers) GetSettingByCustomerId(ctx *gin.Context) {
 	customerId := ctx.Param("id")
 
-	if err := validator.ValidateUUID(customerId); err != nil {
+	if err := h.validator.ValidateUUID(customerId); err != nil {
 		ctx.JSON(http.StatusBadRequest, dtos.GetSettingResponse{
 			Message: "Người dùng không hợp lệ!",
 			Success: false,

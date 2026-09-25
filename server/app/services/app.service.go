@@ -35,3 +35,7 @@ type CustomerServices interface {
 type SettingServices interface {
 	GetSettingByCustomerId(customerId string) (*dtos.GetSetting, uint16, error)
 }
+
+type MessageServices interface {
+	GetManyMessage(id string, at string) ([]dtos.GetMessage, uint16, error)
+}

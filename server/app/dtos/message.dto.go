@@ -7,7 +7,7 @@ import (
 
 type GetMessageDetail struct {
 	ID       string          `json:"id"`
-	Type     models.BetType  `json:"type"`
+	BetType models.BetType  `json:"bet_type"`
 	Syntax   models.Syntax   `json:"syntax"`
 	Province models.Province `json:"province"`
 
@@ -34,8 +34,13 @@ type GetMessage struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type GetMessageQuery struct {
+	ID string `json:"id" binding:"required,uuid"`
+	At string `json:"at" binding:"required"`
+}
+
 type CreateMessageDetail struct {
-	Type     models.BetType  `json:"type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
+	BetType  models.BetType  `json:"bet_type" binding:"required,oneof=b2 dd2 da dax b3 dd3 b4"`
 	Syntax   models.Syntax   `json:"syntax" binding:"required,oneof=b dau duoi da dax"`
 	Province models.Province `json:"province" binding:"required,oneof=tp dt cm bt dn ct st vt bli tn bth vl bd tv la hg bp tg kg dl py th qna kh qb qt gl nt qn dno kt mb"`
 

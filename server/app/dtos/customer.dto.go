@@ -18,7 +18,7 @@ type UpdateCustomer struct {
 }
 
 type DeleteManyCustomer struct {
-	Ids []string `json:"ids" binding:"required"`
+	Ids []string `json:"ids" binding:"required,div,uuid"`
 }
 
 type CustomerQuery struct {

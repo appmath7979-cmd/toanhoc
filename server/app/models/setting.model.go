@@ -13,7 +13,7 @@ type BetValue struct {
 }
 
 type BetPair struct {
-	Type    BetType  `json:"type"`
+	BetType BetType  `json:"bet_type"`
 	C       BetValue `json:"c"`
 	T       BetValue `json:"t"`
 	Percent bool     `json:"percent"`

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func ValidateDate(date string) error {
+func (v *AppValidator) ValidateDate(date string) error {
 	if date == "" {
 		return errors.New("Thông tin không hợp lệ!")
 	}
