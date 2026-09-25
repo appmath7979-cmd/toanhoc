@@ -1,17 +1,13 @@
 package routes
 
 import (
-	"server/app/handlers"
-	"server/app/repositories"
-	"server/app/services"
+	"server/app/modules"
 
 	"gorm.io/gorm"
 )
 
 func CustomerRoute(db *gorm.DB) RouteGroup {
-	repositories := repositories.CustomerRepoFn(db)
-	services := services.CustomerServiceFn(repositories)
-	handlers := handlers.CustomerHandlerFn(services)
+	handlers := modules.AppModuleFn(db).CustomerModule()
 
 	return RouteGroup{
 		Prefix: "customers",
