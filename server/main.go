@@ -34,7 +34,7 @@ func main() {
 	r := app.Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	app.RegistRoute("v1", routes.AppRoutes())
+	app.RegistRoute("v1", routes.AppRouter())
 
 	app.Run(port)
 }

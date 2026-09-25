@@ -12,19 +12,6 @@ type MutateErrRes struct {
 	Status  uint16 `json:"status" example:"400"`
 }
 
-type QueryErrItemRes struct {
-	Message string      `json:"message" example:"Thông tin không hợp lệ"`
-	Success bool        `json:"success" example:"false"`
-	Status  uint16      `json:"status" example:"400"`
-	Data    interface{} `json:"data"`
-}
-
-type QueryErrListRes struct {
-	QueryErrItemRes
-	TotalItem int64 `json:"total_item" example:"0"`
-	TotalPage int64 `json:"total_page" example:"0"`
-}
-
 type InfoRes struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
