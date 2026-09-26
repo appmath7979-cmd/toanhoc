@@ -57,6 +57,16 @@ func (r *CustomerRepo) FindCustomerAndMessageById(id string, at string) (*models
 	return &customer, nil
 }
 
+func (r *CustomerRepo) FindCustomerAndSettingById(id string) (*models.Customer, error) {
+	var customer models.Customer
+
+	if err := r.db.Preload("Setting").First(&customer, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return &customer, nil
+}
+
 func (r *CustomerRepo) CreateCustomer(req *models.Customer) (*models.Customer, error) {
 	var existingUser models.Customer
 
