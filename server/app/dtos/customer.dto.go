@@ -35,7 +35,7 @@ type CustomerBaseResponse struct {
 	PhoneNumber string    `json:"phone_number"`
 	IsGuest     bool      `json:"is_guest"`
 	IsSend      bool      `json:"is_send"`
-	IsActive    bool      `json:"active"`
+	Active    bool      `json:"active"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }

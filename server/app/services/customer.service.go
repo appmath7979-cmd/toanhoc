@@ -7,6 +7,8 @@ import (
 	"server/app/models"
 	"server/app/repositories"
 	"server/app/utils"
+
+	"gorm.io/gorm"
 )
 
 type CustomerService struct {
@@ -53,7 +55,7 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 			PhoneNumber: c.PhoneNumber,
 			IsGuest:     c.IsGuest,
 			IsSend:      c.IsSend,
-			IsActive:    c.Active,
+			Active:    c.Active,
 			CreatedAt:   c.CreatedAt,
 			UpdatedAt:   c.UpdatedAt,
 		})
@@ -62,6 +64,63 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 	totalItem := math.Ceil(float64(totalPage) / float64(limit))
 
 	return results, int64(totalItem), totalPage, 200, err
+}
+
+func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos.GetCustomerById, uint16, error) {
+	customer, err := s.repo.FindCustomerAndMessageById(id, at)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, 404, errors.New("Không tìm thấy khách hàng này!")
+		} else {
+			return nil, 500, err
+		}
+	}
+
+	var messages []dtos.GetMessage
+
+	for _, m := range customer.Messages {
+		var details []dtos.GetMessageDetail
+
+		for _, d := range m.MessageDetails {
+			details = append(details, dtos.GetMessageDetail{
+				ID:        d.ID,
+				BetType:   d.BetType,
+				Syntax:    d.Syntax,
+				Province:  d.Province,
+				Score:     d.Score,
+				Co:        d.Co,
+				Trung:     d.Trung,
+				Number:    d.Number,
+				MessageID: d.MessageID,
+				CreatedAt: d.CreatedAt,
+				UpdatedAt: d.UpdatedAt,
+			})
+		}
+		messages = append(messages, dtos.GetMessage{
+			ID:             m.ID,
+			Send:           m.Send,
+			At:             m.At,
+			Content:        m.Content,
+			Region:         m.Region,
+			MessageDetails: details,
+			CustomerID:     m.CustomerID,
+			CreatedAt:      m.CreatedAt,
+			UpdatedAt:      m.UpdatedAt,
+		})
+	}
+
+	result := dtos.GetCustomerById{
+		ID:          customer.ID,
+		FullName:    customer.FullName,
+		PhoneNumber: customer.PhoneNumber,
+		IsGuest:     customer.IsGuest,
+		IsSend:      customer.IsSend,
+		Active:      customer.Active,
+		Messages:    messages,
+	}
+
+	return &result, 200, nil
 }
 
 func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
