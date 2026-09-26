@@ -18,9 +18,9 @@ type InfoRes struct {
 	Status  uint16 `json:"status"`
 }
 
-type GetCustomerByIdRes struct {
+type GetCustomerAndMessageByIdRes struct {
 	InfoRes
-	Data *GetCustomerById `json:"data"`
+	Data *GetCustomerAndMessageById `json:"data"`
 }
 
 type GetManyCustomerRes struct {

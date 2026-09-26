@@ -55,7 +55,7 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 			PhoneNumber: c.PhoneNumber,
 			IsGuest:     c.IsGuest,
 			IsSend:      c.IsSend,
-			Active:    c.Active,
+			Active:      c.Active,
 			CreatedAt:   c.CreatedAt,
 			UpdatedAt:   c.UpdatedAt,
 		})
@@ -66,7 +66,7 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 	return results, int64(totalItem), totalPage, 200, err
 }
 
-func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos.GetCustomerById, uint16, error) {
+func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos.GetCustomerAndMessageById, uint16, error) {
 	customer, err := s.repo.FindCustomerAndMessageById(id, at)
 
 	if err != nil {
@@ -110,7 +110,7 @@ func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos
 		})
 	}
 
-	result := dtos.GetCustomerById{
+	result := dtos.GetCustomerAndMessageById{
 		ID:          customer.ID,
 		FullName:    customer.FullName,
 		PhoneNumber: customer.PhoneNumber,
@@ -157,4 +157,38 @@ func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, erro
 	}
 
 	return 201, nil
+}
+
+func (s *CustomerService) UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, error) {
+	err := s.repo.UpdateCustomer(id, req)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 404, errors.New("Không tìm thấy người dùng!")
+		} else {
+			return 500, err
+		}
+	}
+
+	return 200, nil
+}
+
+func (s *CustomerService) DeletCustomerById(id string) (uint16, error) {
+	if err := s.repo.DeleteCustomerById(id); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 404, err
+		} else {
+			return 500, err
+		}
+	} else {
+		return 200, nil
+	}
+}
+
+func (s *CustomerService) DeleteManyCustomer(req *dtos.DeleteManyCustomer) error {
+	if err := s.repo.DeleteCustomer(req.Ids); err != nil {
+		return err
+	}
+
+	return nil
 }
