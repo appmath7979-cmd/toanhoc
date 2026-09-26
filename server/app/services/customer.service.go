@@ -123,6 +123,49 @@ func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos
 	return &result, 200, nil
 }
 
+func (s *CustomerService) GetCustomerAndSettingById(id string) (*dtos.GetCustomerAndSettingById, uint16, error) {
+	customer, err := s.repo.FindCustomerAndSettingById(id)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, 404, errors.New("Không tìm thấy khách hàng!")
+		} else {
+			return nil, 500, err
+		}
+	}
+
+	var bets []dtos.GetBetPair
+
+	for _, b := range customer.Setting.Bets {
+		bets = append(bets, dtos.GetBetPair{
+			BetType: b.BetType,
+			C:       dtos.GetBetPairValue(b.C),
+			T:       dtos.GetBetPairValue(b.T),
+			Percent: b.Percent,
+		})
+	}
+
+	setting := dtos.GetSetting{
+		ID:         customer.Setting.ID,
+		XienMb:     customer.Setting.XienMb,
+		DaxT:       dtos.DaxT(customer.Setting.DaxT),
+		Bets:       bets,
+		CustomerID: customer.Setting.CustomerID,
+		CreatedAt:  customer.Setting.CreatedAt,
+		UpdatedAt:  customer.Setting.UpdatedAt,
+	}
+
+	result := dtos.GetCustomerAndSettingById{
+		ID:          customer.ID,
+		FullName:    customer.FullName,
+		PhoneNumber: customer.PhoneNumber,
+		IsGuest:     customer.IsGuest,
+		Setting:     &setting,
+	}
+
+	return &result, 200, nil
+}
+
 func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
 	var bets []models.BetPair
 

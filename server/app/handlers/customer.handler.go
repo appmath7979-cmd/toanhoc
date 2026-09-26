@@ -127,6 +127,62 @@ func (h *CustomerHandler) GetCustomerAndMessageById(ctx *gin.Context) {
 			Data:    customer,
 		})
 	}
+
+}
+
+// GetCustomerById godoc
+// @Summary Lấy khách hàng
+// @Description Lấy khách hàng theo id và thông tin của khách hàng
+// @Tags customers
+// @Accept json
+// @Produce json
+// @Param id path string true "Id của khách hàng"
+// @Success 200 {object} dtos.GetCustomerSettingByIdRes "Tìm khách hàng và lấy thông tin khách hàng thành công"
+// @Failure 404 {object} dtos.GetCustomerSettingByIdRes "Không tìm thấy khách hàng"
+// @Failure 500 {object} dtos.GetCustomerSettingByIdRes "Lỗi Server"
+// @Router /api/v1/customers/{id} [get]
+func (h *CustomerHandler) GetCustomerAndSettingById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	isUUID := h.validate.ValidateUUID(id)
+
+	if isUUID != nil {
+		ctx.JSON(http.StatusBadRequest, dtos.GetCustomerAndMessageByIdRes{
+			Message: "Dữ liệu không hợp lệ!",
+			Success: false,
+			Status:  400,
+			Data:    nil,
+		})
+
+		return
+	}
+
+	customer, status, err := h.service.GetCustomerAndSettingById(id)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, dtos.GetCustomerSettingByIdRes{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    customer,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, dtos.GetCustomerSettingByIdRes{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+				Data:    customer,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, dtos.GetCustomerSettingByIdRes{
+			Message: "Thành công!",
+			Success: true,
+			Status:  status,
+			Data:    customer,
+		})
+	}
 }
 
 // CreateCustomer godoc

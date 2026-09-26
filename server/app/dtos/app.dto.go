@@ -6,12 +6,6 @@ type MutateResponse struct {
 	Status  uint16 `json:"status"`
 }
 
-type MutateErrRes struct {
-	Message string `json:"message" example:"Thông tin không hợp lệ"`
-	Success bool   `json:"success" example:"false"`
-	Status  uint16 `json:"status" example:"400"`
-}
-
 type InfoRes struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
@@ -26,6 +20,13 @@ type GetCustomerAndMessageByIdRes struct {
 type GetManyCustomerRes struct {
 	InfoRes
 	Data      []GetCustomer `json:"data"`
+	TotalItem int64         `json:"total_item"`
+	TotalPage int64         `json:"total_page"`
+}
+
+type GetCustomerSettingByIdRes struct {
+	InfoRes
+	Data      *GetCustomerAndSettingById `json:"data"`
 	TotalItem int64         `json:"total_item"`
 	TotalPage int64         `json:"total_page"`
 }
