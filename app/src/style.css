@@ -3,174 +3,46 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-	--background: oklch(98.5% 0 none);
-	--foreground: oklch(14.5% 0 none);
-	--surface: oklch(96.7% 0.001 286.375);
-	--surface-accent: oklch(92% 0.004 286.32);
-	--primary: oklch(51.849% 0.20779 24.818);
-	--primary-foreground: oklch(97.788% 0.00409 55.493);
-	--secondary: oklch(98.4% 0.003 247.858);
-	--secondary-accent: oklch(92.9% 0.013 255.508);
-	--secondary-foreground: oklch(12.9% 0.042 264.695);
-	--muted: oklch(92.3% 0.003 48.717);
-	--muted-foreground: oklch(44.4% 0.011 73.639);
-	--border: oklch(87% 0 none);
-	--status-danger: oklch(56.137% 0.20803 10.555);
-	--danger: oklch(39.6% 0.141 25.723);
-	--danger-accent: oklch(97.1% 0.013 17.38);
+	--primary: oklch(57.7% 0.245 27.325);
+	--accent: oklch(92.9% 0.013 255.508);
+	--accent-foreground: oklch(70.4% 0.04 256.788);
+	--border: oklch(70.8% 0 none);
 }
 
 .dark {
-	--background: oklch(14.1% 0.005 285.823);
-	--foreground: oklch(98.5% 0 none);
-	--surface: oklch(21% 0.006 285.885);
-	--surface-accent: oklch(27.4% 0.006 286.033);
-	--primary: oklch(58.139% 0.23486 27.975);
-	--status-danger: oklch(63.019% 0.22968 16.17);
-	--border: oklch(37.1% 0 none);
-	--muted: oklch(44.4% 0.011 73.639);
-	--muted-foreground: oklch(92.3% 0.003 48.717);
-	--secondary-accent: oklch(28.908% 0.00003 271.152);
-	--secondary-foreground: oklch(98.4% 0.003 247.858);
-	--secondary: oklch(12.9% 0.042 264.695);
-	--danger: oklch(63.7% 0.237 25.331);
-	/* --danger-accent: oklch(88.5% 0.062 18.334); */
+	--primary: oklch(63.7% 0.237 25.331);
 }
 
 @theme inline {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
 	--color-primary: var(--primary);
-	--color-primary-foreground: var(--primary-foreground);
-	--color-surface: var(--surface);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
 	--color-border: var(--border);
-	--color-secondary: var(--secondary);
-	--color-secondary-accent: var(--secondary-accent);
-	--color-secondary-foreground: var(--secondary-foreground);
-	--color-muted: var(--muted);
-	--color-muted-foreground: var(--muted-foreground);
-	--color-status-danger: var(--status-danger);
-	--color-danger: var(--danger);
-	--color-danger-accent: var(--danger-accent);
-	--color-surface-accent: var(--surface-accent);
 }
 
+html,
 body,
-#app,
-html {
-	@apply h-dvh overflow-hidden scroll-smooth bg-background text-foreground **:border-border;
+#root {
+	@apply scroll-smooth;
 }
 
-@layer base {
-	.contain {
-		@apply w-full max-w-7xl mx-auto px-4;
-	}
+.container {
+	padding: 0 16px;
+	width: 100dvw;
 }
 
 @layer utilities {
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 6px;
-		height: 6px;
-	}
-
-	/* Màu nền của track scroll */
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-
-	/* Màu và bo tròn của thanh nắm kéo (thumb) */
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		@apply bg-muted-foreground/30 rounded-full transition-colors;
-	}
-
-	/* Hiệu ứng khi rê chuột vào thanh cuộn */
-	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-		@apply bg-muted-foreground/60;
+	.smooth {
+		@apply transition-all duration-300;
 	}
 }
 
 @layer components {
-	.btn {
-		@apply border border-transparent! inline-flex items-center gap-1.5 font-medium text-sm rounded-md transition-all duration-300;
-	}
-
-	.btn-primary {
-		@apply bg-primary text-primary-foreground hover:bg-primary/80;
-	}
-
-	.btn-outline {
-		@apply border-border! text-secondary-foreground hover:bg-secondary-accent;
-	}
-
-	.btn-disable {
-		@apply opacity-40 pointer-events-none;
-	}
-
-	.btn-ghost {
-		@apply text-secondary-foreground hover:bg-secondary-accent;
-	}
-
-	.btn-danger {
-		@apply bg-danger text-danger-accent hover:bg-danger/80;
-	}
-
-	.btn-default {
-		@apply h-8 px-2 [&>svg]:size-4;
-	}
-
-	.btn-large {
-		@apply h-10 px-2 [&>svg]:size-4.5;
-	}
-
-	.btn-xlarge {
-		@apply h-11 px-2 [&>svg]:size-5;
-	}
-
-	.btn-icon {
-		@apply border border-transparent! inline-flex justify-center items-center rounded-md transition-all duration-300;
-	}
-
-	.btn-icon--outline {
-		@apply border-border! text-secondary-foreground hover:bg-secondary-accent;
-	}
-
-	.btn-icon--ghost {
-		@apply border-transparent! text-secondary-foreground hover:bg-secondary-accent;
-	}
-
-	.btn-icon--default {
-		@apply size-8 [&_svg]:size-5;
-	}
-
-	.btn-icon--sm {
-		@apply size-6 [&_svg]:size-4;
-	}
-
-	.checkbox {
-		@apply bg-background size-3.5 rounded-xs flex justify-center items-center shadow-xs border hover:bg-white/5 transition-colors duration-75;
-	}
-
 	.input {
-		@apply placeholder:text-sm font-semibold border outline-0 ring-transparent rounded-md px-2 py-1 bg-background focus:border-primary focus:ring-primary focus:ring-2  transition-all duration-300;
+		@apply px-2 py-1 text-sm border border-border outline-0 rounded-md focus:ring-2 focus:border-primary focus:text-primary placeholder:text-accent-foreground;
 	}
 
-	.radio-box {
-		@apply p-4 border rounded-md has-data-[state=checked]:bg-primary/10 has-data-[state=checked]:border-primary! w-full;
-	}
-
-	.alert-content {
-		@apply fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 rounded-lg;
+	.search {
+		@apply relative flex items-center;
 	}
 }
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-
-input[type="number"] {
-	-moz-appearance: textfield;
-	appearance: textfield;
-}
-
