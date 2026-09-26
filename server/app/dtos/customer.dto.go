@@ -11,7 +11,7 @@ type CreateCustomer struct {
 
 type UpdateCustomer struct {
 	FullName    *string        `json:"full_name" binding:"omitempty,min=2,max=100"`
-	PhoneNumber *string        `json:"phone_number" binding:"omitempty,regex=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
+	PhoneNumber *string        `json:"phone_number" binding:"omitempty,regexp=^(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$"`
 	IsGuest     *bool          `json:"is_guest" binding:"omitempty"`
 	Active      *bool          `json:"active" binding:"omitempty"`
 	Setting     *UpdateSetting `json:"setting" binding:"omitempty"`
@@ -44,7 +44,7 @@ type GetCustomer struct {
 	CustomerBaseResponse
 }
 
-type GetCustomerById struct {
+type GetCustomerAndMessageById struct {
 	CustomerBaseResponse
 	Messages []GetMessage `json:"messages"`
 }

@@ -21,6 +21,12 @@ func CustomerRoute(db *gorm.DB) RouteGroup {
 			{
 				Path: "", Method: "POST", Handler: handlers.CreateCustomer,
 			},
+			{
+				Path: "/:id", Method: "PATCH", Handler: handlers.UpdateCustomer,
+			},
+			{
+				Path: "/:id", Method: "DELETE", Handler: handlers.DeleteCustomerById,
+			},
 		},
 	}
 }
