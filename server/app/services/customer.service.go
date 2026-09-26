@@ -1,8 +1,10 @@
 package services
 
 import (
+	"errors"
 	"math"
 	"server/app/dtos"
+	"server/app/models"
 	"server/app/repositories"
 	"server/app/utils"
 )
@@ -60,4 +62,40 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 	totalItem := math.Ceil(float64(totalPage) / float64(limit))
 
 	return results, int64(totalItem), totalPage, 200, err
+}
+
+func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
+	var bets []models.BetPair
+
+	for _, b := range req.Setting.Bets {
+		bets = append(bets, models.BetPair{
+			BetType: b.BetType,
+			C:       models.BetValue(b.C),
+			T:       models.BetValue(b.T),
+			Percent: b.Percent,
+		})
+	}
+
+	customer := models.Customer{
+		FullName:    req.FullName,
+		PhoneNumber: req.PhoneNumber,
+		IsGuest:     *req.IsGuest,
+		Setting: &models.Setting{
+			XienMb: req.Setting.XienMb,
+			DaxT:   models.DaxT(req.Setting.DaxT),
+			Bets:   bets,
+		},
+	}
+
+	result, err := s.repo.CreateCustomer(&customer)
+
+	if err != nil {
+		return 500, err
+	}
+
+	if result == nil {
+		return 409, errors.New("Không thể tạo khách hàng với số điện thoại này!")
+	}
+
+	return 201, nil
 }
