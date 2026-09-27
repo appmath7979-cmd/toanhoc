@@ -3,7 +3,7 @@ import { ComponentProps } from "react";
 
 function Table({ children, ...props }: ComponentProps<"table">) {
 	return (
-		<div aria-data="table-container">
+		<div>
 			<table {...props}>{children}</table>
 		</div>
 	);
@@ -15,7 +15,7 @@ function TableHeader({
 	...props
 }: ComponentProps<"thead">) {
 	return (
-		<thead aria-data="table-header" className={cn("", className)} {...props}>
+		<thead className={cn("", className)} {...props}>
 			{children}
 		</thead>
 	);

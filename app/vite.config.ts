@@ -2,19 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import process from "node:process";
 import tailwindcss from "@tailwindcss/vite";
-import tsconfigPaths from "vite-tsconfig-paths";
-import { devtools } from "@tanstack/devtools-vite";
 import path from "node:path";
 
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
 export default defineConfig(() => ({
-	plugins: [tsconfigPaths(), devtools(), tailwindcss(), react()],
+	plugins: [tailwindcss(), react()],
 	resolve: {
+		tsconfigPaths: true,
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
 		},
+	},
+	optimizeDeps: {
+		exclude: ["@tanstack/devtools-ui", "@tanstack/devtools-vite"],
 	},
 	// Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
 	//

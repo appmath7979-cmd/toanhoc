@@ -1,9 +1,7 @@
 import SearchField from "@/components/system/SearchField";
-import Button from "@/components/ui/button/Button";
+import { Button } from "@/components/ui/button/Button";
 import ButtonGroup from "@/components/ui/button/ButtonGroup";
 import Checkbox from "@/components/ui/form/Checkbox";
-import Field from "@/components/ui/form/Field";
-import Input from "@/components/ui/form/Input";
 import {
 	Table,
 	TableBody,
@@ -12,10 +10,18 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table/Table";
-import { PlusIcon, SearchIcon, TrashIcon } from "lucide-react";
+import { useQueryCustomer } from "@/hooks/queries/use-customer-query";
+import { BoxSelectIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import Pending from "../Pending";
 
 export default function Customer() {
+	const { data, isPending } = useQueryCustomer({ page: 1, guest: true });
+
+	if (isPending) return <Pending />;
+
+	if (!data) return;
+
 	return (
 		<div className="container py-4">
 			<div>
@@ -58,13 +64,32 @@ export default function Customer() {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					<TableRow>
-						<TableCell>
-							<Checkbox />
-						</TableCell>
-						<TableCell>Tên khách hàng</TableCell>
-						<TableCell>Hành động</TableCell>
-					</TableRow>
+					{!data.data || data.data.length === 0 ? (
+						<TableRow>
+							<TableCell>
+								<BoxSelectIcon />
+								<div>
+									<p>Chưa có khách hàng nào</p>
+									<Button setChild>
+										<Link to={"/customer/add"}>
+											<PlusIcon />
+											<span>Thêm khách hàng</span>
+										</Link>
+									</Button>
+								</div>
+							</TableCell>
+						</TableRow>
+					) : (
+						data.data.map((customer) => (
+							<TableRow key={customer.id}>
+								<TableCell>
+									<Checkbox />
+								</TableCell>
+								<TableCell>{customer.full_name}</TableCell>
+								<TableCell>{customer.full_name}</TableCell>
+							</TableRow>
+						))
+					)}
 				</TableBody>
 			</Table>
 		</div>

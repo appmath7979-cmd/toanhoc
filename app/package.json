@@ -32,7 +32,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.14",
-		"@tanstack/devtools-vite": "^0.8.5",
 		"@tauri-apps/cli": "^2",
 		"@types/node": "^22.20.2",
 		"@types/react": "^19.1.8",

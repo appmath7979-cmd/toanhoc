@@ -3,10 +3,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+	--background: oklch(98.5% 0 none);
+	--foreground: oklch(14.5% 0 none);
 	--primary: oklch(57.7% 0.245 27.325);
+	--primary-foreground: oklch(97.1% 0.013 17.38);
+	--surface-0: oklch(98.5% 0 none);
+	--surface-1: oklch(96.7% 0.001 286.375);
 	--accent: oklch(92.9% 0.013 255.508);
+	--muted: oklch(92.3% 0.003 48.717);
+	--muted-foreground: oklch(44.4% 0.011 73.639);
 	--accent-foreground: oklch(70.4% 0.04 256.788);
-	--border: oklch(70.8% 0 none);
+	--border: oklch(92.2% 0 none);
 }
 
 .dark {
@@ -14,21 +21,49 @@
 }
 
 @theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
 	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-surface-0: var(--surface-0);
+	--color-surface-1: var(--surface-1);
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
 	--color-border: var(--border);
 }
 
 html,
 body,
 #root {
-	@apply scroll-smooth;
+	@apply w-full h-dvh scroll-smooth overflow-hidden bg-background text-foreground;
 }
 
-.container {
-	padding: 0 16px;
-	width: 100dvw;
+.contain {
+	padding: 4px 16px;
+}
+
+@layer utilities {
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+
+	/* Màu nền của track scroll */
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	/* Màu và bo tròn của thanh nắm kéo (thumb) */
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-muted-foreground/30 rounded-full transition-colors;
+	}
+
+	/* Hiệu ứng khi rê chuột vào thanh cuộn */
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-muted-foreground/60;
+	}
 }
 
 @layer utilities {

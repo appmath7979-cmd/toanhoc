@@ -13,7 +13,7 @@ interface ButtonProps {
 	danger?: boolean;
 }
 
-export default function Button({
+function Button({
 	variant = "primary",
 	setChild = false,
 	danger = false,
@@ -23,3 +23,5 @@ export default function Button({
 	const Comp = setChild ? Slot.Root : "button";
 	return <Comp {...props}>{children}</Comp>;
 }
+
+export { Button, type ButtonProps };

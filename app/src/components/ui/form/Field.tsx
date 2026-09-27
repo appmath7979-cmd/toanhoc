@@ -11,7 +11,13 @@ export default function Field({
 	className?: string;
 }) {
 	return (
-		<div className={cn("space-y-2", direction && "flex gap-2", className)}>
+		<div
+			className={cn(
+				"flex flex-col gap-1",
+				direction === "horizontal" && "flex-row items-center",
+				className,
+			)}
+		>
 			{children}
 		</div>
 	);
