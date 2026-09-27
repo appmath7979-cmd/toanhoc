@@ -1,13 +1,12 @@
-interface BaseApi {
+interface API {
 	message: string;
 	status: number;
 	success: boolean;
 }
 
-interface ListApi {
-	page: number;
-	total_items: number;
-	total_pages: number;
+interface APIPagination {
+	total_item: number;
+	total_page: number;
 }
 
-export type { BaseApi, ListApi };
+export type { API, APIPagination };

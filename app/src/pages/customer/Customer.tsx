@@ -1,68 +1,97 @@
-import { getCustomer } from "@/api/customer.api";
-import Box from "@/components/core/Box";
-import CustomerEmpty from "@/components/pages/customer/CustomerEmpty";
-import CustomerTable from "@/components/pages/customer/CustomerTable";
-import Interactive from "@/components/pages/customer/Interactive";
-import Pagination from "@/components/Pagination";
-import { useGetCustomers } from "@/hooks/query/useCustomerQuery";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import Pending from "../status/Pending";
-import { useAppStore } from "@lavaz/store";
-import { store } from "@/store/store";
+import SearchField from "@/components/system/SearchField";
+import { Button } from "@/components/ui/button/Button";
+import ButtonGroup from "@/components/ui/button/ButtonGroup";
+import Checkbox from "@/components/ui/form/Checkbox";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table/Table";
+import { useQueryCustomer } from "@/hooks/queries/use-customer-query";
+import { BoxSelectIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import Pending from "../Pending";
 
 export default function Customer() {
-	const [{ active, guest, sort }] = useAppStore(
-		store.customerPagination,
-		(s) => s,
-	);
+	const { data, isPending } = useQueryCustomer({ page: 1, guest: true });
 
-	const [page, setPage] = useState<number>(1);
-	const [search, setSearch] = useState<string>("");
-	const queryClient = useQueryClient();
+	if (isPending) return <Pending />;
 
-	const { data, isLoading, isPlaceholderData } = useGetCustomers({
-		page,
-		search,
-		active,
-		guest,
-		sort,
-	});
-
-	useEffect(() => {
-		const hasMore = page < (data?.total_pages ?? 0);
-		console.log(data?.total_pages);
-
-		if (!isPlaceholderData && hasMore)
-			queryClient.prefetchQuery({
-				queryKey: ["customer", "list", page + 1],
-				queryFn: () => getCustomer({ page, search }),
-				staleTime: 5000,
-			});
-	}, [data, isPlaceholderData, page, search, queryClient]);
-
-	if (isLoading) return <Pending />;
-	if ((!search || active === undefined) && !data) return null;
-	if ((!search || active === undefined) && data?.data?.length === 0)
-		return <CustomerEmpty />;
-
-	const handleSearch = (newSeach: string) => {
-		setSearch(newSeach);
-		setPage(1);
-	};
+	if (!data) return;
 
 	return (
-		<Box>
-			<Interactive search={search} onSearch={handleSearch} />
-			<hr />
-			<div className="space-y-6">
-				<CustomerTable data={data?.data ?? []} />
-				<Pagination
-					page={data?.page ?? 0}
-					length={data?.total_pages ?? 0}
-					onSetPage={setPage}
-				/>
+		<div className="container py-4">
+			<div>
+				<SearchField />
+				<Button setChild>
+					<Link to={"/customer/add"}>
+						<PlusIcon />
+						<span>Thêm khách hàng</span>
+					</Link>
+				</Button>
 			</div>
-		</Box>
+			<div>
+				<ButtonGroup>
+					<Button>Khách</Button>
+					<Button>Chủ</Button>
+				</ButtonGroup>
+				<div>
+					<Button variant="outline" danger>
+						<TrashIcon />
+						<span>Trạng thái</span>
+					</Button>
+					<Button variant="outline" danger>
+						<TrashIcon />
+						<span>Sắp xếp</span>
+					</Button>
+					<Button variant="outline" danger>
+						<TrashIcon />
+						<span>Xóa</span>
+					</Button>
+				</div>
+			</div>
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead>
+							<Checkbox />
+						</TableHead>
+						<TableHead>Tên khách hàng</TableHead>
+						<TableHead>Hành động</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{!data.data || data.data.length === 0 ? (
+						<TableRow>
+							<TableCell>
+								<BoxSelectIcon />
+								<div>
+									<p>Chưa có khách hàng nào</p>
+									<Button setChild>
+										<Link to={"/customer/add"}>
+											<PlusIcon />
+											<span>Thêm khách hàng</span>
+										</Link>
+									</Button>
+								</div>
+							</TableCell>
+						</TableRow>
+					) : (
+						data.data.map((customer) => (
+							<TableRow key={customer.id}>
+								<TableCell>
+									<Checkbox />
+								</TableCell>
+								<TableCell>{customer.full_name}</TableCell>
+								<TableCell>{customer.full_name}</TableCell>
+							</TableRow>
+						))
+					)}
+				</TableBody>
+			</Table>
+		</div>
 	);
 }
