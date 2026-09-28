@@ -33,5 +33,5 @@ func AppRouter() []RouteGroup {
 
 	allGroup = append(allGroup, CustomerRoute(db))
 
-	return []RouteGroup{}
+	return allGroup
 }

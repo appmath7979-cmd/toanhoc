@@ -3,10 +3,12 @@ package services
 import (
 	"errors"
 	"math"
-	"server/app/dtos"
+	"server/app/dtos/request"
+	"server/app/dtos/response"
 	"server/app/models"
 	"server/app/repositories"
 	"server/app/utils"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -19,7 +21,7 @@ func CustomerServiceFn(repo *repositories.CustomerRepo) *CustomerService {
 	return &CustomerService{repo: repo}
 }
 
-func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCustomer, int64, int64, uint16, error) {
+func (s *CustomerService) GetManyCustomer(req *request.GetManyCustomer) ([]response.GetCustomer, int64, int64, uint16, error) {
 	limit := 10
 	offset := (req.Page - 1) * limit
 	search := req.Search
@@ -40,16 +42,16 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 		sort = "full_name ASC"
 	}
 
-	customers, totalPage, err := s.repo.FindManyCustomer(req.Page, limit, offset, search, req.Active, req.Guest, sort)
+	customers, totalItem, err := s.repo.FindManyCustomer(req.Page, limit, offset, search, req.Active, req.Guest, sort)
 
 	if err != nil {
-		return []dtos.GetCustomer{}, 0, 0, 500, err
+		return []response.GetCustomer{}, 0, 0, 500, err
 	}
 
-	var results []dtos.GetCustomer
+	var results []response.GetCustomer
 
 	for _, c := range customers {
-		results = append(results, dtos.GetCustomer{
+		results = append(results, response.GetCustomer{
 			ID:          c.ID,
 			FullName:    c.FullName,
 			PhoneNumber: c.PhoneNumber,
@@ -61,12 +63,12 @@ func (s *CustomerService) GetManyCustomer(req *dtos.CustomerQuery) ([]dtos.GetCu
 		})
 	}
 
-	totalItem := math.Ceil(float64(totalPage) / float64(limit))
+	totalPage := math.Ceil(float64(totalItem) / float64(limit))
 
-	return results, int64(totalItem), totalPage, 200, err
+	return results, int64(totalPage), totalItem, 200, err
 }
 
-func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos.GetCustomerAndMessageById, uint16, error) {
+func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*response.GetCustomerMessage, uint16, error) {
 	customer, err := s.repo.FindCustomerAndMessageById(id, at)
 
 	if err != nil {
@@ -77,53 +79,22 @@ func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*dtos
 		}
 	}
 
-	var messages []dtos.GetMessage
-
-	for _, m := range customer.Messages {
-		var details []dtos.GetMessageDetail
-
-		for _, d := range m.MessageDetails {
-			details = append(details, dtos.GetMessageDetail{
-				ID:        d.ID,
-				BetType:   d.BetType,
-				Syntax:    d.Syntax,
-				Province:  d.Province,
-				Score:     d.Score,
-				Co:        d.Co,
-				Trung:     d.Trung,
-				Number:    d.Number,
-				MessageID: d.MessageID,
-				CreatedAt: d.CreatedAt,
-				UpdatedAt: d.UpdatedAt,
-			})
-		}
-		messages = append(messages, dtos.GetMessage{
-			ID:             m.ID,
-			Send:           m.Send,
-			At:             m.At,
-			Content:        m.Content,
-			Region:         m.Region,
-			MessageDetails: details,
-			CustomerID:     m.CustomerID,
-			CreatedAt:      m.CreatedAt,
-			UpdatedAt:      m.UpdatedAt,
-		})
-	}
-
-	result := dtos.GetCustomerAndMessageById{
+	result := response.GetCustomerMessage{
 		ID:          customer.ID,
 		FullName:    customer.FullName,
-		PhoneNumber: customer.PhoneNumber,
-		IsGuest:     customer.IsGuest,
-		IsSend:      customer.IsSend,
 		Active:      customer.Active,
-		Messages:    messages,
+		PhoneNumber: customer.PhoneNumber,
+		IsSend:      customer.IsSend,
+		IsGuest:     customer.IsGuest,
+		Messages:    customer.Messages,
+		CreatedAt:   customer.CreatedAt,
+		UpdatedAt:   customer.UpdatedAt,
 	}
 
 	return &result, 200, nil
 }
 
-func (s *CustomerService) GetCustomerAndSettingById(id string) (*dtos.GetCustomerAndSettingById, uint16, error) {
+func (s *CustomerService) GetCustomerAndSettingById(id string) (*response.GetCustomerSetting, uint16, error) {
 	customer, err := s.repo.FindCustomerAndSettingById(id)
 
 	if err != nil {
@@ -134,39 +105,18 @@ func (s *CustomerService) GetCustomerAndSettingById(id string) (*dtos.GetCustome
 		}
 	}
 
-	var bets []dtos.GetBetPair
-
-	for _, b := range customer.Setting.Bets {
-		bets = append(bets, dtos.GetBetPair{
-			BetType: b.BetType,
-			C:       dtos.GetBetPairValue(b.C),
-			T:       dtos.GetBetPairValue(b.T),
-			Percent: b.Percent,
-		})
-	}
-
-	setting := dtos.GetSetting{
-		ID:         customer.Setting.ID,
-		XienMb:     customer.Setting.XienMb,
-		DaxT:       dtos.DaxT(customer.Setting.DaxT),
-		Bets:       bets,
-		CustomerID: customer.Setting.CustomerID,
-		CreatedAt:  customer.Setting.CreatedAt,
-		UpdatedAt:  customer.Setting.UpdatedAt,
-	}
-
-	result := dtos.GetCustomerAndSettingById{
+	result := response.GetCustomerSetting{
 		ID:          customer.ID,
 		FullName:    customer.FullName,
 		PhoneNumber: customer.PhoneNumber,
 		IsGuest:     customer.IsGuest,
-		Setting:     &setting,
+		Setting:     customer.Setting,
 	}
 
 	return &result, 200, nil
 }
 
-func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, error) {
+func (s *CustomerService) CreateCustomer(req *request.CreateCustomer) (uint16, error) {
 	var bets []models.BetPair
 
 	for _, b := range req.Setting.Bets {
@@ -189,20 +139,20 @@ func (s *CustomerService) CreateCustomer(req *dtos.CreateCustomer) (uint16, erro
 		},
 	}
 
-	result, err := s.repo.CreateCustomer(&customer)
+	err := s.repo.CreateCustomer(&customer)
 
 	if err != nil {
-		return 500, err
-	}
+		if strings.Contains(err.Error(), "duplicate key value") {
+			return 409, errors.New("Không thể tạo khách hàng với số điện thoại này!")
+		}
 
-	if result == nil {
-		return 409, errors.New("Không thể tạo khách hàng với số điện thoại này!")
+		return 500, err
 	}
 
 	return 201, nil
 }
 
-func (s *CustomerService) UpdateCustomer(id string, req *dtos.UpdateCustomer) (uint16, error) {
+func (s *CustomerService) UpdateCustomer(id string, req *request.UpdateCustomer) (uint16, error) {
 	err := s.repo.UpdateCustomer(id, req)
 
 	if err != nil {
@@ -228,7 +178,7 @@ func (s *CustomerService) DeletCustomerById(id string) (uint16, error) {
 	}
 }
 
-func (s *CustomerService) DeleteManyCustomer(req *dtos.DeleteManyCustomer) error {
+func (s *CustomerService) DeleteManyCustomer(req *request.DeleteManyCustomer) error {
 	if err := s.repo.DeleteCustomer(req.Ids); err != nil {
 		return err
 	}

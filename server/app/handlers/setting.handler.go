@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"server/app/dtos"
+	"server/app/dtos/response"
 	"server/app/services"
 	"server/app/validator"
 
@@ -25,15 +25,15 @@ func SettingHandlerFn(service *services.SettingService, validate *validator.AppV
 // @Accept json
 // @Produce json
 // @Param id path string true "Id của khách hàng"
-// @Success 200 {object} dtos.GetSettingResponse "Tìm thông tin khách hàng thành công"
-// @Failure 404 {object} dtos.GetSettingResponse "Không tìm thấy thông tin khách hàng"
-// @Failure 500 {object} dtos.GetSettingResponse "Lỗi Server"
+// @Success 200 {object} response.GetSetting "Tìm thông tin khách hàng thành công"
+// @Failure 404 {object} response.GetSetting "Không tìm thấy thông tin khách hàng"
+// @Failure 500 {object} response.GetSetting "Lỗi Server"
 // @Router /api/v1/settings/{id} [get]
 func (h *SettingHandler) GetSettingById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if err := h.validate.ValidateUUID(id); err != nil {
-		ctx.JSON(http.StatusBadRequest, dtos.GetSettingResponse{
+		ctx.JSON(http.StatusBadRequest, response.GetSetting{
 			Message: "Dữ liệu không hợp lệ!",
 			Success: false,
 			Status:  400,
@@ -47,14 +47,14 @@ func (h *SettingHandler) GetSettingById(ctx *gin.Context) {
 
 	if err != nil {
 		if status == 404 {
-			ctx.JSON(http.StatusNotFound, dtos.GetSettingResponse{
+			ctx.JSON(http.StatusNotFound, response.GetSetting{
 				Message: err.Error(),
 				Success: false,
 				Status:  status,
 				Data:    setting,
 			})
 		} else {
-			ctx.JSON(http.StatusInternalServerError, dtos.GetSettingResponse{
+			ctx.JSON(http.StatusInternalServerError, response.GetSetting{
 				Message: err.Error(),
 				Success: false,
 				Status:  status,
@@ -62,7 +62,7 @@ func (h *SettingHandler) GetSettingById(ctx *gin.Context) {
 			})
 		}
 	} else {
-		ctx.JSON(http.StatusOK, dtos.GetSettingResponse{
+		ctx.JSON(http.StatusOK, response.GetSetting{
 			Message: "Thành công!",
 			Success: true,
 			Status:  status,

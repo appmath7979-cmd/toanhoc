@@ -2,7 +2,7 @@ package main
 
 import (
 	"server/app"
-	"server/app/core"
+	"server/app/common"
 	"server/app/models"
 	"server/app/routes"
 	"server/configs"
@@ -29,7 +29,7 @@ func main() {
 		&models.MessageDetail{},
 	)
 
-	app := core.NewApplication()
+	app := common.NewApplication()
 
 	r := app.Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
