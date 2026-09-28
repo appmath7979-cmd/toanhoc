@@ -1,4 +1,4 @@
-package core
+package common
 
 import (
 	"log"
@@ -24,7 +24,7 @@ func NewApplication() *Application {
 
 	if mode != "release" {
 		origins = []string{
-			"http://localhost:1420","http://tauri.localhost","https://tauri.localhost",
+			"http://localhost:1420", "http://tauri.localhost", "https://tauri.localhost",
 		}
 	}
 

@@ -2,7 +2,8 @@ package services
 
 import (
 	"errors"
-	"server/app/dtos"
+
+	"server/app/models"
 	"server/app/repositories"
 
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ func SettingServiceFn(repo *repositories.SettingRepo) *SettingService {
 	return &SettingService{repo: repo}
 }
 
-func (s *SettingService) GetSettingById(id string) (*dtos.GetSetting, uint16, error) {
+func (s *SettingService) GetSettingById(id string) (*models.Setting, uint16, error) {
 	setting, err := s.repo.FindSettingById(id)
 
 	if err != nil {
@@ -27,23 +28,12 @@ func (s *SettingService) GetSettingById(id string) (*dtos.GetSetting, uint16, er
 		}
 	}
 
-	var bets []dtos.GetBetPair
-
-	for _, b := range setting.Bets {
-		bets = append(bets, dtos.GetBetPair{
-			BetType: b.BetType,
-			C:       dtos.GetBetPairValue(b.C),
-			T:       dtos.GetBetPairValue(b.T),
-			Percent: b.Percent,
-		})
-	}
-
-	result := dtos.GetSetting{
+	result := models.Setting{
 		ID:         setting.ID,
 		XienMb:     setting.XienMb,
-		DaxT:       dtos.DaxT(setting.DaxT),
+		DaxT:       setting.DaxT,
 		CustomerID: setting.ID,
-		Bets:       bets,
+		Bets:       setting.Bets,
 		CreatedAt:  setting.CreatedAt,
 		UpdatedAt:  setting.UpdatedAt,
 	}
