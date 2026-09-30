@@ -1,6 +1,6 @@
-import RadioField from "@/components/ui/form/RadioField";
-import SubscribeButton from "@/components/ui/form/SubscribeButton";
-import TextField from "@/components/ui/form/TextField";
+import RadioField from "@/components/ui/form/tanstack/RadioField";
+import SubscribeButton from "@/components/ui/form/tanstack/SubscribeButton";
+import TextField from "@/components/ui/form/tanstack/TextField";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
@@ -14,7 +14,7 @@ const { useAppForm, withFieldGroup } = createFormHook({
 		RadioField,
 	},
 	formComponents: {
-		SubscribeButton,
+		SubscribeButton
 	},
 });
 

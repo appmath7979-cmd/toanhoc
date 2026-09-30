@@ -13,23 +13,5 @@ export default function Heading({
 	className,
 }: HeadingProps) {
 	const Comp = as;
-	return (
-		<Comp
-			className={cn(
-				"font-medium text-base",
-				as === "h1"
-					? "text-2xl lg:text-3xl font-bold"
-					: as === "h2"
-						? "text-xl lg:text-2xl font-semibold"
-						: as === "h3"
-							? "text-lg lg:text-xl font-semibold"
-							: as === "h6"
-								? "text-base"
-								: "lg:text-lg",
-				className,
-			)}
-		>
-			{children}
-		</Comp>
-	);
+	return <Comp className={cn("", className)}>{children}</Comp>;
 }

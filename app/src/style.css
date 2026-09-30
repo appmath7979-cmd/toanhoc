@@ -7,6 +7,8 @@
 	--foreground: oklch(14.5% 0 none);
 	--primary: oklch(57.7% 0.245 27.325);
 	--primary-foreground: oklch(97.1% 0.013 17.38);
+	--secondary: oklch(97% 0.001 106.424);
+	--secondary-foreground: oklch(14.7% 0.004 49.25);
 	--surface-0: oklch(98.5% 0 none);
 	--surface-1: oklch(96.7% 0.001 286.375);
 	--accent: oklch(92.9% 0.013 255.508);
@@ -25,6 +27,8 @@
 	--color-foreground: var(--foreground);
 	--color-primary: var(--primary);
 	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
 	--color-surface-0: var(--surface-0);
 	--color-surface-1: var(--surface-1);
 	--color-accent: var(--accent);
@@ -41,7 +45,7 @@ body,
 }
 
 .contain {
-	padding: 4px 16px;
+	padding: 4px 12px;
 }
 
 @layer utilities {
@@ -73,11 +77,4 @@ body,
 }
 
 @layer components {
-	.input {
-		@apply px-2 py-1 text-sm border border-border outline-0 rounded-md focus:ring-2 focus:border-primary focus:text-primary placeholder:text-accent-foreground;
-	}
-
-	.search {
-		@apply relative flex items-center;
-	}
 }

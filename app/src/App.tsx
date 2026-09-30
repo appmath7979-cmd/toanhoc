@@ -7,7 +7,7 @@ export function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Customer />} />
-				<Route path="/customer/add" element={<AddCustomer />} />
+				<Route path="/customers/add" element={<AddCustomer />} />
 			</Routes>
 		</BrowserRouter>
 	);
