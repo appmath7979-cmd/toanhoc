@@ -1,10 +1,8 @@
-import { RadioItemProps } from "@/components/ui/form/Radio";
 import { CustomerBasicInfo } from "@/schema/customer.schema";
 
 const defaultBasicInfo = {
 	full_name: "",
-	phone_number: "",
-	is_guest: false,
+	is_guest: true,
 } as CustomerBasicInfo;
 
 const defaultSettingInfo = {
@@ -56,58 +54,4 @@ const defaultSettingInfo = {
 	],
 };
 
-const xienMbRadio: RadioItemProps[] = [
-	{
-		id: "xien-mb-true",
-		label: "Cho phép",
-		value: "true",
-		description: "Cho phép khách hàng đá xiên",
-	},
-	{
-		id: "xien-mb-false",
-		label: "Không",
-		value: "false",
-		description: "Không cho phép khách hàng đá xiên",
-	},
-];
-
-const guestRadio: RadioItemProps[] = [
-	{
-		id: "guest-true",
-		label: "Khách",
-		value: "true",
-		description: "Khách hàng là người gửi tin cho bạn",
-	},
-	{
-		id: "guest-false",
-		label: "Chủ",
-		value: "false",
-		description: "Khách hàng là người nhận tin của bạn",
-	},
-];
-
-const daxTRadio: RadioItemProps[] = [
-	{
-		id: "daxt-one",
-		label: "Một ky",
-		value: "ONE",
-	},
-	{
-		id: "daxt-half",
-		label: "Ky rưỡi",
-		value: "HALF",
-	},
-	{
-		id: "daxt-many",
-		label: "Nhiều ky",
-		value: "MANY",
-	},
-];
-
-export {
-	defaultBasicInfo,
-	defaultSettingInfo,
-	xienMbRadio,
-	guestRadio,
-	daxTRadio,
-};
+export { defaultBasicInfo, defaultSettingInfo };

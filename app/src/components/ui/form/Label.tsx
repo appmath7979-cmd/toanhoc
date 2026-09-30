@@ -2,12 +2,12 @@ import { cn } from "@/libs/utils/cn";
 import { ComponentProps } from "react";
 
 export default function Label({
-	className,
 	children,
+	className,
 	...props
 }: ComponentProps<"label">) {
 	return (
-		<label className={cn("text-sm font-medium", className)} {...props}>
+		<label className={cn("font-semibold text-sm", className)} {...props}>
 			{children}
 		</label>
 	);

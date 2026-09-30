@@ -1,24 +1,27 @@
 import { cn } from "@/libs/utils/cn";
-import { ReactNode } from "react";
+import Label from "./Label";
+import Input from "./Input";
+import { ComponentProps } from "react";
 
-export default function Field({
-	children,
+interface FieldProps extends ComponentProps<"input"> {
+	label?: string;
+	direction?: "horizontal" | "vertical";
+	labelPos?: "before" | "after";
+}
+
+function Field({
+	label,
 	direction = "vertical",
+	labelPos = "before",
 	className,
-}: {
-	children: ReactNode;
-	direction?: "vertical" | "horizontal";
-	className?: string;
-}) {
+	...props
+}: FieldProps) {
 	return (
-		<div
-			className={cn(
-				"flex flex-col gap-1",
-				direction === "horizontal" && "flex-row items-center",
-				className,
-			)}
-		>
-			{children}
-		</div>
+		<Label className={cn("", className)}>
+			<p>{label}</p>
+			<Input {...props} />
+		</Label>
 	);
 }
+
+export { Field, type FieldProps };

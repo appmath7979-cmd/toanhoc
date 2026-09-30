@@ -1,11 +1,39 @@
 import { ReactNode } from "react";
+import { cn } from "@/libs/utils/cn";
 
-function Card({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex flex-col gap-3 border border-border rounded-md shadow-md p-4 surface-0">
-			{children}
-		</div>
-	);
+interface CardTitleProps {
+	as?: "h2" | "h3" | "h4" | "h5" | "h6";
+	children: ReactNode;
+	className?: string;
 }
 
-export { Card };
+function Card({ children }: { children: ReactNode }) {
+	return <div className="">{children}</div>;
+}
+
+function CardHeader({
+	children,
+	className,
+}: {
+	children: ReactNode;
+	className?: string;
+}) {
+	return <div className={cn("", className)}>{children}</div>;
+}
+
+function CardTitle({ children, className, as = "h2" }: CardTitleProps) {
+	const Comp = as;
+	return <Comp className={cn("", className)}>{children}</Comp>;
+}
+
+function CardBody({
+	children,
+	className,
+}: {
+	children: ReactNode;
+	className?: string;
+}) {
+	return <div className={cn("", className)}>{children}</div>;
+}
+
+export { Card, CardBody, CardHeader, CardTitle };

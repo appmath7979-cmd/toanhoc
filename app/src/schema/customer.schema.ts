@@ -26,9 +26,6 @@ const CustomerSchema = z.object({
 		.string()
 		.min(2, "Họ tên phải có ít nhất 2 ký tự!")
 		.max(100, "Họ tên chỉ chứa tối đa 100 ký tự!"),
-	phone_number: z
-		.string()
-		.regex(/^0[35789]\d{8}$/, "Số điện thoại không hợp lệ!"),
 	is_guest: z.boolean(),
 	setting: SettingSchema,
 });
