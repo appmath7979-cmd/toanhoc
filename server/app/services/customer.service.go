@@ -54,7 +54,6 @@ func (s *CustomerService) GetManyCustomer(req *request.GetManyCustomer) ([]respo
 		results = append(results, response.GetCustomer{
 			ID:          c.ID,
 			FullName:    c.FullName,
-			PhoneNumber: c.PhoneNumber,
 			IsGuest:     c.IsGuest,
 			IsSend:      c.IsSend,
 			Active:      c.Active,
@@ -83,7 +82,6 @@ func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*resp
 		ID:          customer.ID,
 		FullName:    customer.FullName,
 		Active:      customer.Active,
-		PhoneNumber: customer.PhoneNumber,
 		IsSend:      customer.IsSend,
 		IsGuest:     customer.IsGuest,
 		Messages:    customer.Messages,
@@ -108,7 +106,6 @@ func (s *CustomerService) GetCustomerAndSettingById(id string) (*response.GetCus
 	result := response.GetCustomerSetting{
 		ID:          customer.ID,
 		FullName:    customer.FullName,
-		PhoneNumber: customer.PhoneNumber,
 		IsGuest:     customer.IsGuest,
 		Setting:     customer.Setting,
 	}
@@ -130,7 +127,6 @@ func (s *CustomerService) CreateCustomer(req *request.CreateCustomer) (uint16, e
 
 	customer := models.Customer{
 		FullName:    req.FullName,
-		PhoneNumber: req.PhoneNumber,
 		IsGuest:     *req.IsGuest,
 		Setting: &models.Setting{
 			XienMb: req.Setting.XienMb,
