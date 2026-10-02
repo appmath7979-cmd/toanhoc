@@ -6,18 +6,42 @@ import {
 	defaultBasicInfo,
 	defaultSettingInfo,
 } from "@/data/customer-form.data";
-import { CreateCustomer, CustomerSchema } from "@/schema/customer.schema";
+import { useCreateCustomer } from "@/hooks/query/use-customer-query";
+import {
+	CreateCustomer,
+	CustomerBasicInfo,
+	CustomerSchema,
+	CustomerSettingInfo,
+} from "@/schema/customer.schema";
 import { SaveIcon } from "lucide-react";
 
-export default function AddCustomer() {
+export default function AddCustomer({
+	mode = "add",
+	basicInfo,
+	settingInfo,
+}: {
+	mode?: "add" | "edit";
+	basicInfo?: CustomerBasicInfo;
+	settingInfo?: CustomerSettingInfo;
+}) {
+	const { mutateAsync: create } = useCreateCustomer();
+
+	const defaultValues: CreateCustomer = {
+		...defaultBasicInfo,
+		...basicInfo,
+		setting: settingInfo?.setting ?? defaultSettingInfo.setting,
+	};
+
 	const form = useAppForm({
-		defaultValues: {
-			...defaultBasicInfo,
-			setting: { ...defaultSettingInfo },
-		} as CreateCustomer,
+		defaultValues: defaultValues,
 		validators: {
 			onChange: CustomerSchema,
 			onBlur: CustomerSchema,
+		},
+		onSubmit: async ({ value }) => {
+			if (mode === "add") {
+				await create(value);
+			}
 		},
 	});
 
@@ -26,8 +50,8 @@ export default function AddCustomer() {
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
-					e.stopPropagation;
-					form.handleSubmit;
+					e.stopPropagation();
+					form.handleSubmit();
 				}}
 			>
 				<BasicInfo

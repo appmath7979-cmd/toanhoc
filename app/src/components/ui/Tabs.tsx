@@ -30,7 +30,13 @@ function Tabs({
 	);
 }
 
-function TabsList({ children, loop = true }: { children: ReactNode; loop?: boolean }) {
+function TabsList({
+	children,
+	loop = true,
+}: {
+	children: ReactNode;
+	loop?: boolean;
+}) {
 	return <T.List loop={loop}>{children}</T.List>;
 }
 
@@ -40,18 +46,13 @@ function TabsTrigger({
 	value,
 	className,
 }: {
-
 	children?: ReactNode;
 	setChild?: boolean;
 	value: string;
 	className?: string;
 } & Attributes) {
 	return (
-		<T.Trigger
-			asChild={setChild}
-			value={value}
-			className={cn("", className)}
-		>
+		<T.Trigger asChild={setChild} value={value} className={cn("", className)}>
 			{children}
 		</T.Trigger>
 	);

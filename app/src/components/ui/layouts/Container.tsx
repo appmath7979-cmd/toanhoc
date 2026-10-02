@@ -6,5 +6,9 @@ interface ContainerProps {
 }
 export default function Container({ as = "div", children }: ContainerProps) {
 	const Comp = as;
-	return <Comp className="overflow-y-auto h-dvh custom-scrollbar">{children}</Comp>;
+	return (
+		<Comp className="w-full overflow-y-auto h-dvh custom-scrollbar">
+			{children}
+		</Comp>
+	);
 }
