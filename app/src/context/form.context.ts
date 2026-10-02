@@ -1,3 +1,4 @@
+import NumberField from "@/components/ui/form/tanstack/NumberField";
 import RadioField from "@/components/ui/form/tanstack/RadioField";
 import SubscribeButton from "@/components/ui/form/tanstack/SubscribeButton";
 import TextField from "@/components/ui/form/tanstack/TextField";
@@ -11,10 +12,11 @@ const { useAppForm, withFieldGroup } = createFormHook({
 	formContext,
 	fieldComponents: {
 		TextField,
+		NumberField,
 		RadioField,
 	},
 	formComponents: {
-		SubscribeButton
+		SubscribeButton,
 	},
 });
 

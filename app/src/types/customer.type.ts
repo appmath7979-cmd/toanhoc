@@ -8,13 +8,13 @@ interface CustomerQuery {
 }
 
 interface Customer {
-	id: string;
-	full_name: string;
-	phone_number: string;
-	is_guest: boolean;
-	is_send: boolean;
 	active: boolean;
 	created_at: string;
+	full_name: string;
+	id: string;
+	is_guest: boolean;
+	is_send: boolean;
+	phone_number: string;
 	updated_at: string;
 }
 
@@ -22,4 +22,4 @@ interface CustomerRes extends API, APIPagination {
 	data: Customer[];
 }
 
-export type { CustomerQuery, CustomerRes };
+export type { CustomerQuery, CustomerRes, Customer };

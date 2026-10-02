@@ -7,20 +7,25 @@ interface FieldProps extends ComponentProps<"input"> {
 	label?: string;
 	direction?: "horizontal" | "vertical";
 	labelPos?: "before" | "after";
+	error?: string;
 }
 
 function Field({
 	label,
+	error,
 	direction = "vertical",
 	labelPos = "before",
 	className,
 	...props
 }: FieldProps) {
 	return (
-		<Label className={cn("", className)}>
-			<p>{label}</p>
-			<Input {...props} />
-		</Label>
+		<div>
+			<Label className={cn("", className)}>
+				<p>{label}</p>
+				<Input {...props} />
+			</Label>
+			<em>{error}</em>
+		</div>
 	);
 }
 
