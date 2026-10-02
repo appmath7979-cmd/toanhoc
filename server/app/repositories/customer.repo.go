@@ -84,10 +84,6 @@ func (r *CustomerRepo) UpdateCustomer(id string, req *request.UpdateCustomer) er
 			updates["full_name"] = *req.FullName
 		}
 
-		if req.PhoneNumber != nil {
-			updates["phone_number"] = *req.PhoneNumber
-		}
-
 		if req.IsGuest != nil {
 			updates["is_guest"] = *req.IsGuest
 		}
