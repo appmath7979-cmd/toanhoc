@@ -28,13 +28,13 @@ const (
 )
 
 type Setting struct {
-	ID     string                       `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
-	XienMb bool                         `gorm:"type:boolean;default:false"`
-	DaxT   DaxT                         `gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
-	Bets   datatypes.JSONSlice[BetPair] `gorm:"type:jsonb"`
+	ID     string                       `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	XienMb bool                         `json:"xien_mb" gorm:"type:boolean;default:false"`
+	DaxT   DaxT                         `json:"dax_t" gorm:"type:varchar(20);check:dax_t IN ('ONE', 'HALF', 'MANY')"`
+	Bets   datatypes.JSONSlice[BetPair] `json:"bets" gorm:"type:jsonb"`
 
-	CustomerID string `gorm:"type:uuid;unique;not null;index"`
+	CustomerID string `json:"customer_id" gorm:"type:uuid;unique;not null;index"`
 
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	CreatedAt time.Time `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"default:CURRENT_TIMESTAMP"`
 }

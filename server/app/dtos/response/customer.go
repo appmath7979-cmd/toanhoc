@@ -37,15 +37,15 @@ type GetCustomerSetting struct {
 type ManyCustomer struct {
 	StatusResponse
 	PaginationResponse
-	Data []GetCustomer
+	Data []GetCustomer `json:"data"`
 }
 
 type CustomerMessage struct {
 	StatusResponse
-	Data *GetCustomerMessage
+	Data *GetCustomerMessage `json:"data"`
 }
 
 type CustomerSetting struct {
 	StatusResponse
-	Data *GetCustomerSetting
+	Data *GetCustomerSetting `json:"data"`
 }
