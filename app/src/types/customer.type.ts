@@ -1,4 +1,5 @@
 import { API, APIPagination } from "./api.type";
+import { Setting } from "./setting.type";
 
 interface CustomerQuery {
 	page: number;
@@ -14,7 +15,6 @@ interface Customer {
 	id: string;
 	is_guest: boolean;
 	is_send: boolean;
-	phone_number: string;
 	updated_at: string;
 }
 
@@ -22,4 +22,18 @@ interface CustomerRes extends API, APIPagination {
 	data: Customer[];
 }
 
-export type { CustomerQuery, CustomerRes, Customer };
+interface CustomerSetting extends Customer {
+	setting: Setting;
+}
+
+interface CustomerSettingRes extends API {
+	data: CustomerSetting;
+}
+
+export type {
+	CustomerQuery,
+	CustomerRes,
+	Customer,
+	CustomerSetting,
+	CustomerSettingRes,
+};

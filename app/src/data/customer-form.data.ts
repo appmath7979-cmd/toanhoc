@@ -1,4 +1,5 @@
 import {
+	CreateCustomer,
 	CustomerBasicInfo,
 	CustomerSettingInfo,
 } from "@/schema/customer.schema";

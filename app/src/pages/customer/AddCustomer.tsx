@@ -2,35 +2,45 @@ import BasicInfo from "@/components/customer/edit/BasicInfo";
 import SettingInfo from "@/components/customer/edit/SettingInfo";
 import Container from "@/components/ui/layouts/Container";
 import { useAppForm } from "@/context/form.context";
+import { defaultBasicInfo, defaultSettingInfo } from "@/data/customer-form.data";
 import {
-	defaultBasicInfo,
-	defaultSettingInfo,
-} from "@/data/customer-form.data";
-import { useCreateCustomer } from "@/hooks/query/use-customer-query";
-import {
-	CreateCustomer,
-	CustomerBasicInfo,
-	CustomerSchema,
-	CustomerSettingInfo,
-} from "@/schema/customer.schema";
+	useCreateCustomer,
+	useGetCustomerSetting,
+} from "@/hooks/query/use-customer-query";
+import customerFormData from "@/libs/helper/customer-form";
+import { CreateCustomer, CustomerBasicInfo, CustomerSchema, CustomerSettingInfo } from "@/schema/customer.schema";
+import { store } from "@/store/store";
+import { useAppStore } from "@lavaz/store";
 import { SaveIcon } from "lucide-react";
+import { useMemo } from "react";
 
-export default function AddCustomer({
-	mode = "add",
-	basicInfo,
-	settingInfo,
-}: {
-	mode?: "add" | "edit";
-	basicInfo?: CustomerBasicInfo;
-	settingInfo?: CustomerSettingInfo;
-}) {
+export default function AddCustomer() {
+	const [{ customerId, mode }, { onFinish }] = useAppStore(
+		store.customerAction,
+		(s) => s,
+	);
+
+	const { data } = useGetCustomerSetting(customerId)
+
 	const { mutateAsync: create } = useCreateCustomer();
 
+	const { basicInfo, settingInfo } = useMemo(() => {
+		console.log(mode)
+		if (!data?.data || !mode) {
+			return { basicInfo: defaultBasicInfo, settingInfo: defaultSettingInfo };
+		}
+
+		const values = data.data
+		return customerFormData(values, mode === "edit")
+
+	}, [data, data?.data, mode]);
+
 	const defaultValues: CreateCustomer = {
-		...defaultBasicInfo,
 		...basicInfo,
-		setting: settingInfo?.setting ?? defaultSettingInfo.setting,
+		setting: settingInfo.setting,
 	};
+
+	console.log(defaultValues)
 
 	const form = useAppForm({
 		defaultValues: defaultValues,
@@ -39,9 +49,9 @@ export default function AddCustomer({
 			onBlur: CustomerSchema,
 		},
 		onSubmit: async ({ value }) => {
-			if (mode === "add") {
-				await create(value);
-			}
+			// if (mode === "copy" || !mode) {
+			// 	await create(value);
+			// }
 		},
 	});
 
