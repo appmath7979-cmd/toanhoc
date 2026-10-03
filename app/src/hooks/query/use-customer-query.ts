@@ -1,7 +1,9 @@
 import {
 	createCustomer,
+	deleteCustomer,
 	getCustomers,
 	getCustomerSetting,
+	updateCustomer,
 } from "@/apis/customer.api";
 import { CreateCustomer } from "@/schema/customer.schema";
 import { CustomerQuery } from "@/types/customer.type";
@@ -33,4 +35,32 @@ function useCreateCustomer() {
 	});
 }
 
-export { useGetManyCustomer, useCreateCustomer, useGetCustomerSetting };
+function useUpdateCustomer() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: Partial<CreateCustomer> & { id: string }) =>
+			updateCustomer(data.id, data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["customers"] });
+		},
+	});
+}
+function useDeleteCustomer() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (id: string) => deleteCustomer(id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["customers"] });
+		},
+	});
+}
+
+export {
+	useGetManyCustomer,
+	useCreateCustomer,
+	useGetCustomerSetting,
+	useUpdateCustomer,
+	useDeleteCustomer
+};

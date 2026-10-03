@@ -2,17 +2,26 @@ import BasicInfo from "@/components/customer/edit/BasicInfo";
 import SettingInfo from "@/components/customer/edit/SettingInfo";
 import Container from "@/components/ui/layouts/Container";
 import { useAppForm } from "@/context/form.context";
-import { defaultBasicInfo, defaultSettingInfo } from "@/data/customer-form.data";
+import {
+	defaultBasicInfo,
+	defaultSettingInfo,
+} from "@/data/customer-form.data";
 import {
 	useCreateCustomer,
 	useGetCustomerSetting,
 } from "@/hooks/query/use-customer-query";
 import customerFormData from "@/libs/helper/customer-form";
-import { CreateCustomer, CustomerBasicInfo, CustomerSchema, CustomerSettingInfo } from "@/schema/customer.schema";
+import {
+	CreateCustomer,
+	CustomerSchema,
+	CustomerSettingInfo,
+} from "@/schema/customer.schema";
 import { store } from "@/store/store";
 import { useAppStore } from "@lavaz/store";
 import { SaveIcon } from "lucide-react";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AddCustomer() {
 	const [{ customerId, mode }, { onFinish }] = useAppStore(
@@ -20,27 +29,34 @@ export default function AddCustomer() {
 		(s) => s,
 	);
 
-	const { data } = useGetCustomerSetting(customerId)
+	const navigate = useNavigate();
+	const { data, isPending, isSuccess } = useGetCustomerSetting(customerId);
 
-	const { mutateAsync: create } = useCreateCustomer();
+	const { mutateAsync } = useCreateCustomer();
 
 	const { basicInfo, settingInfo } = useMemo(() => {
-		console.log(mode)
+		const basicInfo = defaultBasicInfo;
+		let settingInfo: CustomerSettingInfo;
 		if (!data?.data || !mode) {
-			return { basicInfo: defaultBasicInfo, settingInfo: defaultSettingInfo };
+			settingInfo = defaultSettingInfo;
+		} else {
+			const settingValues = data.data.setting;
+			settingInfo = {
+				setting: {
+					bets: settingValues.bets,
+					dax_t: settingValues.dax_t,
+					xien_mb: settingValues.xien_mb,
+				},
+			};
 		}
 
-		const values = data.data
-		return customerFormData(values, mode === "edit")
-
-	}, [data, data?.data, mode]);
+		return { basicInfo, settingInfo };
+	}, [data, data?.data]);
 
 	const defaultValues: CreateCustomer = {
 		...basicInfo,
 		setting: settingInfo.setting,
 	};
-
-	console.log(defaultValues)
 
 	const form = useAppForm({
 		defaultValues: defaultValues,
@@ -49,11 +65,18 @@ export default function AddCustomer() {
 			onBlur: CustomerSchema,
 		},
 		onSubmit: async ({ value }) => {
-			// if (mode === "copy" || !mode) {
-			// 	await create(value);
-			// }
+			const res = await mutateAsync(value);
+			if (res.success) {
+				toast.success(res.message)
+				onFinish();
+				navigate("/")
+			} else {
+				if (res.status === 500) toast.error("Có lỗi xảy ra!")
+				else toast.error(res.message)
+			}
 		},
 	});
+
 
 	return (
 		<Container>

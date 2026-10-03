@@ -48,7 +48,7 @@ export default function Customer() {
 				<CustomerList customers={data?.data ?? []} />
 			</Table>
 			<CustomerPagination
-				totalPages={10}
+				totalPages={data.total_page}
 				currentPage={page}
 				onPageChange={setPage}
 			/>
