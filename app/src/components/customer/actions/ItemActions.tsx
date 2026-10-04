@@ -1,9 +1,8 @@
-import { getCustomerSetting } from "@/apis/customer.api";
+import DeleteAlert from "@/components/system/dialog/DeleteAlert";
 import { Button } from "@/components/ui/Button";
 import Flex from "@/components/ui/layouts/Flex";
 import Tooltip from "@/components/ui/Tooltip";
-import { useGetCustomerSetting } from "@/hooks/query/use-customer-query";
-import { CreateCustomer } from "@/schema/customer.schema";
+import { useDeleteCustomer } from "@/hooks/query/use-customer-query";
 import { store } from "@/store/store";
 import { useAppStore } from "@lavaz/store";
 import { CopyIcon, EditIcon, TrashIcon } from "lucide-react";
@@ -13,8 +12,10 @@ export default function ItemActions({ customerId }: { customerId: string }) {
 	const [, { onCopy, onEdit }] = useAppStore(store.customerAction, (s) => s);
 	const navigate = useNavigate();
 
+	const { mutate } = useDeleteCustomer();
+
 	const handleCopy = () => {
-		onCopy(customerId)
+		onCopy(customerId);
 		navigate("/customers/add");
 	};
 
@@ -37,12 +38,11 @@ export default function ItemActions({ customerId }: { customerId: string }) {
 					<span>Chỉnh sửa</span>
 				</Button>
 			</Tooltip>
-			<Tooltip content="Xóa">
-				<Button variant="ghost" size="sm">
-					<TrashIcon />
-					<span>Xóa</span>
-				</Button>
-			</Tooltip>
+			<DeleteAlert
+				title="Xóa khách hàng"
+				description="Bạn có chắc xóa khách hàng này? Điều này sẽ xóa vĩnh viễn khách hàng bạn đang xóa."
+				onClick={() => mutate(customerId)}
+			/>
 		</Flex>
 	);
 }

@@ -14,6 +14,7 @@ async function getCustomers({
 	page,
 	search,
 	sort,
+	active,
 }: CustomerQuery): Promise<CustomerRes> {
 	const res = await appAPI.get(endpoint, {
 		params: {
@@ -21,6 +22,7 @@ async function getCustomers({
 			page,
 			search,
 			sort,
+			active,
 		},
 	});
 	return res.data;
@@ -37,9 +39,23 @@ async function createCustomer(data: CreateCustomer): Promise<API> {
 	return res.data;
 }
 
-async function updateCustomer(data: Partial<CreateCustomer>): Promise<API> {
-	const res = await appAPI.patch(endpoint, data);
+async function updateCustomer(
+	id: string,
+	data: Partial<CreateCustomer>,
+): Promise<API> {
+	const res = await appAPI.patch(`${endpoint}/${id}`, data);
 	return res.data;
 }
 
-export { getCustomers, createCustomer, updateCustomer, getCustomerSetting };
+async function deleteCustomer(customerId: string): Promise<API> {
+	const res = await appAPI.delete(`${endpoint}/${customerId}`);
+	return res.data;
+}
+
+export {
+	getCustomers,
+	createCustomer,
+	updateCustomer,
+	getCustomerSetting,
+	deleteCustomer,
+};
