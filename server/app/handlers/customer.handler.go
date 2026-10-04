@@ -49,7 +49,7 @@ func (h *CustomerHandler) GetManyCustomer(ctx *gin.Context) {
 		return
 	}
 
-	customers, totalItem, totalPage, status, err := h.service.GetManyCustomer(&req)
+	customers, totalPage, totalItem, status, err := h.service.GetManyCustomer(&req)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, response.ManyCustomer{

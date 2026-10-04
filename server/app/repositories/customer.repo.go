@@ -1,10 +1,12 @@
 package repositories
 
 import (
+	"encoding/json"
 	"errors"
 	"server/app/dtos/request"
 	"server/app/models"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -24,11 +26,11 @@ func (r *CustomerRepo) FindManyCustomer(page int, limit int, offset int, search 
 
 	if search != "" {
 		searchPatten := "%" + search + "%"
-		query = query.Where("unaccent(full_name) ILIKE ? OR unaccent(phone_number) ILIKE ?", searchPatten, searchPatten)
+		query = query.Where("unaccent(full_name) ILIKE ?", searchPatten)
 	}
 
 	if active != nil {
-		query = query.Where("active = ? AND = ?", active, guest)
+		query = query.Where("active = ?", active)
 	} else {
 		query = query.Where("is_guest = ?", guest)
 	}
@@ -93,7 +95,7 @@ func (r *CustomerRepo) UpdateCustomer(id string, req *request.UpdateCustomer) er
 		}
 
 		if len(updates) > 0 {
-			if err := tx.Model(&models.Customer{}).Where("id = ? AND phone_number = ?").Updates(updates).Error; err != nil {
+			if err := tx.Model(&models.Customer{}).Where("id = ?", id).Updates(updates).Error; err != nil {
 				return err
 			}
 		}
@@ -110,11 +112,14 @@ func (r *CustomerRepo) UpdateCustomer(id string, req *request.UpdateCustomer) er
 			}
 
 			if req.Setting.Bets != nil {
-				settingUpdates["bets"] = req.Setting.Bets
+				jsonBytes, err := json.Marshal(req.Setting.Bets)
+				if err == nil {
+					settingUpdates["bets"] = datatypes.JSON(jsonBytes)
+				}
 			}
 
 			if len(settingUpdates) > 0 {
-				if err := r.db.Model(&models.Setting{}).Where("customer_id = ?", id).Updates(settingUpdates).Error; err != nil {
+				if err := tx.Model(&models.Setting{}).Where("customer_id = ?", id).Updates(settingUpdates).Error; err != nil {
 					return err
 				}
 			}
