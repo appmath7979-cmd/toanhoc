@@ -14,6 +14,7 @@ async function getCustomers({
 	page,
 	search,
 	sort,
+	active,
 }: CustomerQuery): Promise<CustomerRes> {
 	const res = await appAPI.get(endpoint, {
 		params: {
@@ -21,6 +22,7 @@ async function getCustomers({
 			page,
 			search,
 			sort,
+			active,
 		},
 	});
 	return res.data;

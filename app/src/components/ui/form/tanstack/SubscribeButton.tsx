@@ -12,7 +12,12 @@ export default function SubscribeButton({
 	return (
 		<form.Subscribe selector={(state) => state.isSubmitting}>
 			{(isSubmitting) => (
-				<button type="submit" {...props} disabled={isSubmitting}>
+				<button
+					type="submit"
+					className="btn btn-primary w-full justify-center"
+					{...props}
+					disabled={isSubmitting}
+				>
 					{children}
 				</button>
 			)}

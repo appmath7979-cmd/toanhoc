@@ -1,11 +1,14 @@
 import { API, APIPagination } from "./api.type";
 import { Setting } from "./setting.type";
 
+type Sort = "latest" | "oldest" | "name_DESC" | "name_ASC";
+
 interface CustomerQuery {
 	page: number;
 	search?: string;
 	guest: boolean;
-	sort?: "latest" | "oldest" | "name_DESC" | "name_ASC";
+	sort?: Sort;
+	active?: boolean;
 }
 
 interface Customer {
@@ -36,4 +39,5 @@ export type {
 	Customer,
 	CustomerSetting,
 	CustomerSettingRes,
+	Sort,
 };

@@ -67,16 +67,15 @@ export default function AddCustomer() {
 		onSubmit: async ({ value }) => {
 			const res = await mutateAsync(value);
 			if (res.success) {
-				toast.success(res.message)
+				toast.success(res.message);
 				onFinish();
-				navigate("/")
+				navigate("/");
 			} else {
-				if (res.status === 500) toast.error("Có lỗi xảy ra!")
-				else toast.error(res.message)
+				if (res.status === 500) toast.error("Có lỗi xảy ra!");
+				else toast.error(res.message);
 			}
 		},
 	});
-
 
 	return (
 		<Container>

@@ -24,7 +24,7 @@ export default function DeleteAlert({
 }: DeleteAlertProps) {
 	return (
 		<Alert>
-			<AlertTrigger>
+			<AlertTrigger className="btn btn-ghost--danger">
 				<TrashIcon />
 				<span>Xóa</span>
 			</AlertTrigger>

@@ -12,7 +12,7 @@ export default function ItemActions({ customerId }: { customerId: string }) {
 	const [, { onCopy, onEdit }] = useAppStore(store.customerAction, (s) => s);
 	const navigate = useNavigate();
 
-	const { mutate } = useDeleteCustomer()
+	const { mutate } = useDeleteCustomer();
 
 	const handleCopy = () => {
 		onCopy(customerId);

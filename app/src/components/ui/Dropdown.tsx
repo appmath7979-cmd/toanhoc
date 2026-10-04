@@ -6,7 +6,7 @@ function Dropdown({ children }: { children: ReactNode }) {
 }
 
 function DropdownTrigger({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>;
+	return <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>;
 }
 
 function DropdownContent({ children }: { children: ReactNode }) {
@@ -17,8 +17,11 @@ function DropdownContent({ children }: { children: ReactNode }) {
 	);
 }
 
-function DropdownItem({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Item>{children}</DropdownMenu.Item>;
+function DropdownItem({
+	children,
+	...props
+}: DropdownMenu.DropdownMenuItemProps) {
+	return <DropdownMenu.Item {...props}>{children}</DropdownMenu.Item>;
 }
 
 function DropdownSeparator() {

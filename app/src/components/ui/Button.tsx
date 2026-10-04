@@ -3,9 +3,18 @@ import { Slot } from "radix-ui";
 import { ComponentProps } from "react";
 
 const variants = {
-	primary: "",
-	ghost: "",
-	outline: "",
+	primary: {
+		base: "btn-primary",
+		danger: "btn-primary--danger",
+	},
+	ghost: {
+		base: "btn-ghost",
+		danger: "btn-ghost--danger",
+	},
+	outline: {
+		base: "btn-outline",
+		danger: "btn-outline--danger"
+	},
 };
 
 const sizes = {
@@ -37,8 +46,8 @@ function Button({
 		<Comp
 			{...props}
 			className={cn(
-				"disabled:opacity-50 disabled:cursor-not-allowed",
-				variant,
+				"btn disabled:opacity-50 disabled:cursor-not-allowed",
+				variants[variant][danger ? "danger" : "base"],
 				size,
 				className,
 			)}

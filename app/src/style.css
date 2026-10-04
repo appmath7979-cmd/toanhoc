@@ -16,6 +16,8 @@
 	--muted-foreground: oklch(44.4% 0.011 73.639);
 	--accent-foreground: oklch(70.4% 0.04 256.788);
 	--border: oklch(92.2% 0 none);
+	--danger: oklch(55.698% 0.19743 25.153);
+	--danger-foreground: oklch(99.336% 0.00316 15.246);
 }
 
 .dark {
@@ -35,6 +37,8 @@
 	--color-accent-foreground: var(--accent-foreground);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
+	--color-danger: var(--danger);
+	--color-danger-foreground: var(--danger-foreground);
 	--color-border: var(--border);
 }
 
@@ -74,7 +78,52 @@ body,
 	.smooth {
 		@apply transition-all duration-300;
 	}
+	.dialog-overlay--anim {
+		animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.dialog-content--anim {
+		animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.btn-primary {
+		@apply bg-primary text-primary-foreground hover:bg-primary/80;
+	}
+
+	.btn-ghost {
+		@apply bg-transparent text-secondary-foreground hover:bg-accent hover:text-accent-foreground;
+	}
+
+	.btn-primary--danger {
+		@apply bg-danger text-danger-foreground hover:bg-danger/80;
+	}
+
+	.btn-ghost--danger {
+		@apply bg-transparent text-danger hover:bg-danger/20
+	}
 }
 
 @layer components {
+	.btn {
+		@apply inline-flex items-center gap-1 px-4 py-1.5 font-semibold border border-transparent rounded-md [&_svg]:size-4.5 transition-all duration-300;
+	}
+}
+
+@keyframes overlayShow {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes contentShow {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
 }

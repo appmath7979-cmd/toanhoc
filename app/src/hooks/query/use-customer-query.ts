@@ -62,5 +62,5 @@ export {
 	useCreateCustomer,
 	useGetCustomerSetting,
 	useUpdateCustomer,
-	useDeleteCustomer
+	useDeleteCustomer,
 };
