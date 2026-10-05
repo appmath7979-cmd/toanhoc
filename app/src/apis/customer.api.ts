@@ -1,7 +1,7 @@
 import {
 	CustomerQuery,
 	CustomerRes,
-	CustomerSettingRes,
+	CustomerByIdRes,
 } from "@/types/customer.type";
 import appAPI from "./app.api";
 import { CreateCustomer } from "@/schema/customer.schema";
@@ -28,9 +28,8 @@ async function getCustomers({
 	return res.data;
 }
 
-async function getCustomerSetting(id: string): Promise<CustomerSettingRes> {
+async function getCustomerSetting(id: string): Promise<CustomerByIdRes> {
 	const res = await appAPI.get(`${endpoint}/${id}`);
-	console.log(res.statusText);
 	return res.data;
 }
 

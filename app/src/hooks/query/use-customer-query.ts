@@ -1,6 +1,7 @@
 import {
 	createCustomer,
 	deleteCustomer,
+	getCustomerMessage,
 	getCustomers,
 	getCustomerSetting,
 	updateCustomer,
@@ -21,6 +22,13 @@ function useGetCustomerSetting(customerId: string) {
 		queryKey: ["customers", customerId],
 		queryFn: () => getCustomerSetting(customerId),
 		enabled: !!customerId,
+	});
+}
+
+function useGetCustomerMessage(customerId: string, at: string) {
+	return useQuery({
+		queryKey: ["customers", customerId],
+		queryFn: () => getCustomerMessage(customerId, at),
 	});
 }
 
@@ -63,4 +71,5 @@ export {
 	useGetCustomerSetting,
 	useUpdateCustomer,
 	useDeleteCustomer,
+	useGetCustomerMessage
 };

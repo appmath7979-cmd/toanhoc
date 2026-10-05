@@ -19,7 +19,12 @@ export default function CustomerItem({ customer }: CustomerItemProps) {
 			<TableCell>
 				<Link to={`/customers/${customer.id}`}>
 					<Flex className="gap-1 items-center">
-						<div className={cn("size-3 rounded-full", customer.is_send ? "bg-emerald-500" : "bg-gray-400")} />
+						<div
+							className={cn(
+								"size-3 rounded-full",
+								customer.is_send ? "bg-emerald-500" : "bg-gray-400",
+							)}
+						/>
 						<p>{customer.full_name}</p>
 					</Flex>
 				</Link>

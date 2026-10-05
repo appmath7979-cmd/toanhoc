@@ -25,19 +25,20 @@ interface CustomerRes extends API, APIPagination {
 	data: Customer[];
 }
 
-interface CustomerSetting extends Customer {
+interface CustomerById extends Customer {
 	setting: Setting;
 }
 
-interface CustomerSettingRes extends API {
-	data: CustomerSetting;
+
+interface CustomerByIdRes extends API {
+	data: CustomerById;
 }
 
 export type {
 	CustomerQuery,
 	CustomerRes,
 	Customer,
-	CustomerSetting,
-	CustomerSettingRes,
 	Sort,
+	CustomerById,
+	CustomerByIdRes
 };
