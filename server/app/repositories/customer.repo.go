@@ -44,22 +44,7 @@ func (r *CustomerRepo) FindManyCustomer(page int, limit int, offset int, search 
 	return customers, totalItem, nil
 }
 
-func (r *CustomerRepo) FindCustomerAndMessageById(id string, at string) (*models.Customer, error) {
-	var customer models.Customer
-
-	if err := r.db.
-		Preload("Messages", func(db *gorm.DB) {
-			db.Where("at = ?", at)
-		}).
-		Preload("Messages.MessageDetails").
-		First(&customer, "id = ?", id).Error; err != nil {
-		return nil, err
-	}
-
-	return &customer, nil
-}
-
-func (r *CustomerRepo) FindCustomerAndSettingById(id string) (*models.Customer, error) {
+func (r *CustomerRepo) FindCustomerById(id string) (*models.Customer, error) {
 	var customer models.Customer
 
 	if err := r.db.Preload("Setting").First(&customer, "id = ?", id).Error; err != nil {

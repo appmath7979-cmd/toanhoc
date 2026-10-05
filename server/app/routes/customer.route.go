@@ -16,10 +16,7 @@ func CustomerRoute(db *gorm.DB) RouteGroup {
 				Path: "", Method: "GET", Handler: handlers.GetManyCustomer,
 			},
 			{
-				Path: "/:id", Method: "GET", Handler: handlers.GetCustomerAndSettingById,
-			},
-			{
-				Path: "/:id/:at", Method: "GET", Handler: handlers.GetCustomerAndMessageById,
+				Path: "/:id", Method: "GET", Handler: handlers.GetCustomerDetails,
 			},
 			{
 				Path: "", Method: "POST", Handler: handlers.CreateCustomer,

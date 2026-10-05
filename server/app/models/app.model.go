@@ -64,6 +64,7 @@ const (
 	ProvinceQN  Province = "qn"
 	ProvinceDNO Province = "dno"
 	ProvinceKT  Province = "kt"
+	ProvinceAG Province = "ag"
 	ProvinceMB  Province = "mb"
 )
 
