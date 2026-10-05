@@ -5,7 +5,10 @@ function Alert({ children }: { children: ReactNode }) {
 	return <AlertDialog.Root>{children}</AlertDialog.Root>;
 }
 
-function AlertTrigger({ children, ...props }: AlertDialog.AlertDialogTriggerProps) {
+function AlertTrigger({
+	children,
+	...props
+}: AlertDialog.AlertDialogTriggerProps) {
 	return <AlertDialog.Trigger {...props}>{children}</AlertDialog.Trigger>;
 }
 

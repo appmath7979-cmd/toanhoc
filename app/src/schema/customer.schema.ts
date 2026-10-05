@@ -33,6 +33,7 @@ const CustomerSchema = z.object({
 type CreateCustomer = z.infer<typeof CustomerSchema>;
 type CustomerBasicInfo = Omit<CreateCustomer, "setting">;
 type CustomerSettingInfo = Pick<CreateCustomer, "setting">;
+type BetPair = z.infer<typeof BetPairSchema>;
 
 export {
 	type CreateCustomer,

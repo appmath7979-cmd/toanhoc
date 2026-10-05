@@ -13,7 +13,7 @@ const variants = {
 	},
 	outline: {
 		base: "btn-outline",
-		danger: "btn-outline--danger"
+		danger: "btn-outline--danger",
 	},
 };
 
