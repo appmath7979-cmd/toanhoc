@@ -74,65 +74,6 @@ func (h *CustomerHandler) GetManyCustomer(ctx *gin.Context) {
 
 // GetCustomerById godoc
 // @Summary Lấy khách hàng
-// @Description Lấy khách hàng theo id và danh sách tin nhắn
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param id path string true "Id của khách hàng"
-// @Param at path string true "Ngày tạo tin"
-// @Success 200 {object} response.CustomerMessage "Tìm khách hàng và lấy danh sách tin nhắn thành công"
-// @Failure 404 {object} response.CustomerMessage "Không tìm thấy khách hàng"
-// @Failure 500 {object} response.CustomerMessage "Lỗi Server"
-// @Router /api/v1/customers/{id}/{at} [get]
-func (h *CustomerHandler) GetCustomerAndMessageById(ctx *gin.Context) {
-	id := ctx.Param("id")
-	at := ctx.Param("at")
-
-	isUUID := h.validate.ValidateUUID(id)
-	isAt := h.validate.ValidateDate(at)
-
-	if isUUID != nil || isAt != nil {
-		ctx.JSON(http.StatusBadRequest, response.CustomerMessage{
-			Message: "Dữ liệu không hợp lệ!",
-			Success: false,
-			Status:  400,
-			Data:    nil,
-		})
-
-		return
-	}
-
-	customer, status, err := h.service.GetCustomerAndMessageById(id, at)
-
-	if err != nil {
-		if status == 404 {
-			ctx.JSON(http.StatusNotFound, response.CustomerMessage{
-				Message: err.Error(),
-				Success: false,
-				Status:  status,
-				Data:    customer,
-			})
-		} else {
-			ctx.JSON(http.StatusInternalServerError, response.CustomerMessage{
-				Message: err.Error(),
-				Success: false,
-				Status:  status,
-				Data:    customer,
-			})
-		}
-	} else {
-		ctx.JSON(http.StatusOK, response.CustomerMessage{
-			Message: "Thành công!",
-			Success: true,
-			Status:  status,
-			Data:    customer,
-		})
-	}
-
-}
-
-// GetCustomerById godoc
-// @Summary Lấy khách hàng
 // @Description Lấy khách hàng theo id và thông tin của khách hàng
 // @Tags customers
 // @Accept json
@@ -142,7 +83,7 @@ func (h *CustomerHandler) GetCustomerAndMessageById(ctx *gin.Context) {
 // @Failure 404 {object} response.CustomerSetting "Không tìm thấy khách hàng"
 // @Failure 500 {object} response.CustomerSetting "Lỗi Server"
 // @Router /api/v1/customers/{id} [get]
-func (h *CustomerHandler) GetCustomerAndSettingById(ctx *gin.Context) {
+func (h *CustomerHandler) GetCustomerDetails(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	isUUID := h.validate.ValidateUUID(id)
@@ -158,7 +99,7 @@ func (h *CustomerHandler) GetCustomerAndSettingById(ctx *gin.Context) {
 		return
 	}
 
-	customer, status, err := h.service.GetCustomerAndSettingById(id)
+	customer, status, err := h.service.GetCustomerDetails(id)
 
 	if err != nil {
 		if status == 404 {
@@ -242,7 +183,7 @@ func (h *CustomerHandler) CreateCustomer(ctx *gin.Context) {
 // @Tags customers
 // @Accept json
 // @Produce json
-// @Param request body request.UpdateCustomerr true "Thông tin khách hàng cần cập nhật"
+// @Param request body request.UpdateCustomer true "Thông tin khách hàng cần cập nhật"
 // @Success 200 {object} response.StatusResponse "Cập nhật thông tin khách hàng thành công"
 // @Failure 400 {object} response.StatusResponse "Thông tin không hợp lệ"
 // @Failure 409 {object} response.StatusResponse "Số điện thoại đã tồn tại"

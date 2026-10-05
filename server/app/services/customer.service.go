@@ -67,33 +67,8 @@ func (s *CustomerService) GetManyCustomer(req *request.GetManyCustomer) ([]respo
 	return results, int64(totalPage), totalItem, 200, err
 }
 
-func (s *CustomerService) GetCustomerAndMessageById(id string, at string) (*response.GetCustomerMessage, uint16, error) {
-	customer, err := s.repo.FindCustomerAndMessageById(id, at)
-
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, 404, errors.New("Không tìm thấy khách hàng này!")
-		} else {
-			return nil, 500, err
-		}
-	}
-
-	result := response.GetCustomerMessage{
-		ID:          customer.ID,
-		FullName:    customer.FullName,
-		Active:      customer.Active,
-		IsSend:      customer.IsSend,
-		IsGuest:     customer.IsGuest,
-		Messages:    customer.Messages,
-		CreatedAt:   customer.CreatedAt,
-		UpdatedAt:   customer.UpdatedAt,
-	}
-
-	return &result, 200, nil
-}
-
-func (s *CustomerService) GetCustomerAndSettingById(id string) (*response.GetCustomerSetting, uint16, error) {
-	customer, err := s.repo.FindCustomerAndSettingById(id)
+func (s *CustomerService) GetCustomerDetails(id string) (*response.GetCustomerSetting, uint16, error) {
+	customer, err := s.repo.FindCustomerById(id)
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

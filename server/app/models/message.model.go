@@ -6,7 +6,7 @@ type MessageDetail struct {
 	ID       string   `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	BetType  BetType  `gorm:"type:varchar(255); check: bet_type IN ('b2', 'dd2', 'da', 'dax', 'b3', 'dd3', 'b4')"`
 	Syntax   Syntax   `gorm:"type:varchar(255); check: syntax IN ('b', 'dau', 'duoi', 'da', 'dax')"`
-	Province Province `gorm:"type:varchar(255);check:province IN ('tp', 'dt', 'cm', 'bt', 'dn', 'ct', 'st', 'vt', 'bli', 'tn', 'bth', 'vl', 'bd', 'tv', 'la', 'hg', 'bp', 'tg', 'kg', 'dl', 'py', 'th', 'qna', 'kh', 'qb', 'qt', 'gl', 'nt', 'qn', 'dno', 'kt', 'mb')"`
+	Province Province `gorm:"type:varchar(255);check:province IN ('tp', 'dt', 'cm', 'bt', 'dn', 'ct', 'st', 'vt', 'bli', 'tn', 'bth', 'vl', 'bd', 'tv', 'la', 'hg', 'bp', 'tg', 'kg', 'dl', 'py', 'th', 'qna', 'kh', 'qb', 'qt', 'gl', 'nt', 'qn', 'dno', 'kt', 'mb', 'ag')"`
 
 	Score  float32 `gorm:"type:float;not null"`
 	Co     float32 `gorm:"type:float;not null"`
