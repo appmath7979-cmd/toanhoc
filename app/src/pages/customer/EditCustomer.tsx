@@ -7,7 +7,7 @@ import {
 	defaultSettingInfo,
 } from "@/data/customer-form.data";
 import {
-	useGetCustomerSetting,
+	useGetCustomerById,
 	useUpdateCustomer,
 } from "@/hooks/query/use-customer-query";
 import {
@@ -31,7 +31,7 @@ export default function EditCustomer() {
 	const navigate = useNavigate();
 	const { mutateAsync } = useUpdateCustomer();
 
-	const { data, isError, isPaused } = useGetCustomerSetting(customerId);
+	const { data, isError, isPaused } = useGetCustomerById(customerId);
 
 	if (isError || !data || !data.data || isPaused) {
 		// navigate("/")

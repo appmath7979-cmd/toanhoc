@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 const directions = {
 	horizontal: "",
 	"horizontal-reverse": "",
-	vertical: "",
+	vertical: "flex-col",
 	"vertical-reverse": "",
 };
 

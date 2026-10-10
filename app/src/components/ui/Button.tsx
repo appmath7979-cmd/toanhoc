@@ -46,7 +46,7 @@ function Button({
 		<Comp
 			{...props}
 			className={cn(
-				"btn disabled:opacity-50 disabled:cursor-not-allowed",
+				"btn disabled:opacity-50 disabled:pointer-events-none",
 				variants[variant][danger ? "danger" : "base"],
 				size,
 				className,

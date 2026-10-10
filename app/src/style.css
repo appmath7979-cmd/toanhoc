@@ -18,6 +18,8 @@
 	--border: oklch(92.2% 0 none);
 	--danger: oklch(55.698% 0.19743 25.153);
 	--danger-foreground: oklch(99.336% 0.00316 15.246);
+	--editor: oklch(96.7% 0.001 286.375);
+	--editor-foreground: oklch(14.1% 0.005 285.823) ;
 }
 
 .dark {
@@ -37,6 +39,8 @@
 	--color-accent-foreground: var(--accent-foreground);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
+	--color-editor: var(--editor);
+	--color-editor-foreground: var(--editor-foreground);
 	--color-danger: var(--danger);
 	--color-danger-foreground: var(--danger-foreground);
 	--color-border: var(--border);
@@ -98,13 +102,25 @@ body,
 	}
 
 	.btn-ghost--danger {
-		@apply bg-transparent text-danger hover:bg-danger/20
+		@apply bg-transparent text-danger hover:bg-danger/20;
 	}
 }
 
 @layer components {
 	.btn {
 		@apply inline-flex items-center gap-1 px-4 py-1.5 font-semibold border border-transparent rounded-md [&_svg]:size-4.5 transition-all duration-300;
+	}
+
+	.editor-wrapper {
+		@apply relative w-full font-mono text-sm bg-editor border border-border rounded-md min-h-30 text-editor-foreground!;
+	}
+
+	.editor {
+		@apply p-3 pointer-events-none whitespace-pre-wrap wrap-break-word text-editor-foreground;
+	}
+
+	.editor-overlay {
+		@apply absolute inset-0 w-full h-full p-3 bg-transparent text-transparent caret-editor-foreground resize-none focus:outline-none whitespace-pre-wrap wrap-break-word border-none shadow-none;
 	}
 }
 

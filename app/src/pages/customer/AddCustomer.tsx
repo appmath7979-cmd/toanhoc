@@ -8,9 +8,8 @@ import {
 } from "@/data/customer-form.data";
 import {
 	useCreateCustomer,
-	useGetCustomerSetting,
+	useGetCustomerById,
 } from "@/hooks/query/use-customer-query";
-import customerFormData from "@/libs/helper/customer-form";
 import {
 	CreateCustomer,
 	CustomerSchema,
@@ -30,7 +29,7 @@ export default function AddCustomer() {
 	);
 
 	const navigate = useNavigate();
-	const { data, isPending, isSuccess } = useGetCustomerSetting(customerId);
+	const { data } = useGetCustomerById(customerId);
 
 	const { mutateAsync } = useCreateCustomer();
 

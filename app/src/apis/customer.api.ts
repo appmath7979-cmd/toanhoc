@@ -28,7 +28,7 @@ async function getCustomers({
 	return res.data;
 }
 
-async function getCustomerSetting(id: string): Promise<CustomerByIdRes> {
+async function getCustomerById(id: string): Promise<CustomerByIdRes> {
 	const res = await appAPI.get(`${endpoint}/${id}`);
 	return res.data;
 }
@@ -55,6 +55,6 @@ export {
 	getCustomers,
 	createCustomer,
 	updateCustomer,
-	getCustomerSetting,
+	getCustomerById,
 	deleteCustomer,
 };
