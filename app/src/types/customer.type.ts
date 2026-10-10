@@ -29,7 +29,6 @@ interface CustomerById extends Customer {
 	setting: Setting;
 }
 
-
 interface CustomerByIdRes extends API {
 	data: CustomerById;
 }
@@ -40,5 +39,5 @@ export type {
 	Customer,
 	Sort,
 	CustomerById,
-	CustomerByIdRes
+	CustomerByIdRes,
 };

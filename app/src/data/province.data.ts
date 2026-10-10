@@ -177,6 +177,11 @@ export const provinceList: ProvinceItem[] = [
 		region: "mt",
 	},
 	{
+		label: "Quảng Trị",
+		province: "qt",
+		region: "mt",
+	},
+	{
 		label: "Miền Bắc",
 		province: "mb",
 		region: "mb",

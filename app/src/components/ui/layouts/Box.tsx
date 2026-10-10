@@ -16,5 +16,7 @@ interface BoxProps {
 }
 
 export default function Box({ children, className, spaceY = 1 }: BoxProps) {
-	return <div className={cn("", spacingY[spaceY], className)}>{children}</div>;
+	return (
+		<div className={cn("w-full", spacingY[spaceY], className)}>{children}</div>
+	);
 }

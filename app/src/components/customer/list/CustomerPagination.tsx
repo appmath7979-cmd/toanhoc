@@ -15,6 +15,8 @@ export default function CustomerPagination({
 }: CustomerPaginationProps) {
 	if (totalPages <= 1) return null;
 
+	console.log(currentPage);
+
 	const pages = useMemo(() => {
 		if (totalPages <= 5) {
 			return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -51,9 +53,9 @@ export default function CustomerPagination({
 				<ChevronFirstIcon />
 				<span>Trang trước</span>
 			</PaginationItem>
-			{pages.map((page) => (
+			{pages.map((page, i) => (
 				<PaginationItem
-					key={page}
+					key={`${page}-${i}`}
 					disabled={page === "..."}
 					onClick={() => onPageChange(Number(page))}
 				>

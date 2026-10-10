@@ -1,9 +1,8 @@
 import {
 	createCustomer,
 	deleteCustomer,
-	getCustomerMessage,
 	getCustomers,
-	getCustomerSetting,
+	getCustomerById,
 	updateCustomer,
 } from "@/apis/customer.api";
 import { CreateCustomer } from "@/schema/customer.schema";
@@ -17,18 +16,11 @@ function useGetManyCustomer(req: CustomerQuery) {
 	});
 }
 
-function useGetCustomerSetting(customerId: string) {
+function useGetCustomerById(customerId: string) {
 	return useQuery({
 		queryKey: ["customers", customerId],
-		queryFn: () => getCustomerSetting(customerId),
+		queryFn: () => getCustomerById(customerId),
 		enabled: !!customerId,
-	});
-}
-
-function useGetCustomerMessage(customerId: string, at: string) {
-	return useQuery({
-		queryKey: ["customers", customerId],
-		queryFn: () => getCustomerMessage(customerId, at),
 	});
 }
 
@@ -68,8 +60,7 @@ function useDeleteCustomer() {
 export {
 	useGetManyCustomer,
 	useCreateCustomer,
-	useGetCustomerSetting,
+	useGetCustomerById,
 	useUpdateCustomer,
 	useDeleteCustomer,
-	useGetCustomerMessage
 };

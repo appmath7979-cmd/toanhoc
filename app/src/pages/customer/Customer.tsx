@@ -3,20 +3,12 @@ import CustomerList from "@/components/customer/list/CustomerList";
 import CustomerListActions from "@/components/customer/list/CustomerListActions";
 import CustomerPagination from "@/components/customer/list/CustomerPagination";
 import SearchField from "@/components/system/SearchField";
-import { Button } from "@/components/ui/Button";
-import {
-	Dropdown,
-	DropdownContent,
-	DropdownItem,
-	DropdownTrigger,
-} from "@/components/ui/Dropdown";
 import Checkbox from "@/components/ui/form/Checkbox";
 import Container from "@/components/ui/layouts/Container";
 import Flex from "@/components/ui/layouts/Flex";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { useGetManyCustomer } from "@/hooks/query/use-customer-query";
 import { Sort } from "@/types/customer.type";
-import { ChevronDownIcon, FunnelIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 export default function Customer() {
@@ -64,8 +56,6 @@ export default function Customer() {
 
 	if (isError) return <div>Đã xảy ra lỗi</div>;
 
-	if (isPending) return <div>Loading...</div>;
-
 	return (
 		<Container>
 			<Flex justify="between">
@@ -90,7 +80,7 @@ export default function Customer() {
 				<CustomerList customers={data?.data ?? []} />
 			</Table>
 			<CustomerPagination
-				totalPages={data.total_page}
+				totalPages={data?.total_page ?? 0}
 				currentPage={page}
 				onPageChange={setPage}
 			/>
