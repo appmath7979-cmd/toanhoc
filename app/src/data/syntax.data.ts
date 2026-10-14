@@ -1,26 +1,32 @@
 type SyntaxInput =
-	| "b"
-	| "dau"
-	| "duoi"
-	| "da"
-	| "dax"
-	| "bd"
-	| "dd"
-	| "xc"
-	| "xd"
-	| "xduoi";
+  | "b"
+  | "bao"
+  | "dui"
+  | "xdui"
+  | "dau"
+  | "duoi"
+  | "da"
+  | "dax"
+  | "bd"
+  | "dd"
+  | "xc"
+  | "xdau"
+  | "xduoi";
 
 const syntaxInputs: SyntaxInput[] = [
-	"b",
-	"dau",
-	"duoi",
-	"da",
-	"dax",
-	"bd",
-	"dd",
-	"xc",
-	"xd",
-	"xduoi",
+  "b",
+  "bao",
+  "xdui",
+  "dui",
+  "dau",
+  "duoi",
+  "da",
+  "dax",
+  "bd",
+  "dd",
+  "xc",
+  "xdau",
+  "xduoi",
 ];
 
-export { syntaxInputs, type SyntaxInput };
+export { type SyntaxInput, syntaxInputs };

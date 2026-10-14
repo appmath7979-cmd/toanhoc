@@ -19,7 +19,7 @@
 	--danger: oklch(55.698% 0.19743 25.153);
 	--danger-foreground: oklch(99.336% 0.00316 15.246);
 	--editor: oklch(96.7% 0.001 286.375);
-	--editor-foreground: oklch(14.1% 0.005 285.823) ;
+	--editor-foreground: oklch(14.1% 0.005 285.823);
 }
 
 .dark {
