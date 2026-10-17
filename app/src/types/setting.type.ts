@@ -1,3 +1,5 @@
+import type { API } from "./api.type";
+
 type BetType = "b2" | "dd2" | "da" | "dax" | "b3" | "dd3" | "b4";
 type DaxT = "ONE" | "HALF" | "MANY";
 
@@ -24,4 +26,6 @@ interface Setting {
 	created_at: string;
 }
 
-export type { BetPair, BetType, BetValue, Setting };
+type SettingRes = { data: Setting } & API;
+
+export type { BetPair, BetType, BetValue, Setting, SettingRes };

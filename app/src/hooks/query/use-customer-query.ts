@@ -1,13 +1,14 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
 	createCustomer,
 	deleteCustomer,
-	getCustomers,
 	getCustomerById,
+	getCustomers,
 	updateCustomer,
 } from "@/apis/customer.api";
-import { CreateCustomer } from "@/schema/customer.schema";
-import { CustomerQuery } from "@/types/customer.type";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { CreateCustomer } from "@/schema/customer.schema";
+import type { CustomerQuery } from "@/types/customer.type";
 
 function useGetManyCustomer(req: CustomerQuery) {
 	return useQuery({
@@ -32,6 +33,9 @@ function useCreateCustomer() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["customers"] });
 		},
+		onError: (err) => {
+			toast.error(err.message);
+		},
 	});
 }
 
@@ -44,6 +48,9 @@ function useUpdateCustomer() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["customers"] });
 		},
+		onError: (err) => {
+			toast.error(err.message);
+		},
 	});
 }
 function useDeleteCustomer() {
@@ -54,13 +61,16 @@ function useDeleteCustomer() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["customers"] });
 		},
+		onError: (err) => {
+			toast.error(err.message);
+		},
 	});
 }
 
 export {
-	useGetManyCustomer,
 	useCreateCustomer,
-	useGetCustomerById,
-	useUpdateCustomer,
 	useDeleteCustomer,
+	useGetCustomerById,
+	useGetManyCustomer,
+	useUpdateCustomer,
 };

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import QueryProvider from "./QueryProvider";
 
 export default function AppProvider({ children }: { children: ReactNode }) {
