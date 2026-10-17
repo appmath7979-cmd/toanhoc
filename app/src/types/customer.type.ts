@@ -1,5 +1,5 @@
-import { API, APIPagination } from "./api.type";
-import { Setting } from "./setting.type";
+import type { API, APIPagination } from "./api.type";
+import type { Setting } from "./setting.type";
 
 type Sort = "latest" | "oldest" | "name_DESC" | "name_ASC";
 
@@ -34,10 +34,10 @@ interface CustomerByIdRes extends API {
 }
 
 export type {
-	CustomerQuery,
-	CustomerRes,
 	Customer,
-	Sort,
 	CustomerById,
 	CustomerByIdRes,
+	CustomerQuery,
+	CustomerRes,
+	Sort,
 };

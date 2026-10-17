@@ -36,8 +36,9 @@ type CustomerSettingInfo = Pick<CreateCustomer, "setting">;
 type BetPair = z.infer<typeof BetPairSchema>;
 
 export {
+	type BetPair,
 	type CreateCustomer,
-	CustomerSchema,
 	type CustomerBasicInfo,
+	CustomerSchema,
 	type CustomerSettingInfo,
 };

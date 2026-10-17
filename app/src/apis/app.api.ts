@@ -14,8 +14,8 @@ appAPI.interceptors.response.use(
 	(err) => {
 		const message =
 			err.response?.data?.error ||
-			err.response?.data?.details ||
-			err.message ||
+			err.response?.data?.message ||
+			err.response?.message ||
 			"Đã có lỗi xảy ra";
 
 		return Promise.reject(new Error(message));

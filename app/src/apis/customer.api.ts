@@ -1,11 +1,11 @@
-import {
+import type { CreateCustomer } from "@/schema/customer.schema";
+import type { API } from "@/types/api.type";
+import type {
+	CustomerByIdRes,
 	CustomerQuery,
 	CustomerRes,
-	CustomerByIdRes,
 } from "@/types/customer.type";
 import appAPI from "./app.api";
-import { CreateCustomer } from "@/schema/customer.schema";
-import { API } from "@/types/api.type";
 
 const endpoint = "customers";
 
@@ -52,9 +52,9 @@ async function deleteCustomer(customerId: string): Promise<API> {
 }
 
 export {
-	getCustomers,
 	createCustomer,
-	updateCustomer,
-	getCustomerById,
 	deleteCustomer,
+	getCustomerById,
+	getCustomers,
+	updateCustomer,
 };
