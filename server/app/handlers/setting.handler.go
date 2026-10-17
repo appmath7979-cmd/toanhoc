@@ -18,18 +18,7 @@ func SettingHandlerFn(service *services.SettingService, validate *validator.AppV
 	return &SettingHandler{service: service, validate: validate}
 }
 
-// GetSettingById godoc
-// @Summary Lấy thông tin khách hàng
-// @Description Lấy thông tin khách hàng theo id
-// @Tags settings
-// @Accept json
-// @Produce json
-// @Param id path string true "Id của khách hàng"
-// @Success 200 {object} response.GetSetting "Tìm thông tin khách hàng thành công"
-// @Failure 404 {object} response.GetSetting "Không tìm thấy thông tin khách hàng"
-// @Failure 500 {object} response.GetSetting "Lỗi Server"
-// @Router /api/v1/settings/{id} [get]
-func (h *SettingHandler) GetSettingById(ctx *gin.Context) {
+func (h *SettingHandler) GetSettingByCustomerId(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if err := h.validate.ValidateUUID(id); err != nil {
@@ -43,7 +32,7 @@ func (h *SettingHandler) GetSettingById(ctx *gin.Context) {
 		return
 	}
 
-	setting, status, err := h.service.GetSettingById(id)
+	setting, status, err := h.service.GetSettingByCustomerId(id)
 
 	if err != nil {
 		if status == 404 {

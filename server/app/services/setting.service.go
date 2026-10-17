@@ -17,8 +17,8 @@ func SettingServiceFn(repo *repositories.SettingRepo) *SettingService {
 	return &SettingService{repo: repo}
 }
 
-func (s *SettingService) GetSettingById(id string) (*models.Setting, uint16, error) {
-	setting, err := s.repo.FindSettingById(id)
+func (s *SettingService) GetSettingByCustomerId(id string) (*models.Setting, uint16, error) {
+	setting, err := s.repo.FindSettingByCustomerId(id)
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -32,7 +32,7 @@ func (s *SettingService) GetSettingById(id string) (*models.Setting, uint16, err
 		ID:         setting.ID,
 		XienMb:     setting.XienMb,
 		DaxT:       setting.DaxT,
-		CustomerID: setting.ID,
+		CustomerID: setting.CustomerID,
 		Bets:       setting.Bets,
 		CreatedAt:  setting.CreatedAt,
 		UpdatedAt:  setting.UpdatedAt,

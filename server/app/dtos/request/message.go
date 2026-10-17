@@ -19,10 +19,10 @@ type CreateMessageDetail struct {
 }
 
 type CreateMessage struct {
-	Send           bool                  `json:"is_send" binding:"required"`
+	Send           bool                  `json:"is_send"`
 	At             string                `json:"at" binding:"required"`
 	Content        string                `json:"content" binding:"required"`
-	Region         models.Region         `json:"region" binding:"required,oneof=,mb mt mn"`
+	Region         models.Region         `json:"region" binding:"required,oneof=mb mt mn"`
 	MessageDetails []CreateMessageDetail `json:"message_details"`
 	CustomerID     string                `json:"customer_id"`
 }
