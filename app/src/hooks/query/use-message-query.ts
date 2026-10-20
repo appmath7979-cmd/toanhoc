@@ -1,20 +1,37 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { createMessage } from "@/apis/message.api";
-import type { CreateMessage } from "@/types/message.type";
+import { createMessage, getManyMessage } from "@/apis/message.api";
+import type { CreateMessage, GetManyMessageReq } from "@/types/message.type";
 
-function useCreateMessage() {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: (data: CreateMessage) => createMessage(data),
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: ["messages"] });
-			toast.success(data.message);
-		},
-		onError: (err) => {
-			toast.error(err.message);
-		},
-	});
+function useGetManyMessage(req: GetManyMessageReq) {
+  return useQuery({
+    queryKey: ["messages", req.id, req.at, req.region],
+    queryFn: () => getManyMessage(req),
+    enabled: !!req.id && !!req.at,
+  });
 }
 
-export { useCreateMessage };
+function useCreateMessage(id: string | undefined) {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  if (!id) {
+    toast.error("Không thể lấy thông tin khách hàng!");
+    navigate(`/customers`);
+  }
+
+  return useMutation({
+    mutationFn: (data: CreateMessage) => createMessage(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success(data.message);
+      navigate(`/customers/${id}`);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+}
+
+export { useCreateMessage, useGetManyMessage };
