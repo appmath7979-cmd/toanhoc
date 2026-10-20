@@ -19,20 +19,6 @@ func CustomerHandlerFn(service *services.CustomerService, validate *validator.Ap
 	return &CustomerHandler{service: service, validate: validate}
 }
 
-// GetManyCustomers godoc
-// @Summary Lấy danh sách khách hàng
-// @Description Lấy danh sách khách hàng có phân trang và lọc
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param page query int true "Trang cần tìm mặc định 1"
-// @Param search query string false "Tìm kiếm theo tên hoặc số điện thoại"
-// @Param guest query bool true "Lọc theo loại khách"
-// @Param sort query string false "Sắp xếp theo tên hoặc ngày tạo"
-// @Success 200 {object} response.ManyCustomer "Lấy danh sách thành công"
-// @Failure 400 {object} response.ManyCustomer "Thông tin không hợp lệ"
-// @Failure 500 {object} response.ManyCustomer "Lỗi Server"
-// @Router /api/v1/customers [get]
 func (h *CustomerHandler) GetManyCustomer(ctx *gin.Context) {
 	var req request.GetManyCustomer
 

@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"server/app/dtos/request"
+	"server/app/models"
 	"server/app/repositories"
 
 	"gorm.io/gorm"
@@ -14,6 +15,16 @@ type MessageService struct {
 
 func MessageServiceFn(repo *repositories.MessageRepo) *MessageService {
 	return &MessageService{repo: repo}
+}
+
+func (s *MessageService) GetManyMessage(req *request.GetMessageQuery) ([]models.Message, uint16, error) {
+	messages, err := s.repo.FindManyMessage(req)
+
+	if err != nil {
+		return messages, 500, err
+	}
+
+	return messages, 200, nil
 }
 
 func (s *MessageService) CreateMessage(req *request.CreateMessage) (uint16, error) {

@@ -6,9 +6,9 @@ import (
 )
 
 type GetBaseCustomerInfo struct {
-	ID          string `json:"id"`
-	FullName    string `json:"full_name"`
-	IsGuest     bool   `json:"is_guest"`
+	ID       string `json:"id"`
+	FullName string `json:"full_name"`
+	IsGuest  bool   `json:"is_guest"`
 }
 
 type GetOtherCustomerInfo struct {

@@ -7,7 +7,6 @@ type Customer struct {
 	FullName string `gorm:"type:varchar(255);not null;index"`
 	IsGuest  bool   `gorm:"type:boolean;not null"`
 	Active   bool   `gorm:"type:boolean;default:true"`
-	IsSend   bool   `gorm:"type:boolean;default:false"`
 
 	Setting  *Setting  `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"setting"`
 	Messages []Message `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"messages"`

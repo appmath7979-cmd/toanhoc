@@ -13,6 +13,9 @@ func MessageRoute(db *gorm.DB) RouteGroup {
 		Prefix: "messages",
 		Routes: []Route{
 			{
+				Path: "", Method: "GET", Handler: handlers.GetManyMessage,
+			},
+			{
 				Path: "", Method: "POST", Handler: handlers.CreateMessage,
 			},
 		},
