@@ -1,12 +1,22 @@
 import type { API } from "@/types/api.type";
-import type { CreateMessage } from "@/types/message.type";
+import type {
+  CreateMessage,
+  GetManyMessageReq,
+  ManyMessageRes,
+} from "@/types/message.type";
 import appAPI from "./app.api";
 
 const endpoint = "messages";
 
-async function createMessage(data: CreateMessage): Promise<API> {
-	const res = await appAPI.post(`${endpoint}`, data);
-	return res.data;
+async function getManyMessage(req: GetManyMessageReq): Promise<ManyMessageRes> {
+  const { at, id, region } = req;
+  const res = await appAPI.get(`${endpoint}`, { params: { at, id, region } });
+  return res.data;
 }
 
-export { createMessage };
+async function createMessage(data: CreateMessage): Promise<API> {
+  const res = await appAPI.post(`${endpoint}`, data);
+  return res.data;
+}
+
+export { createMessage, getManyMessage };

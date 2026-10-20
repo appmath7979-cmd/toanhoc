@@ -1,6 +1,6 @@
 import { useAppStore } from "@lavaz/store";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import RegionDropdown from "@/components/system/RegionDropdown";
 import { Button } from "@/components/ui/Button";
@@ -11,27 +11,37 @@ import Container from "@/components/ui/layouts/Container";
 import Flex from "@/components/ui/layouts/Flex";
 import Text from "@/components/ui/typography/Text";
 import { schedule } from "@/data/schedule.data";
-import { useGetCustomerById } from "@/hooks/query/use-customer-query";
 import { useCreateMessage } from "@/hooks/query/use-message-query";
 import { useGetSettingByCustomerId } from "@/hooks/query/use-setting-query";
 import { parseMessageToDetails } from "@/libs/helper/message-parser";
+import { fmtDate } from "@/libs/utils/fmt-date";
 import { store } from "@/store/store";
 import type { Province } from "@/types/address.type";
-import type { CreateMessage, MessageDetail } from "@/types/message.type";
-import type { BetValue } from "@/types/setting.type";
+import type {
+  CreateMessage,
+  CreateMessageDetails,
+  MessageDetail,
+} from "@/types/message.type";
 
 export default function Message() {
   const { id } = useParams();
-  const { data: customer, error } = useGetSettingByCustomerId(id ?? "");
-  const { mutate, isSuccess, isPending } = useCreateMessage();
+
+  const {
+    data: setting,
+    error,
+    isPending: settingPending,
+  } = useGetSettingByCustomerId(id ?? "");
+  const { mutate, isPending } = useCreateMessage(id);
+
   const [region] = useAppStore(store.region, (s) => s.value);
+  const [date] = useAppStore(store.datePicker, (s) => s.date);
+
   const [msgDetails, setMsgDetails] = useState<MessageDetail[]>([]);
   const [msgStr, setMsgStr] = useState<string>("");
-  const [day] = useState(() => new Date().getDay());
   const [canSend, setCanSend] = useState<boolean>(false);
   const [canCheck, setCanCheck] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const provinces = schedule[day][region ?? "mb"];
+
+  const provinces = schedule[date.getDay()][region];
 
   const handleGetMsgString = useCallback((msg: string) => {
     setMsgStr(msg);
@@ -45,29 +55,81 @@ export default function Message() {
     } else setCanCheck(true);
   }, [msgStr]);
 
-  const handnleSend = async () => {
+  const handleSend = async () => {
     if (!id) return;
 
-    const formatMsgDetails: MessageDetail[] = () => {
-      if (!customer) return [];
-      const newMsg = msgDetails.map((msg) => {
-        const { bets } = customer.data;
-        const co = bets.find((bet) => bet.bet_type === msg.bet_type)?.c;
-        return { ...msg };
+    const parseData = (): CreateMessageDetails[] => {
+      const bets = setting?.data?.bets ?? [];
+
+      const results = msgDetails.map((item) => {
+        let co: number;
+        let isPercent: boolean;
+        const isFound = bets.find((b) => b.bet_type === item.bet_type);
+
+        if (isFound) {
+          isPercent = isFound.percent;
+          switch (item.bet_type) {
+            case "b2":
+              co = isPercent
+                ? isFound.c[region] * (region === "mb" ? 27 : 18)
+                : isFound.c[region];
+              break;
+            case "b3":
+              co = isPercent
+                ? isFound.c[region] * (region === "mb" ? 23 : 17)
+                : isFound.c[region];
+              break;
+            case "b4":
+              co = isPercent
+                ? isFound.c[region] * (region === "mb" ? 20 : 16)
+                : isFound.c[region];
+              break;
+            // case "da":
+            // case "dd2":
+            // case "dd3":
+            default:
+              co = isFound.c[region];
+              break;
+          }
+        } else {
+          switch (item.bet_type) {
+            case "b2":
+              co = 0.7 * (region === "mb" ? 27 : 18);
+              break;
+            case "b3":
+              co = 0.7 * (region === "mb" ? 23 : 17);
+              break;
+            case "b4":
+              co = 0.7 * (region === "mb" ? 20 : 16);
+              break;
+            // case "da":
+            // case "dd2":
+            // case "dd3":
+            default:
+              co = 0.7;
+              break;
+          }
+        }
+        co = co * item.score * 100;
+
+        const { trung: _t, ...rest } = item;
+
+        return {
+          ...rest,
+          co,
+        };
       });
 
-      return newMsg;
+      return results;
     };
-
-    console.log(formatMsgDetails);
 
     const data: CreateMessage = {
       content: msgStr,
       customer_id: id,
       is_send: false,
-      message_details: msgDetails,
-      region: region ?? "mb",
-      at: "10-12-2026",
+      message_details: parseData(),
+      region: region,
+      at: fmtDate(date),
     };
 
     mutate(data);
@@ -80,17 +142,20 @@ export default function Message() {
     setCanCheck(false);
   };
 
-  if (isSuccess) navigate(`/customers/${id}`);
-
-  if (error || !customer?.success) {
-    toast.error(customer?.message ?? error?.message);
-    navigate("customers");
-  }
+  useEffect(() => {
+    if (settingPending) return;
+    if (error || !setting?.success) {
+      toast.error(
+        setting?.message ?? error?.message ?? "Đã xảy ra lỗi tải cài đặt",
+      );
+      // navigate("/customers", { replace: true });
+    }
+  }, [error, setting, settingPending]);
 
   return (
     <Container>
       <RegionDropdown />
-      <Flex>
+      <Flex aria-disabled={isPending}>
         <Button disabled>Kiểm tra tin</Button>
         <Button
           variant={msgStr && canCheck ? "primary" : "outline"}
@@ -102,7 +167,7 @@ export default function Message() {
         <Button
           variant={!canSend ? "outline" : "primary"}
           disabled={!canSend || isPending}
-          onClick={handnleSend}
+          onClick={handleSend}
         >
           Gửi tin
         </Button>
