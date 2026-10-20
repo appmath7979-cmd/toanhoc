@@ -16,8 +16,10 @@ type Syntax string
 
 const (
 	SyntaxBao   Syntax = "b"
-	SyntaxDau   Syntax = "dau"
-	SyntaxDuoi  Syntax = "duoi"
+	SyntaxDau2  Syntax = "dau"
+	SyntaxDuoi2 Syntax = "duoi"
+	SyntaxDau3  Syntax = "xdau"
+	SyntaxDuoi3 Syntax = "xduoi"
 	SyntaxDa    Syntax = "da"
 	SyntaxDax   Syntax = "dax"
 )
@@ -25,9 +27,9 @@ const (
 type Region string
 
 const (
-	RegionMB Region = "MB"
-	RegionMT Region = "MT"
-	RegionMN Region = "MN"
+	RegionMB Region = "mb"
+	RegionMT Region = "mt"
+	RegionMN Region = "mn"
 )
 
 type Province string
@@ -64,7 +66,6 @@ const (
 	ProvinceQN  Province = "qn"
 	ProvinceDNO Province = "dno"
 	ProvinceKT  Province = "kt"
-	ProvinceAG Province = "ag"
+	ProvinceAG  Province = "ag"
 	ProvinceMB  Province = "mb"
 )
-

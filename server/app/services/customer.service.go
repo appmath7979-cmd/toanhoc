@@ -55,7 +55,7 @@ func (s *CustomerService) GetManyCustomer(req *request.GetManyCustomer) ([]respo
 			ID:          c.ID,
 			FullName:    c.FullName,
 			IsGuest:     c.IsGuest,
-			IsSend:      c.IsSend,
+			// IsSend:      c.IsSend,
 			Active:      c.Active,
 			CreatedAt:   c.CreatedAt,
 			UpdatedAt:   c.UpdatedAt,

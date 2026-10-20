@@ -4,17 +4,67 @@ import (
 	"net/http"
 	"server/app/dtos/request"
 	"server/app/dtos/response"
+	"server/app/models"
 	"server/app/services"
+	"server/app/validator"
 
 	"github.com/gin-gonic/gin"
 )
 
 type MessageHandler struct {
-	service *services.MessageService
+	service  *services.MessageService
+	validate *validator.AppValidator
 }
 
-func MessageHandlerFn(service *services.MessageService) *MessageHandler {
-	return &MessageHandler{service: service}
+func MessageHandlerFn(service *services.MessageService, validate *validator.AppValidator) *MessageHandler {
+	return &MessageHandler{service, validate}
+}
+
+func (h *MessageHandler) GetManyMessage(ctx *gin.Context) {
+	at := ctx.Query("at")
+	id := ctx.Query("id")
+	region := ctx.Query("region")
+
+	atErr := h.validate.ValidateDate(at)
+	idErr := h.validate.ValidateUUID(id)
+
+	if region != "mb" && region != "mn" && region != "mt" {
+		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
+			Message: "Thông tin không hợp lệ",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	if atErr != nil || idErr != nil {
+		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
+			Message: "Thông tin không hợp lệ",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	messages, status, err := h.service.GetManyMessage(&request.GetMessageQuery{ID: id, At: at, Region: models.Region(region)})
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, response.GetManyMessageRes{
+			Data:    messages,
+			Message: err.Error(),
+			Success: false,
+			Status:  status,
+		})
+	} else {
+		ctx.JSON(http.StatusOK, response.GetManyMessageRes{
+			Data:    messages,
+			Message: "Thành công!",
+			Success: true,
+			Status:  status,
+		})
+	}
 }
 
 func (h *MessageHandler) CreateMessage(ctx *gin.Context) {
