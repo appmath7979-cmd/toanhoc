@@ -1,5 +1,5 @@
 import { useAppStore } from "@lavaz/store";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import RegionDropdown from "@/components/system/RegionDropdown";
 import { Button } from "@/components/ui/Button";
@@ -10,12 +10,8 @@ import { useGetManyMessage } from "@/hooks/query/use-message-query";
 import { cn } from "@/libs/utils/cn";
 import { fmtDate } from "@/libs/utils/fmt-date";
 import { store } from "@/store/store";
-
-const msgTableTextCss = {
-  score: "text-orange-600",
-  co: "border-x border-border text-blue-600",
-  trung: "text-green-600",
-};
+import MessageDetailItem from "./message/message-detail-item/MessageDetailItem";
+import TitleStat from "./others/TitleStat";
 
 export default function CustomerDetail() {
   const { id } = useParams();
@@ -26,7 +22,6 @@ export default function CustomerDetail() {
     id: id ?? "",
     region,
   });
-  const [open, setOpen] = useState<boolean>(false);
 
   const messageList = data?.data ?? [];
   const allDetails = messageList.flatMap((msg) => msg.message_details ?? []);
@@ -86,12 +81,8 @@ export default function CustomerDetail() {
         <Link to={`/customers/${id}/message`}>Thêm tin nhắn mới</Link>
       </Button>
       <Box className="border border-border rounded-md">
-        <Box className="relative h-50 overflow-y-auto bg-surface-1">
-          <Flex className="sticky top-0 *:py-1 bg-surface-0 message-row">
-            <Text className={cn(msgTableTextCss.score)}>Xác</Text>
-            <Text className={cn(msgTableTextCss.co)}>Cò</Text>
-            <Text className={cn(msgTableTextCss.trung)}>Trúng</Text>
-          </Flex>
+        <Box className="relative max-h-50 overflow-y-auto bg-surface-1">
+          <TitleStat />
           <Box className="space-y-0">
             {messagesKey.map((m) => {
               const score = messagesInfo[m as keyof typeof messagesInfo].score;
@@ -138,48 +129,13 @@ export default function CustomerDetail() {
           justify="start"
           className="items-start w-full"
         >
-          <Box className="border border-border rounded-md bg-surface-0 p-1 pb-0">
-            <Flex justify="between" className="w-full">
-              <Text className="truncate line-clamp-3 flex-3">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Laboriosam, iusto doloribus, consequuntur dolorum nobis adipisci
-                animi architecto veritatis suscipit incidunt explicabo impedit,
-                eligendi perferendis. Obcaecati, recusandae? Corporis unde iure
-                ipsam.
-              </Text>
-              <Flex>
-                <Button size="sm" variant="ghost">
-                  Sao chép
-                </Button>
-                <Button size="sm" variant="ghost">
-                  Sửa
-                </Button>
-                <Button size="sm" variant="ghost" danger>
-                  Xóa
-                </Button>
-              </Flex>
-            </Flex>
-            <Box
-              className={cn("smooth overflow-hidden", open ? "h-auto" : "h-0")}
-            >
-              <Box>
-                <Flex className="sticky top-0 *:flex-1 *:text-center *:font-medium *:py-1 bg-surface-0">
-                  <Text className="text-orange-600">Xác</Text>
-                  <Text className="border-x border-border text-blue-600">
-                    Cò
-                  </Text>
-                  <Text className="text-green-600">Trúng</Text>
-                </Flex>
-              </Box>
-            </Box>
-            <Button
-              variant="ghost"
-              className="w-full justify-center"
-              onClick={() => setOpen(!open)}
-            >
-              Chi tiết
-            </Button>
-          </Box>
+          {messageList?.map((message) => (
+            <MessageDetailItem
+              key={message.id}
+              message={message}
+              msgTableTextCss={msgTableTextCss}
+            />
+          ))}
         </Flex>
       </Box>
     </Box>

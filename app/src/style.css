@@ -90,7 +90,7 @@ body,
     }
 
     .btn-outline {
-        @apply border-secondary-foreground bg-secondary text-secondary-foreground hover:bg-secondary/80;
+        @apply border-border text-secondary-foreground hover:bg-secondary/80;
     }
 
     .btn-ghost {
@@ -103,6 +103,10 @@ body,
 
     .btn-ghost--danger {
         @apply bg-transparent text-danger hover:bg-danger/20;
+    }
+
+    .btn-outline--danger {
+        @apply border-danger bg-danger-foreground text-danger hover:bg-secondary/80;
     }
 
     .btn-sm {
@@ -158,6 +162,10 @@ body,
 
     .message-row {
         @apply *:flex-1 *:text-center *:font-medium;
+    }
+
+    .msg-detail {
+        @apply w-full *:w-1/6 py-1 border-b border-border text-center;
     }
 }
 

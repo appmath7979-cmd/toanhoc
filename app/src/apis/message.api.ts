@@ -3,6 +3,7 @@ import type {
   CreateMessage,
   GetManyMessageReq,
   ManyMessageRes,
+  MessageItemRes,
 } from "@/types/message.type";
 import appAPI from "./app.api";
 
@@ -19,4 +20,14 @@ async function createMessage(data: CreateMessage): Promise<API> {
   return res.data;
 }
 
-export { createMessage, getManyMessage };
+async function deleteMessage(id: string): Promise<API> {
+  const res = await appAPI.delete(`${endpoint}/${id}`);
+  return res.data;
+}
+
+async function getMessageById(id: string): Promise<MessageItemRes> {
+  const res = await appAPI.get(`${endpoint}/${id}`);
+  return res.data;
+}
+
+export { createMessage, deleteMessage, getManyMessage, getMessageById };

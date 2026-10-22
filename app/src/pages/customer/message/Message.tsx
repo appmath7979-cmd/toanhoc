@@ -70,6 +70,7 @@ export default function Message() {
           isPercent = isFound.percent;
           switch (item.bet_type) {
             case "b2":
+            case "da":
               co = isPercent
                 ? isFound.c[region] * (region === "mb" ? 27 : 18)
                 : isFound.c[region];
@@ -84,7 +85,6 @@ export default function Message() {
                 ? isFound.c[region] * (region === "mb" ? 20 : 16)
                 : isFound.c[region];
               break;
-            // case "da":
             // case "dd2":
             // case "dd3":
             default:
@@ -94,6 +94,7 @@ export default function Message() {
         } else {
           switch (item.bet_type) {
             case "b2":
+            case "da":
               co = 0.7 * (region === "mb" ? 27 : 18);
               break;
             case "b3":
@@ -102,7 +103,6 @@ export default function Message() {
             case "b4":
               co = 0.7 * (region === "mb" ? 20 : 16);
               break;
-            // case "da":
             // case "dd2":
             // case "dd3":
             default:
@@ -110,7 +110,7 @@ export default function Message() {
               break;
           }
         }
-        co = co * item.score * 100;
+        co = co * item.score;
 
         const { trung: _t, ...rest } = item;
 
