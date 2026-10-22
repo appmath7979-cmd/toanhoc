@@ -4,7 +4,8 @@ import AddCustomer from "./pages/customer/AddCustomer";
 import Customer from "./pages/customer/Customer";
 import CustomerDetail from "./pages/customer/CustomerDetail";
 import EditCustomer from "./pages/customer/EditCustomer";
-import Message from "./pages/customer/Message";
+import Message from "./pages/customer/message/Message";
+import MessageDetail from "./pages/customer/message/MessageDetail";
 
 export function App() {
   return (
@@ -17,6 +18,10 @@ export function App() {
           <Route path="/customers/edit" element={<EditCustomer />} />
           <Route path={`/customers/:id`} element={<CustomerDetail />} />
           <Route path={`/customers/:id/message`} element={<Message />} />
+          <Route
+            path={`/customers/:customer_id/message/:message_id`}
+            element={<MessageDetail />}
+          />
         </Routes>
       </BrowserRouter>
     </>

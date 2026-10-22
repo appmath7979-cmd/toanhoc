@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { createMessage, getManyMessage } from "@/apis/message.api";
+import {
+  createMessage,
+  deleteMessage,
+  getManyMessage,
+  getMessageById,
+} from "@/apis/message.api";
 import type { CreateMessage, GetManyMessageReq } from "@/types/message.type";
 
 function useGetManyMessage(req: GetManyMessageReq) {
@@ -9,6 +14,14 @@ function useGetManyMessage(req: GetManyMessageReq) {
     queryKey: ["messages", req.id, req.at, req.region],
     queryFn: () => getManyMessage(req),
     enabled: !!req.id && !!req.at,
+  });
+}
+
+function useGetMessageById(id: string | undefined) {
+  return useQuery({
+    queryKey: ["messages", id],
+    queryFn: () => getMessageById(id ?? ""),
+    enabled: !!id,
   });
 }
 
@@ -34,4 +47,24 @@ function useCreateMessage(id: string | undefined) {
   });
 }
 
-export { useCreateMessage, useGetManyMessage };
+function useDeleteMessage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteMessage(id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success(data.message);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+}
+
+export {
+  useCreateMessage,
+  useDeleteMessage,
+  useGetManyMessage,
+  useGetMessageById,
+};

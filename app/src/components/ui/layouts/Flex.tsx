@@ -13,14 +13,15 @@ interface FlexProps extends ComponentProps<"div"> {
   className?: string;
   children: ReactNode;
   display?: "none" | "inline-flex" | "flex";
-  justify?: "start" | "center" | "end" | "between";
+  justify?:
+    "justify-start" | "justify-center" | "justify-end" | "justify-between";
 }
 
 export default function Flex({
   direction = "horizontal",
   className,
   display = "flex",
-  justify,
+  justify = "start",
   children,
 }: FlexProps) {
   return (

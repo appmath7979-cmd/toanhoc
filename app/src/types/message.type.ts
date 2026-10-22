@@ -66,6 +66,10 @@ interface ManyMessageRes extends API {
   data: MessageRes[];
 }
 
+interface MessageItemRes extends API {
+  data: MessageRes;
+}
+
 export type {
   CreateMessage,
   CreateMessageDetails,
@@ -74,6 +78,7 @@ export type {
   Message,
   MessageDetail,
   MessageDetailRes,
+  MessageItemRes,
   MessageRes,
   Syntax,
 };

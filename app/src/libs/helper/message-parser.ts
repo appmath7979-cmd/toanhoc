@@ -14,7 +14,7 @@ export const getBetTypeByNumberLength = (
   if (len === 4) {
     return "b4";
   }
-  if (["dd", "duoi", "dau", "dd"].includes(syntax)) return "dd2";
+  if (["dd", "duoi", "dau"].includes(syntax)) return "dd2";
   return "b2";
 };
 
@@ -121,7 +121,8 @@ export const parseMessageToDetails = (
 
       currentBets.forEach((bet) => {
         const syntaxLower = bet.syntax.toLowerCase();
-        const isDa = syntaxLower.startsWith("da");
+        // Chỉ khớp da, da2, da3... (KHÔNG khớp "dau")
+        const isDa = /^da\d*$/.test(syntaxLower);
         const isBd = syntaxLower.startsWith("bd");
 
         if (isDa) {
@@ -135,18 +136,11 @@ export const parseMessageToDetails = (
 
           targetProvinces.forEach((prov) => {
             combinations.forEach((combo) => {
-              const combinedNumber = combo.join("-");
-              const baseNumForType = combo[0] || "";
-              const calculatedBetType = getBetTypeByNumberLength(
-                baseNumForType,
-                bet.syntax,
-              );
-
               newDetails.push({
-                bet_type: calculatedBetType,
+                bet_type: "da",
                 co: 1,
-                number: combinedNumber,
-                syntax: bet.syntax as Syntax,
+                number: combo.join("-"),
+                syntax: "da" as Syntax,
                 province: prov as Province,
                 score: bet.score,
                 trung: 0,
