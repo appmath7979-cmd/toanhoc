@@ -71,7 +71,7 @@ func (h *MessageHandler) CreateMessage(ctx *gin.Context) {
 	var req request.CreateMessage
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
-			Message: "Thông tin không hợp lệ",
+			Message: "Thông tin không hợp lệ!",
 			Success: false,
 			Status:  400,
 		})
@@ -99,6 +99,88 @@ func (h *MessageHandler) CreateMessage(ctx *gin.Context) {
 		ctx.JSON(http.StatusCreated, response.StatusResponse{
 			Message: "Thêm tin nhắn thành công!",
 			Success: false,
+			Status:  status,
+		})
+	}
+}
+
+func (h *MessageHandler) DeletMessage(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	if err := h.validate.ValidateUUID(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
+			Message: "Thông tin không hợp lệ!",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	status, err := h.service.DeleteMessage(id)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, response.StatusResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, response.StatusResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, response.StatusResponse{
+			Message: "Xóa tin thành công!",
+			Success: true,
+			Status:  status,
+		})
+	}
+}
+
+func (h *MessageHandler) GetMessageById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	if err := h.validate.ValidateUUID(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, response.GetMessageByIdRes{
+			Data:    nil,
+			Message: "Thông tin không hợp lệ",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	var res models.Message
+
+	status, err := h.service.GetMessageById(id, &res)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, response.GetMessageByIdRes{
+				Data:    nil,
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, response.GetMessageByIdRes{
+				Data:    nil,
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, response.GetMessageByIdRes{
+			Data:    &res,
+			Message: "Thành công!",
+			Success: true,
 			Status:  status,
 		})
 	}

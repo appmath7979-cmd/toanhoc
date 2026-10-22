@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 	"server/app/dtos/request"
 	"server/app/models"
@@ -18,8 +19,6 @@ func MessageRepoFn(db *gorm.DB) *MessageRepo {
 
 func (r *MessageRepo) FindManyMessage(req *request.GetMessageQuery) ([]models.Message, error) {
 	var messages []models.Message
-
-	fmt.Printf("DEBUG QUERY -> At: %s, ID: %s, Region: %s\n", req.At, req.ID, req.Region)
 
 	if err := r.db.Preload("MessageDetails").Where("at = ? AND customer_id = ? AND region = ?", req.At, req.ID, req.Region).Find(&messages).Error; err != nil {
 		return nil, err
@@ -55,6 +54,32 @@ func (r *MessageRepo) CreateMessage(req *request.CreateMessage) error {
 	message.MessageDetails = details
 
 	if err := r.db.Create(&message).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *MessageRepo) DeleteMessage(id string) error {
+	var message models.Message
+
+	if err := r.db.First(&message, "id = ?", id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("Tin không tìm thấy hoặc không tồn tại!")
+		}
+
+		return err
+	}
+
+	if err := r.db.Delete(&message).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *MessageRepo) GetMessageById(id string, res *models.Message) error {
+	if err := r.db.Preload("MessageDetails").First(res, "id = ?", id).Error; err != nil {
 		return err
 	}
 

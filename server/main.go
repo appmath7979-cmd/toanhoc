@@ -7,17 +7,10 @@ import (
 	"server/app/routes"
 	"server/configs"
 
-	_ "server/docs"
-
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title           Toanhoc Backend API
-// @version         1.0
-// @description     API documentation for Toanhoc backend used by Tauri app.
-// @host            localhost:8080
-// @BasePath        /api/v1
 func main() {
 	port := app.LoadEnv("PORT")
 
