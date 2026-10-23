@@ -185,3 +185,53 @@ func (h *MessageHandler) GetMessageById(ctx *gin.Context) {
 		})
 	}
 }
+
+func (h *MessageHandler) UpdateMessage(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	if err := h.validate.ValidateUUID(id); err != nil {
+		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
+			Message: "Thông tin không hợp lệ",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	var req request.UpdateMessage
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
+			Message: "Thông tin không hợp lệ",
+			Success: false,
+			Status:  400,
+		})
+
+		return
+	}
+
+	status, err := h.service.UpdateMessage(id, req)
+
+	if err != nil {
+		if status == 404 {
+			ctx.JSON(http.StatusNotFound, response.StatusResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, response.StatusResponse{
+				Message: err.Error(),
+				Success: false,
+				Status:  status,
+			})
+		}
+	} else {
+		ctx.JSON(http.StatusOK, response.StatusResponse{
+			Message: "Thành công!",
+			Success: true,
+			Status:  status,
+		})
+	}
+}

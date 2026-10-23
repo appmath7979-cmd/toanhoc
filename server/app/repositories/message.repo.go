@@ -85,3 +85,42 @@ func (r *MessageRepo) GetMessageById(id string, res *models.Message) error {
 
 	return nil
 }
+
+func (r *MessageRepo) UpdateMessage(id string, req request.UpdateMessage) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Model(&models.Message{}).Where("id = ?", id).Select("content").Updates(models.Message{
+			Content: req.Content,
+		}).Error
+
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Where("message_id = ?", id).Delete(&models.MessageDetail{}).Error; err != nil {
+			return err
+		}
+
+		var details []models.MessageDetail
+
+		for _, d := range req.MessageDetails {
+			details = append(details, models.MessageDetail{
+				BetType:   d.BetType,
+				Syntax:    d.Syntax,
+				Province:  d.Province,
+				Score:     d.Score,
+				Co:        d.Co,
+				Trung:     0,
+				Number:    d.Number,
+				MessageID: id,
+			})
+		}
+
+		if len(details) > 0 {
+			if err := tx.Create(&details).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}

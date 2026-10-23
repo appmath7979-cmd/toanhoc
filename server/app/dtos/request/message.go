@@ -25,3 +25,8 @@ type CreateMessage struct {
 	MessageDetails []CreateMessageDetail `json:"message_details"`
 	CustomerID     string                `json:"customer_id"`
 }
+
+type UpdateMessage struct {
+	Content        string                `json:"content" binding:"required"`
+	MessageDetails []CreateMessageDetail `json:"message_details"`
+}

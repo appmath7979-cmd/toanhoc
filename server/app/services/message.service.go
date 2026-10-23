@@ -63,3 +63,15 @@ func (s *MessageService) GetMessageById(id string, res *models.Message) (uint16,
 
 	return 200, nil
 }
+
+func (s *MessageService) UpdateMessage(id string, req request.UpdateMessage) (uint16, error) {
+	if err := s.repo.UpdateMessage(id, req); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 404, errors.New("Không tìm thấy tin!")
+		}
+
+		return 500, err
+	}
+
+	return 200, nil
+}
