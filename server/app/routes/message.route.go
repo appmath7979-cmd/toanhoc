@@ -22,6 +22,9 @@ func MessageRoute(db *gorm.DB) RouteGroup {
 				Path: "", Method: "POST", Handler: handlers.CreateMessage,
 			},
 			{
+				Path: "/:id", Method: "PUT", Handler: handlers.UpdateMessage,
+			},
+			{
 				Path: "/:id", Method: "DELETE", Handler: handlers.DeletMessage,
 			},
 		},

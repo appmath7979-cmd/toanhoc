@@ -58,17 +58,6 @@ func (h *CustomerHandler) GetManyCustomer(ctx *gin.Context) {
 	}
 }
 
-// GetCustomerById godoc
-// @Summary Lấy khách hàng
-// @Description Lấy khách hàng theo id và thông tin của khách hàng
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param id path string true "Id của khách hàng"
-// @Success 200 {object} response.CustomerSetting "Tìm khách hàng và lấy thông tin khách hàng thành công"
-// @Failure 404 {object} response.CustomerSetting "Không tìm thấy khách hàng"
-// @Failure 500 {object} response.CustomerSetting "Lỗi Server"
-// @Router /api/v1/customers/{id} [get]
 func (h *CustomerHandler) GetCustomerDetails(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -113,18 +102,6 @@ func (h *CustomerHandler) GetCustomerDetails(ctx *gin.Context) {
 	}
 }
 
-// CreateCustomer godoc
-// @Summary Tạo khách hàng
-// @Description Tạo khách hàng mới
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param request body request.CreateCustomer true "Thông tin khách hàng cần tạo"
-// @Success 201 {object} response.StatusResponse "Tạo khách hàng thành công"
-// @Failure 400 {object} response.StatusResponse "Thông tin không hợp lệ"
-// @Failure 409 {object} response.StatusResponse "Số điện thoại đã tồn tại"
-// @Failure 500 {object} response.StatusResponse "Lỗi Server"
-// @Router /api/v1/customers [post]
 func (h *CustomerHandler) CreateCustomer(ctx *gin.Context) {
 	var req request.CreateCustomer
 
@@ -163,18 +140,6 @@ func (h *CustomerHandler) CreateCustomer(ctx *gin.Context) {
 	}
 }
 
-// UpdateCustomer godoc
-// @Summary Cập nhật khách hàng
-// @Description Cập nhật thông tin khách hàng
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param request body request.UpdateCustomer true "Thông tin khách hàng cần cập nhật"
-// @Success 200 {object} response.StatusResponse "Cập nhật thông tin khách hàng thành công"
-// @Failure 400 {object} response.StatusResponse "Thông tin không hợp lệ"
-// @Failure 409 {object} response.StatusResponse "Số điện thoại đã tồn tại"
-// @Failure 500 {object} response.StatusResponse "Lỗi Server"
-// @Router /api/v1/customers/{id} [patch]
 func (h *CustomerHandler) UpdateCustomer(ctx *gin.Context) {
 	var req request.UpdateCustomer
 	id := ctx.Param("id")
@@ -217,17 +182,6 @@ func (h *CustomerHandler) UpdateCustomer(ctx *gin.Context) {
 	}
 }
 
-// DeleteCustomerById godoc
-// @Summary Xóa khách hàng
-// @Description Xóa khách hàng theo id
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param id path string true "Id khách hàng cần xóa"
-// @Success 200 {object} response.StatusResponse "Xóa khách hàng thành công"
-// @Failure 400 {object} response.StatusResponse "Thông tin không hợp lệ"
-// @Failure 500 {object} response.StatusResponse "Lỗi Server"
-// @Router /api/v1/customers/{id} [delete]
 func (h *CustomerHandler) DeleteCustomerById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -264,17 +218,6 @@ func (h *CustomerHandler) DeleteCustomerById(ctx *gin.Context) {
 	}
 }
 
-// DeleteManyCustomers godoc
-// @Summary Xóa nhiều khách hàng
-// @Description Xóa nhiều khách hàng theo id
-// @Tags customers
-// @Accept json
-// @Produce json
-// @Param ids body request.DeleteManyCustomer true "Danh sách id khách hàng cần xóa"
-// @Success 200 {object} response.StatusResponse "Xóa khách hàng thành công"
-// @Failure 400 {object} response.StatusResponse "Thông tin không hợp lệ"
-// @Failure 500 {object} response.StatusResponse "Lỗi Server"
-// @Router /api/v1/customers [delete]
 func (h *CustomerHandler) DeleteManyCustomer(ctx *gin.Context) {
 	var req request.DeleteManyCustomer
 
