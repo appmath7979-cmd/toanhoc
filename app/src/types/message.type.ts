@@ -33,9 +33,9 @@ interface Message {
   at: string;
   content: string;
   customer_id: string;
-  is_send: boolean;
+  send: boolean;
   region: Region;
-  message_details: MessageDetail[];
+  message_details: MessageDetailRes[];
 }
 
 interface CreateMessageDetails {
@@ -51,13 +51,12 @@ interface CreateMessage {
   at: string;
   content: string;
   customer_id: string;
-  is_send: boolean;
+  send: boolean;
   region: Region;
   message_details: CreateMessageDetails[];
 }
 
 interface MessageRes extends Message {
-  id: string;
   created_at: string;
   updated_at: string;
 }
@@ -68,6 +67,11 @@ interface ManyMessageRes extends API {
 
 interface MessageItemRes extends API {
   data: MessageRes;
+}
+
+interface UpdateMessageReq {
+  content: string;
+  message_details: CreateMessageDetails[];
 }
 
 export type {
@@ -81,4 +85,5 @@ export type {
   MessageItemRes,
   MessageRes,
   Syntax,
+  UpdateMessageReq,
 };

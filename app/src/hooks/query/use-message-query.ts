@@ -6,8 +6,13 @@ import {
   deleteMessage,
   getManyMessage,
   getMessageById,
+  updateMessage,
 } from "@/apis/message.api";
-import type { CreateMessage, GetManyMessageReq } from "@/types/message.type";
+import type {
+  CreateMessage,
+  GetManyMessageReq,
+  UpdateMessageReq,
+} from "@/types/message.type";
 
 function useGetManyMessage(req: GetManyMessageReq) {
   return useQuery({
@@ -47,6 +52,22 @@ function useCreateMessage(id: string | undefined) {
   });
 }
 
+function useUpdateMessage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ data, id }: { id: string; data: UpdateMessageReq }) =>
+      updateMessage(id, data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+      toast.success(data.message);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+}
+
 function useDeleteMessage() {
   const queryClient = useQueryClient();
 
@@ -67,4 +88,5 @@ export {
   useDeleteMessage,
   useGetManyMessage,
   useGetMessageById,
+  useUpdateMessage,
 };

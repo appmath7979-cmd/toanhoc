@@ -71,7 +71,7 @@ export default function MessageDetailItem({
 
   return (
     <Box className="border border-border rounded-md bg-surface-0 p-1 pb-0">
-      <Flex justify="between" className="w-full items-baseline">
+      <Flex justify="justify-between" className="w-full items-baseline">
         <Link to={`/customers/${message.customer_id}/message/${message.id}`}>
           <Text className="line-clamp-3 grow text-sm">{message.content}</Text>
         </Link>
@@ -79,7 +79,7 @@ export default function MessageDetailItem({
       </Flex>
       <Box className={cn("smooth overflow-hidden", open ? "h-auto" : "h-0")}>
         <Box className="space-y-0">
-          <TitleStat msgTableTextCss={msgTableTextCss} />
+          <TitleStat />
           <Box className="space-y-0">
             {messagesKey.map((m) => {
               const score = messagesInfo[m as keyof typeof messagesInfo].score;

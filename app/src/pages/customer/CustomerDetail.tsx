@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import Box from "@/components/ui/layouts/Box";
 import Flex from "@/components/ui/layouts/Flex";
 import Text from "@/components/ui/typography/Text";
+import { msgTableTextCss } from "@/data/css.data";
 import { useGetManyMessage } from "@/hooks/query/use-message-query";
 import { cn } from "@/libs/utils/cn";
 import { fmtDate } from "@/libs/utils/fmt-date";
@@ -124,11 +125,7 @@ export default function CustomerDetail() {
       </Box>
       <Box>
         <Text className="font-medium">Danh sách tin nhắn</Text>
-        <Flex
-          direction="vertical"
-          justify="start"
-          className="items-start w-full"
-        >
+        <Flex direction="vertical" className="items-start w-full">
           {messageList?.map((message) => (
             <MessageDetailItem
               key={message.id}
