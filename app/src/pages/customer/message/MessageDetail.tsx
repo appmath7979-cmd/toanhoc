@@ -1,5 +1,5 @@
 import { SquarePenIcon, TrashIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import DeleteAlert from "@/components/system/dialog/DeleteAlert";
@@ -19,7 +19,7 @@ import { useGetSettingByCustomerId } from "@/hooks/query/use-setting-query";
 import { useMessage } from "@/hooks/use-message";
 import { parseMessageToDetails } from "@/libs/helper/message-parser";
 import { cn } from "@/libs/utils/cn";
-import { convertDate, fmtDate } from "@/libs/utils/fmt-date";
+import { convertDate } from "@/libs/utils/fmt-date";
 import type { Province } from "@/types/address.type";
 import type { UpdateMessageReq } from "@/types/message.type";
 
@@ -74,9 +74,6 @@ export default function MessageDetail() {
       content: msg,
       message_details: paresedData,
     };
-
-    console.log(data);
-
     updateMsg({ id: message_id, data });
   };
 
@@ -167,7 +164,7 @@ export default function MessageDetail() {
               isEdit ? "max-h-88" : "max-h-100 ",
             )}
           >
-            {messageData?.message_details?.map((m, i) => {
+            {messageData?.message_details?.map((m) => {
               return (
                 <Flex key={m.id} className="msg-detail even:bg-surface-1">
                   <Text as="span">{m.province}</Text>

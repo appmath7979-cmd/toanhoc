@@ -5,9 +5,13 @@ import { Button } from "@/components/ui/Button";
 import Box from "@/components/ui/layouts/Box";
 import Flex from "@/components/ui/layouts/Flex";
 import Text from "@/components/ui/typography/Text";
+import {
+  messageCalculate,
+  messageParseForCalculate,
+} from "@/libs/helper/message-calculate";
 import { cn } from "@/libs/utils/cn";
 import type { MessageRes } from "@/types/message.type";
-import TitleStat from "../../others/TitleStat";
+import TitleStat from "../../others/TitleStatistic";
 import Actions from "./Actions";
 
 interface MessageDetailItemProps {
@@ -24,33 +28,14 @@ export default function MessageDetailItem({
   const allDetails = message.message_details;
 
   const messagesInfo = useMemo(() => {
-    const caculate = (d: typeof allDetails) => {
-      return d.reduce(
-        (acc, item) => {
-          acc.score += item.score ?? 0;
-          acc.co += item.co ?? 0;
-          acc.trung += item.trung ?? 0;
-
-          return acc;
-        },
-        { score: 0, co: 0, trung: 0 },
-      );
-    };
-
-    const b2 = allDetails.filter((item) => item.bet_type === "b2") ?? [];
-    const b3 = allDetails.filter((item) => item.bet_type === "b3") ?? [];
-    const dd2 = allDetails.filter((item) => item.bet_type === "dd2") ?? [];
-    const dd3 = allDetails.filter((item) => item.bet_type === "dd3") ?? [];
-    const b4 = allDetails.filter((item) => item.bet_type === "b4") ?? [];
-    const da = allDetails.filter((item) => item.bet_type === "da") ?? [];
-
+    const { b2, b3, dd2, dd3, b4, da } = messageParseForCalculate(allDetails);
     return {
-      b2: { ...caculate(b2) },
-      b3: { ...caculate(b3) },
-      b4: { ...caculate(b4) },
-      dd2: { ...caculate(dd2) },
-      dd3: { ...caculate(dd3) },
-      da: { ...caculate(da) },
+      b2: { ...messageCalculate(b2) },
+      b3: { ...messageCalculate(b3) },
+      b4: { ...messageCalculate(b4) },
+      dd2: { ...messageCalculate(dd2) },
+      dd3: { ...messageCalculate(dd3) },
+      da: { ...messageCalculate(da) },
     };
   }, [allDetails]);
 
