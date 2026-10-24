@@ -8,8 +8,9 @@ type Customer struct {
 	IsGuest  bool   `gorm:"type:boolean;not null"`
 	Active   bool   `gorm:"type:boolean;default:true"`
 
-	Setting  *Setting  `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"setting"`
-	Messages []Message `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"messages"`
+	Setting        *Setting        `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"setting"`
+	Messages       []Message       `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"messages"`
+	CustomerLimits []CustomerLimit `gorm:"foreignKey:CustomerID;constraint:OnDelete:CASCADE;" json:"customer_limits"`
 
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`

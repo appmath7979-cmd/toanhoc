@@ -31,7 +31,7 @@ func AppRouter() []RouteGroup {
 	var allGroup []RouteGroup
 	db := configs.DB
 
-	allGroup = append(allGroup, CustomerRoute(db), SettingRoute(db), MessageRoute(db))
+	allGroup = append(allGroup, CustomerRoute(db), SettingRoute(db), MessageRoute(db), LimitRoute(db))
 
 	return allGroup
 }
