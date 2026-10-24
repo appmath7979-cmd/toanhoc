@@ -6,9 +6,6 @@ import (
 	"server/app/models"
 	"server/app/routes"
 	"server/configs"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -20,12 +17,10 @@ func main() {
 		&models.Setting{},
 		&models.Message{},
 		&models.MessageDetail{},
+		&models.CustomerLimit{},
 	)
 
 	app := common.NewApplication()
-
-	r := app.Route
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	app.RegistRoute("v1", routes.AppRouter())
 

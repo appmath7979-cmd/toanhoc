@@ -65,7 +65,7 @@ func (h *CustomerHandler) GetCustomerDetails(ctx *gin.Context) {
 
 	if isUUID != nil {
 		ctx.JSON(http.StatusBadRequest, response.CustomerSetting{
-			Message: "Dữ liệu không hợp lệ!",
+			Message: isUUID.Error(),
 			Success: false,
 			Status:  400,
 			Data:    nil,
