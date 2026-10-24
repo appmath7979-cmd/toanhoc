@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import DeleteAlert from "@/components/system/dialog/DeleteAlert";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button/Button";
 import { AlertTrigger } from "@/components/ui/dialog/Alert";
 import Editor from "@/components/ui/editor/Editor";
 import Box from "@/components/ui/layouts/Box";
@@ -22,6 +22,8 @@ import { cn } from "@/libs/utils/cn";
 import { convertDate } from "@/libs/utils/fmt-date";
 import type { Province } from "@/types/address.type";
 import type { UpdateMessageReq } from "@/types/message.type";
+import LimitDetail from "../others/LimitDetail";
+import TitleLimitDetail from "../others/TitleLimitDetail";
 
 export default function MessageDetail() {
   const { customer_id, message_id } = useParams();
@@ -149,38 +151,16 @@ export default function MessageDetail() {
       )}
       <Box className="mt-4 space-y-2">
         <Text className="font-semibold">Chi tiết</Text>
-        <Box className="border border-border rounded-md">
-          <Flex className="msg-detail *:font-medium bg-surface-1">
-            <Text as="span">Đài</Text>
-            <Text as="span">Số/Cặp đánh</Text>
-            <Text as="span">Cú pháp</Text>
-            <Text as="span">Điểm</Text>
-            <Text as="span">Dư</Text>
-            <Text as="span">Tổng</Text>
-          </Flex>
+        <Box className="border border-border rounded-md space-y-0">
+          <TitleLimitDetail />
           <ul
             className={cn(
               "overflow-y-auto",
               isEdit ? "max-h-88" : "max-h-100 ",
             )}
           >
-            {messageData?.message_details?.map((m) => {
-              return (
-                <Flex key={m.id} className="msg-detail even:bg-surface-1">
-                  <Text as="span">{m.province}</Text>
-                  <Text as="span">{m.number}</Text>
-                  <Text as="span">{m.syntax}</Text>
-                  <Text as="span" className="text-blue-600 font-medium">
-                    {m.score}
-                  </Text>
-                  <Text as="span" className="text-red-600 font-medium">
-                    0
-                  </Text>
-                  <Text as="span" className="text-emerald-600 font-medium">
-                    {m.score}
-                  </Text>
-                </Flex>
-              );
+            {messageData?.message_details?.map((m, i) => {
+              return <LimitDetail key={m.id} index={i} detail={m} />;
             })}
           </ul>
         </Box>

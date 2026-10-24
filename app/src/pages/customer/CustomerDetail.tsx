@@ -1,8 +1,7 @@
 import { useAppStore } from "@lavaz/store";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import RegionDropdown from "@/components/system/RegionDropdown";
-import { Button } from "@/components/ui/Button";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button/Button";
 import Box from "@/components/ui/layouts/Box";
 import Flex from "@/components/ui/layouts/Flex";
 import { useGetManyMessage } from "@/hooks/query/use-message-query";
@@ -62,7 +61,7 @@ export default function CustomerDetail() {
 
       {(currentView === "statistic" && (
         <Statistic id={id} allDetails={allDetails} messageList={messageList} />
-      )) || <CustomerLimit id={id} />}
+      )) || <CustomerLimit id={id} allDetails={allDetails} />}
     </Box>
   );
 }

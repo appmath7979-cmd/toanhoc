@@ -1,6 +1,6 @@
 import { CopyIcon, SquarePenIcon, TrashIcon } from "lucide-react";
 import DeleteAlert from "@/components/system/dialog/DeleteAlert";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button/Button";
 import { AlertTrigger } from "@/components/ui/dialog/Alert";
 import Flex from "@/components/ui/layouts/Flex";
 import Tooltip from "@/components/ui/Tooltip";

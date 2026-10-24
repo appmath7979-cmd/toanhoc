@@ -2,7 +2,7 @@ import { useAppStore } from "@lavaz/store";
 import { CopyIcon, EditIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import DeleteAlert from "@/components/system/dialog/DeleteAlert";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button/Button";
 import Flex from "@/components/ui/layouts/Flex";
 import Tooltip from "@/components/ui/Tooltip";
 import { useDeleteCustomer } from "@/hooks/query/use-customer-query";

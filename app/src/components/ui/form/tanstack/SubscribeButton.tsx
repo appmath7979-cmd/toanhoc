@@ -1,26 +1,26 @@
 import { useFormContext } from "@/context/form.context";
-import { ButtonProps } from "../../Button";
+import type { ButtonProps } from "../../button/Button";
 
 export default function SubscribeButton({
-	variant,
-	children,
-	setChild = false,
-	...props
+  variant,
+  children,
+  setChild = false,
+  ...props
 }: ButtonProps) {
-	const form = useFormContext();
+  const form = useFormContext();
 
-	return (
-		<form.Subscribe selector={(state) => state.isSubmitting}>
-			{(isSubmitting) => (
-				<button
-					type="submit"
-					className="btn btn-primary w-full justify-center"
-					{...props}
-					disabled={isSubmitting}
-				>
-					{children}
-				</button>
-			)}
-		</form.Subscribe>
-	);
+  return (
+    <form.Subscribe selector={(state) => state.isSubmitting}>
+      {(isSubmitting) => (
+        <button
+          type="submit"
+          className="btn btn-primary w-full justify-center"
+          {...props}
+          disabled={isSubmitting}
+        >
+          {children}
+        </button>
+      )}
+    </form.Subscribe>
+  );
 }

@@ -1,14 +1,14 @@
 import { useAppStore } from "@lavaz/store";
-import { fmtDate } from "@/libs/utils/fmt-date";
-import { store } from "@/store/store";
-import Box from "./ui/layouts/Box";
-import Text from "./ui/typography/Text";
-import { Popover } from "radix-ui";
-import { Button } from "./ui/Button";
 import { CalendarIcon } from "lucide-react";
+import { Popover } from "radix-ui";
+import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { vi } from "react-day-picker/locale";
-import { useState } from "react";
+import { fmtDate } from "@/libs/utils/fmt-date";
+import { store } from "@/store/store";
+import { Button } from "./ui/button/Button";
+import Box from "./ui/layouts/Box";
+import Text from "./ui/typography/Text";
 
 export default function DatePicker() {
   const [date, { setDate }] = useAppStore(store.datePicker, (s) => s.date);
