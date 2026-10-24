@@ -4,6 +4,7 @@ import type {
   GetManyMessageReq,
   ManyMessageRes,
   MessageItemRes,
+  UpdateMessageReq,
 } from "@/types/message.type";
 import appAPI from "./app.api";
 
@@ -30,4 +31,15 @@ async function getMessageById(id: string): Promise<MessageItemRes> {
   return res.data;
 }
 
-export { createMessage, deleteMessage, getManyMessage, getMessageById };
+async function updateMessage(id: string, data: UpdateMessageReq): Promise<API> {
+  const res = await appAPI.put(`${endpoint}/${id}`, data);
+  return res.data;
+}
+
+export {
+  createMessage,
+  deleteMessage,
+  getManyMessage,
+  getMessageById,
+  updateMessage,
+};

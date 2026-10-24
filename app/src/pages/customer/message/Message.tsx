@@ -13,15 +13,12 @@ import Text from "@/components/ui/typography/Text";
 import { schedule } from "@/data/schedule.data";
 import { useCreateMessage } from "@/hooks/query/use-message-query";
 import { useGetSettingByCustomerId } from "@/hooks/query/use-setting-query";
+import { useMessage } from "@/hooks/use-message";
 import { parseMessageToDetails } from "@/libs/helper/message-parser";
 import { fmtDate } from "@/libs/utils/fmt-date";
 import { store } from "@/store/store";
 import type { Province } from "@/types/address.type";
-import type {
-  CreateMessage,
-  CreateMessageDetails,
-  MessageDetail,
-} from "@/types/message.type";
+import type { CreateMessage } from "@/types/message.type";
 
 export default function Message() {
   const { id } = useParams();
@@ -36,10 +33,13 @@ export default function Message() {
   const [region] = useAppStore(store.region, (s) => s.value);
   const [date] = useAppStore(store.datePicker, (s) => s.date);
 
-  const [msgDetails, setMsgDetails] = useState<MessageDetail[]>([]);
   const [msgStr, setMsgStr] = useState<string>("");
   const [canSend, setCanSend] = useState<boolean>(false);
   const [canCheck, setCanCheck] = useState<boolean>(false);
+
+  const { parseData, msgDetails, setMsgDetails } = useMessage({
+    bets: setting?.data.bets,
+  });
 
   const provinces = schedule[date.getDay()][region];
 
@@ -58,76 +58,13 @@ export default function Message() {
   const handleSend = async () => {
     if (!id) return;
 
-    const parseData = (): CreateMessageDetails[] => {
-      const bets = setting?.data?.bets ?? [];
-
-      const results = msgDetails.map((item) => {
-        let co: number;
-        let isPercent: boolean;
-        const isFound = bets.find((b) => b.bet_type === item.bet_type);
-
-        if (isFound) {
-          isPercent = isFound.percent;
-          switch (item.bet_type) {
-            case "b2":
-            case "da":
-              co = isPercent
-                ? isFound.c[region] * (region === "mb" ? 27 : 18)
-                : isFound.c[region];
-              break;
-            case "b3":
-              co = isPercent
-                ? isFound.c[region] * (region === "mb" ? 23 : 17)
-                : isFound.c[region];
-              break;
-            case "b4":
-              co = isPercent
-                ? isFound.c[region] * (region === "mb" ? 20 : 16)
-                : isFound.c[region];
-              break;
-            // case "dd2":
-            // case "dd3":
-            default:
-              co = isFound.c[region];
-              break;
-          }
-        } else {
-          switch (item.bet_type) {
-            case "b2":
-            case "da":
-              co = 0.7 * (region === "mb" ? 27 : 18);
-              break;
-            case "b3":
-              co = 0.7 * (region === "mb" ? 23 : 17);
-              break;
-            case "b4":
-              co = 0.7 * (region === "mb" ? 20 : 16);
-              break;
-            // case "dd2":
-            // case "dd3":
-            default:
-              co = 0.7;
-              break;
-          }
-        }
-        co = co * item.score;
-
-        const { trung: _t, ...rest } = item;
-
-        return {
-          ...rest,
-          co,
-        };
-      });
-
-      return results;
-    };
+    const paresedData = parseData();
 
     const data: CreateMessage = {
       content: msgStr,
       customer_id: id,
-      is_send: false,
-      message_details: parseData(),
+      send: false,
+      message_details: paresedData,
       region: region,
       at: fmtDate(date),
     };
@@ -148,7 +85,6 @@ export default function Message() {
       toast.error(
         setting?.message ?? error?.message ?? "Đã xảy ra lỗi tải cài đặt",
       );
-      // navigate("/customers", { replace: true });
     }
   }, [error, setting, settingPending]);
 
@@ -172,7 +108,7 @@ export default function Message() {
           Gửi tin
         </Button>
       </Flex>
-      <Flex justify="center" className="gap-2">
+      <Flex justify="justify-center" className="gap-2">
         {provinces.map((p) => (
           <Text
             key={`${p.province}-${region}`}
@@ -183,7 +119,7 @@ export default function Message() {
           </Text>
         ))}
       </Flex>
-      <Flex justify="start" className="items-start" direction="vertical">
+      <Flex className="items-start" direction="vertical">
         <Label htmlFor="message-input">Nhập tin nhắn</Label>
         <Editor
           id="message-input"
