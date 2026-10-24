@@ -1,7 +1,7 @@
 import { ChevronsDownIcon, ChevronsUpIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button/Button";
 import Box from "@/components/ui/layouts/Box";
 import Flex from "@/components/ui/layouts/Flex";
 import Text from "@/components/ui/typography/Text";

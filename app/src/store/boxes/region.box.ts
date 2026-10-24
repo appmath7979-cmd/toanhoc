@@ -8,7 +8,7 @@ interface RegionState {
 
 const initialState = {
   value: "mb",
-  label: "Chọn miền",
+  label: "Miền Bắc",
 } satisfies RegionState as RegionState;
 
 export const regionBox = createBox(initialState, (set) => ({

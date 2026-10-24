@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { syntaxInputs } from "@/data/syntax.data";
 import { calculateInvalidIndices } from "@/libs/helper/editor-parser";
 import type { Province } from "@/types/address.type";
-import { Button } from "../Button";
+import { Button } from "../button/Button";
 import Textarea from "../form/Textarea";
 import Box from "../layouts/Box";
 import Text from "../typography/Text";

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import RegionDropdown from "@/components/system/RegionDropdown";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button/Button";
 import Editor from "@/components/ui/editor/Editor";
 import Label from "@/components/ui/form/Label";
 import Box from "@/components/ui/layouts/Box";
