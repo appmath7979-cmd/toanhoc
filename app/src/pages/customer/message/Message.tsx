@@ -32,6 +32,7 @@ export default function Message() {
 
   const [region] = useAppStore(store.region, (s) => s.value);
   const [date] = useAppStore(store.datePicker, (s) => s.date);
+  const [send, { resetSend }] = useAppStore(store.sendMessage, (s) => s.send);
 
   const [msgStr, setMsgStr] = useState<string>("");
   const [canSend, setCanSend] = useState<boolean>(false);
@@ -63,13 +64,14 @@ export default function Message() {
     const data: CreateMessage = {
       content: msgStr,
       customer_id: id,
-      send: false,
+      send,
       message_details: paresedData,
       region: region,
       at: fmtDate(date),
     };
 
     mutate(data);
+    resetSend();
   };
 
   const handleConvertMsgToDetails = () => {

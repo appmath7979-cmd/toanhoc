@@ -6,6 +6,7 @@ function useGetSettingByCustomerId(id: string | undefined) {
     queryKey: ["settings", id],
     queryFn: () => getSettingByCustomerId(id ?? ""),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

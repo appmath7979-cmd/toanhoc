@@ -5,14 +5,26 @@ function Dropdown({ children }: { children: ReactNode }) {
   return <DropdownMenu.Root>{children}</DropdownMenu.Root>;
 }
 
-function DropdownTrigger({ children }: { children: ReactNode }) {
-  return <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>;
+function DropdownTrigger({
+  children,
+  disabled,
+}: {
+  children: ReactNode;
+  disabled?: boolean;
+}) {
+  return (
+    <DropdownMenu.Trigger disabled={disabled} className="btn btn-ghost">
+      {children}
+    </DropdownMenu.Trigger>
+  );
 }
 
 function DropdownContent({ children }: { children: ReactNode }) {
   return (
     <DropdownMenu.Portal>
-      <DropdownMenu.Content>{children}</DropdownMenu.Content>
+      <DropdownMenu.Content className="min-w-40 flex flex-col rounded-md border border-border shadow-sm">
+        {children}
+      </DropdownMenu.Content>
     </DropdownMenu.Portal>
   );
 }
@@ -21,7 +33,14 @@ function DropdownItem({
   children,
   ...props
 }: DropdownMenu.DropdownMenuItemProps) {
-  return <DropdownMenu.Item {...props}>{children}</DropdownMenu.Item>;
+  return (
+    <DropdownMenu.Item
+      className="btn btn-ghost btn-sm cursor-default"
+      {...props}
+    >
+      {children}
+    </DropdownMenu.Item>
+  );
 }
 
 function DropdownSeparator() {

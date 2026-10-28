@@ -4,40 +4,39 @@ import type { Setting } from "./setting.type";
 type Sort = "latest" | "oldest" | "name_DESC" | "name_ASC";
 
 interface CustomerQuery {
-	page: number;
-	search?: string;
-	guest: boolean;
-	sort?: Sort;
-	active?: boolean;
+  page: number;
+  search?: string;
+  guest: boolean;
+  sort?: Sort;
+  active?: boolean;
 }
 
 interface Customer {
-	active: boolean;
-	created_at: string;
-	full_name: string;
-	id: string;
-	is_guest: boolean;
-	is_send: boolean;
-	updated_at: string;
+  active: boolean;
+  created_at: string;
+  full_name: string;
+  id: string;
+  is_guest: boolean;
+  updated_at: string;
 }
 
 interface CustomerRes extends API, APIPagination {
-	data: Customer[];
+  data: Customer[];
 }
 
 interface CustomerById extends Customer {
-	setting: Setting;
+  setting: Setting;
 }
 
 interface CustomerByIdRes extends API {
-	data: CustomerById;
+  data: CustomerById;
 }
 
 export type {
-	Customer,
-	CustomerById,
-	CustomerByIdRes,
-	CustomerQuery,
-	CustomerRes,
-	Sort,
+  Customer,
+  CustomerById,
+  CustomerByIdRes,
+  CustomerQuery,
+  CustomerRes,
+  Sort,
 };

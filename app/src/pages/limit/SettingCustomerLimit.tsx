@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button/Button";
 import Box from "@/components/ui/layouts/Box";
 import Flex from "@/components/ui/layouts/Flex";
-import Text from "@/components/ui/typography/Text";
 import { limitInputData } from "@/data/limit-input.data";
 import { regionData, regionList } from "@/data/region.data";
 import { provinceNameSchedule } from "@/data/schedule.data";
@@ -16,7 +15,6 @@ import { cn } from "@/libs/utils/cn";
 import { store } from "@/store/store";
 import type { CreateCustomerLimit, Limit } from "@/types/limit.type";
 import type { Region } from "@/types/region.type";
-import SettingCustomerLimitBox from "./SettingCustomerLimitBox";
 import SettingCustomerLimitGroup from "./SettingCustomerLimitGroup";
 
 const cang = ["2c", "3c", "4c"];
@@ -51,11 +49,7 @@ export default function SettingCustomerLimit() {
   const four = limitInputData["4c"];
 
   const handleSend = () => {
-    const limits: Limit[] = [
-      ...value.mb.map((i) => i.value),
-      ...value.mn.map((i) => i.value),
-      ...value.mt.map((i) => i.value),
-    ];
+    const limits: Limit[] = [...value.mb, ...value.mn, ...value.mt];
     const payload: CreateCustomerLimit = {
       day,
       customer_id: data?.data?.customer_id ?? id ?? "",

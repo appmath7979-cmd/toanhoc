@@ -17,12 +17,14 @@ interface DeleteAlertProps extends AlertDialog.AlertDialogActionProps {
   title: string;
   description: string;
   children?: ReactNode;
+  iconOnly?: boolean;
 }
 
 export default function DeleteAlert({
   title,
   description,
   children,
+  iconOnly,
   ...props
 }: DeleteAlertProps) {
   return (
@@ -32,7 +34,7 @@ export default function DeleteAlert({
       ) : (
         <AlertTrigger className="btn btn-ghost--danger">
           <TrashIcon />
-          <span>Xóa</span>
+          {iconOnly || <span>Xóa</span>}
         </AlertTrigger>
       )}
       <AlertContent>

@@ -17,6 +17,7 @@ function useGetCustomerLimit({
     queryFn: () => getCustomerLimit({ day, id }),
     enabled: !!id,
     retry,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

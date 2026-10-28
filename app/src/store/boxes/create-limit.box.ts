@@ -28,10 +28,10 @@ export const createLimitBox = createBox(initialState, (set) => ({
       );
 
       if (index === -1) {
-        return { ...prev, [region]: [...currentList, { value }] };
+        return { ...prev, [region]: [...currentList, value] };
       } else {
         const updatedList = [...currentList];
-        updatedList[index] = { ...value };
+        updatedList[index] = value;
         return { ...prev, [region]: updatedList };
       }
     }),

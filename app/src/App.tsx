@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DatePicker from "./components/DatePicker";
+import Container from "./components/ui/layouts/Container";
 import AddCustomer from "./pages/customer/AddCustomer";
 import Customer from "./pages/customer/Customer";
 import CustomerDetail from "./pages/customer/CustomerDetail";
@@ -10,23 +11,25 @@ import SettingCustomerLimit from "./pages/limit/SettingCustomerLimit";
 
 export function App() {
   return (
-    <BrowserRouter>
-      <DatePicker />
-      <Routes>
-        <Route path="/" element={<Customer />} />
-        <Route path="/customers/add" element={<AddCustomer />} />
-        <Route path="/customers/edit" element={<EditCustomer />} />
-        <Route path={`/customers/:id`} element={<CustomerDetail />} />
-        <Route path={`/customers/:id/message`} element={<Message />} />
-        <Route
-          path={`/customers/limit/:id`}
-          element={<SettingCustomerLimit />}
-        />
-        <Route
-          path={`/customers/:customer_id/message/:message_id`}
-          element={<MessageDetail />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <Container>
+      <BrowserRouter>
+        <DatePicker />
+        <Routes>
+          <Route path="/" element={<Customer />} />
+          <Route path="/customers/add" element={<AddCustomer />} />
+          <Route path="/customers/edit" element={<EditCustomer />} />
+          <Route path={`/customers/:id`} element={<CustomerDetail />} />
+          <Route path={`/customers/:id/message`} element={<Message />} />
+          <Route
+            path={`/customers/limit/:id`}
+            element={<SettingCustomerLimit />}
+          />
+          <Route
+            path={`/customers/:customer_id/message/:message_id`}
+            element={<MessageDetail />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </Container>
   );
 }

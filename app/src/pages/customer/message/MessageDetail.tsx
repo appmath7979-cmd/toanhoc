@@ -22,8 +22,8 @@ import { cn } from "@/libs/utils/cn";
 import { convertDate } from "@/libs/utils/fmt-date";
 import type { Province } from "@/types/address.type";
 import type { UpdateMessageReq } from "@/types/message.type";
-import LimitDetail from "../others/LimitDetail";
-import TitleLimitDetail from "../others/TitleLimitDetail";
+import LimitDetail from "../../../components/others/LimitDetail";
+import TitleLimitDetail from "../../../components/others/TitleLimitDetail";
 
 export default function MessageDetail() {
   const { customer_id, message_id } = useParams();
@@ -152,7 +152,7 @@ export default function MessageDetail() {
       <Box className="mt-4 space-y-2">
         <Text className="font-semibold">Chi tiết</Text>
         <Box className="border border-border rounded-md space-y-0">
-          <TitleLimitDetail />
+          <TitleLimitDetail isStatistic={false} />
           <ul
             className={cn(
               "overflow-y-auto",
@@ -160,7 +160,14 @@ export default function MessageDetail() {
             )}
           >
             {messageData?.message_details?.map((m, i) => {
-              return <LimitDetail key={m.id} index={i} detail={m} />;
+              return (
+                <LimitDetail
+                  key={m.id}
+                  index={i}
+                  detail={m}
+                  isStatistic={false}
+                />
+              );
             })}
           </ul>
         </Box>

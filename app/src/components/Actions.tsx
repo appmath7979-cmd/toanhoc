@@ -5,6 +5,7 @@ import { AlertTrigger } from "@/components/ui/dialog/Alert";
 import Flex from "@/components/ui/layouts/Flex";
 import Tooltip from "@/components/ui/Tooltip";
 import { useDeleteMessage } from "@/hooks/query/use-message-query";
+import { copyToClipboard } from "@/libs/helper/copy-to-clipboard";
 
 interface ActionsProps {
   msgContent: string;
@@ -20,7 +21,7 @@ export default function Actions({ msgContent, id }: ActionsProps) {
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => navigator.clipboard.writeText(msgContent)}
+          onClick={() => copyToClipboard(msgContent)}
         >
           <CopyIcon />
         </Button>

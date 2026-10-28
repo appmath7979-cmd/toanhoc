@@ -60,11 +60,13 @@ export default function SettingCustomerLimitInput({
 
   useEffect(() => {
     const current = storeValue ?? 0;
-    if (parseFloat(inputValue) !== current) {
-      setInputValue(current.toString());
-    }
+
+    setInputValue((prev) =>
+      parseFloat(prev) === current ? prev : current.toString(),
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storeValue, inputValue]);
+  }, [storeValue]);
 
   return (
     <Box className="grid grid-rows-2 gap-2 p-3 rounded-md border border-border h-20 shadow-xs">

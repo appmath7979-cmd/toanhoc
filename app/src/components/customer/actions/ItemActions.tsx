@@ -29,19 +29,18 @@ export default function ItemActions({ customerId }: { customerId: string }) {
       <Tooltip content="Sao chép">
         <Button variant="ghost" size="sm" onClick={handleCopy}>
           <CopyIcon />
-          <span>Sao chép</span>
         </Button>
       </Tooltip>
       <Tooltip content="Chỉnh sửa">
         <Button variant="ghost" size="sm" onClick={handleEdit}>
           <EditIcon />
-          <span>Chỉnh sửa</span>
         </Button>
       </Tooltip>
       <DeleteAlert
         title="Xóa khách hàng"
         description="Bạn có chắc xóa khách hàng này? Điều này sẽ xóa vĩnh viễn khách hàng bạn đang xóa."
         onClick={() => mutate(customerId)}
+        iconOnly
       />
     </Flex>
   );
