@@ -22,6 +22,7 @@ type Limit struct {
 	Region       Region  `json:"region" gorm:"type:char(2);check:region IN ('mb', 'mt', 'mn')"`
 	ProvinceName string  `json:"province_name" gorm:"type:varchar(10);not null"`
 	BetType      BetType `json:"bet_type" gorm:"type:varchar(5); check: bet_type IN ('b2', 'dd2', 'da', 'dax', 'b3', 'dd3', 'b4')"`
+	Syntax       Syntax  `json:"syntax" gorm:"type:varchar(10); check: syntax IN ('b', 'dau', 'duoi', 'da', 'dax', 'xdau', 'xduoi', 'db' )"`
 	Value        float32 `json:"value" gorm:"type:float;not null"`
 }
 
