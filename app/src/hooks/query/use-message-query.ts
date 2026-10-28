@@ -19,6 +19,7 @@ function useGetManyMessage(req: GetManyMessageReq) {
     queryKey: ["messages", req.id, req.at, req.region],
     queryFn: () => getManyMessage(req),
     enabled: !!req.id && !!req.at,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

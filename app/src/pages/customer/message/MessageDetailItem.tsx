@@ -11,8 +11,9 @@ import {
 } from "@/libs/helper/message-calculate";
 import { cn } from "@/libs/utils/cn";
 import type { MessageRes } from "@/types/message.type";
-import TitleStat from "../../others/TitleStatistic";
-import Actions from "./Actions";
+
+import Actions from "../../../components/Actions";
+import TitleStatistic from "../../../components/others/TitleStatistic";
 
 interface MessageDetailItemProps {
   message: MessageRes;
@@ -64,7 +65,7 @@ export default function MessageDetailItem({
       </Flex>
       <Box className={cn("smooth overflow-hidden", open ? "h-auto" : "h-0")}>
         <Box className="space-y-0">
-          <TitleStat />
+          <TitleStatistic />
           <Box className="space-y-0">
             {messagesKey.map((m) => {
               const score = messagesInfo[m as keyof typeof messagesInfo].score;

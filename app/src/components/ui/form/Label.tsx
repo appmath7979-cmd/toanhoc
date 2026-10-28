@@ -1,14 +1,14 @@
+import type { ComponentProps } from "react";
 import { cn } from "@/libs/utils/cn";
-import { ComponentProps } from "react";
 
 export default function Label({
-	children,
-	className,
-	...props
+  children,
+  className,
+  ...props
 }: ComponentProps<"label">) {
-	return (
-		<label className={cn("font-semibold text-sm", className)} {...props}>
-			{children}
-		</label>
-	);
+  return (
+    <label className={cn("font-semibold text-sm", className)} {...props}>
+      {children}
+    </label>
+  );
 }

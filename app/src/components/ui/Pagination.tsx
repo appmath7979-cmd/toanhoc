@@ -1,16 +1,16 @@
-import { ComponentProps, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 function Pagination({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex justify-center items-center gap-1">{children}</div>
-	);
+  return (
+    <div className="flex justify-center items-center gap-1">{children}</div>
+  );
 }
 
 function PaginationItem({
-	children,
-	...props
+  children,
+  ...props
 }: { children: ReactNode } & ComponentProps<"button">) {
-	return <button {...props}>{children}</button>;
+  return <button {...props}>{children}</button>;
 }
 
 export { Pagination, PaginationItem };
