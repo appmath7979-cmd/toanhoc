@@ -1,57 +1,57 @@
 import { DropdownMenu } from "radix-ui";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 function Dropdown({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Root>{children}</DropdownMenu.Root>;
+  return <DropdownMenu.Root>{children}</DropdownMenu.Root>;
 }
 
 function DropdownTrigger({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>;
+  return <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>;
 }
 
 function DropdownContent({ children }: { children: ReactNode }) {
-	return (
-		<DropdownMenu.Portal>
-			<DropdownMenu.Content>{children}</DropdownMenu.Content>
-		</DropdownMenu.Portal>
-	);
+  return (
+    <DropdownMenu.Portal>
+      <DropdownMenu.Content>{children}</DropdownMenu.Content>
+    </DropdownMenu.Portal>
+  );
 }
 
 function DropdownItem({
-	children,
-	...props
+  children,
+  ...props
 }: DropdownMenu.DropdownMenuItemProps) {
-	return <DropdownMenu.Item {...props}>{children}</DropdownMenu.Item>;
+  return <DropdownMenu.Item {...props}>{children}</DropdownMenu.Item>;
 }
 
 function DropdownSeparator() {
-	return <DropdownMenu.Separator />;
+  return <DropdownMenu.Separator />;
 }
 
 function DropdownLabel({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Label>{children}</DropdownMenu.Label>;
+  return <DropdownMenu.Label>{children}</DropdownMenu.Label>;
 }
 
 function DropdownSub({ children }: { children: ReactNode }) {
-	return <DropdownMenu.Sub>{children}</DropdownMenu.Sub>;
+  return <DropdownMenu.Sub>{children}</DropdownMenu.Sub>;
 }
 
 function DropdownSubTrigger({ children }: { children: ReactNode }) {
-	return <DropdownMenu.SubTrigger>{children}</DropdownMenu.SubTrigger>;
+  return <DropdownMenu.SubTrigger>{children}</DropdownMenu.SubTrigger>;
 }
 
 function DropdownSubContent({ children }: { children: ReactNode }) {
-	return <DropdownMenu.SubContent>{children}</DropdownMenu.SubContent>;
+  return <DropdownMenu.SubContent>{children}</DropdownMenu.SubContent>;
 }
 
 export {
-	Dropdown,
-	DropdownTrigger,
-	DropdownContent,
-	DropdownItem,
-	DropdownSeparator,
-	DropdownLabel,
-	DropdownSub,
-	DropdownSubTrigger,
-	DropdownSubContent,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownLabel,
+  DropdownSeparator,
+  DropdownSub,
+  DropdownSubContent,
+  DropdownSubTrigger,
+  DropdownTrigger,
 };

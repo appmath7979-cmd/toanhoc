@@ -1,7 +1,6 @@
 import { Tabs as T } from "radix-ui";
 import type { Attributes, ReactNode } from "react";
 import { cn } from "@/libs/utils/cn";
-import { Button, ButtonProps } from "./button/Button";
 
 interface TabsProps {
   children: ReactNode;

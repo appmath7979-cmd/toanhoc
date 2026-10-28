@@ -26,7 +26,7 @@ function Field({
     "flex",
     direction === "vertical" && "col",
     direction === "vertical" && labelPos === "after" && "reverse",
-  ];
+  ].join("-");
   return (
     <div className={cn("gap-2", flexDirection, className)}>
       <Label className={labelClassName}>

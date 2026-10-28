@@ -1,9 +1,9 @@
+import type { ComponentProps } from "react";
 import { cn } from "@/libs/utils/cn";
-import { ComponentProps } from "react";
 
 export default function Textarea({
-	className,
-	...props
+  className,
+  ...props
 }: ComponentProps<"textarea">) {
-	return <textarea className={cn("", className)} {...props} />;
+  return <textarea className={cn("", className)} {...props} />;
 }

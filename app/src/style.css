@@ -49,7 +49,7 @@
 html,
 body,
 #root {
-    @apply w-full h-dvh scroll-smooth overflow-hidden bg-background text-foreground;
+    @apply w-full h-dvh scroll-smooth overflow-auto bg-background text-foreground;
 }
 
 .contain {

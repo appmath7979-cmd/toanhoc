@@ -21,7 +21,7 @@ export default function Flex({
   direction = "horizontal",
   className,
   display = "flex",
-  justify = "start",
+  justify = "justify-start",
   children,
 }: FlexProps) {
   return (
