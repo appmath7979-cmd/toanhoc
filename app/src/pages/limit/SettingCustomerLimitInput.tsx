@@ -37,8 +37,6 @@ export default function SettingCustomerLimitInput({
       i.syntax === syntax,
   )?.value;
 
-  console.log(storeValue);
-
   const [inputValue, setInputValue] = useState<string>(
     storeValue !== undefined ? storeValue.toString() : "0",
   );
