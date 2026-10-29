@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"server/app/dtos/request"
 	"server/app/models"
 
@@ -25,19 +26,28 @@ func (r *LimitRepo) GetCustomerLimit(id string, day int16, res *models.CustomerL
 }
 
 func (r *LimitRepo) CreateCustomerLimit(req *request.CreateCustomerLimit) error {
-	var customer models.Customer
+	limit := datatypes.JSONSlice[models.Limit](req.Limits)
 
-	if err := r.db.First(&customer, "id = ?", req.CustomerID).Error; err != nil {
+	var customerLimit models.CustomerLimit
+	err := r.db.Where("customer_id = ? AND day = ?", req.CustomerID, req.Day).First(&customerLimit).Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		if createErr := r.db.Create(&models.CustomerLimit{
+			Day:        models.DayOfWeek(req.Day),
+			Limits:     limit,
+			CustomerID: req.CustomerID,
+		}).Error; createErr != nil {
+			return createErr
+		}
+
+		return nil
+	}
+
+	if err != nil {
 		return err
 	}
 
-	limits := models.CustomerLimit{
-		Day:        models.DayOfWeek(req.Day),
-		CustomerID: customer.ID,
-		Limits:     datatypes.JSONSlice[models.Limit](req.Limits),
-	}
-
-	if err := r.db.Create(&limits).Error; err != nil {
+	if err := r.db.Model(&customerLimit).Update("limits", limit).Error; err != nil {
 		return err
 	}
 

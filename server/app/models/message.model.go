@@ -5,7 +5,7 @@ import "time"
 type MessageDetail struct {
 	ID       string   `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	BetType  BetType  `json:"bet_type" gorm:"type:varchar(5); check: bet_type IN ('b2', 'dd2', 'da', 'dax', 'b3', 'dd3', 'b4')"`
-	Syntax   Syntax   `json:"syntax" gorm:"type:varchar(10); check: syntax IN ('b', 'dau', 'duoi', 'da', 'dax', 'xdau', 'xduoi' )"`
+	Syntax   Syntax   `json:"syntax" gorm:"type:varchar(10); check: syntax IN ('b', 'dau', 'duoi', 'da', 'dax', 'xdau', 'xduoi', 'db' )"`
 	Province Province `json:"province" gorm:"type:varchar(5);check:province IN ('tp', 'dt', 'cm', 'bt', 'dn', 'ct', 'st', 'vt', 'bli', 'tn', 'bth', 'vl', 'bd', 'tv', 'la', 'hg', 'bp', 'tg', 'kg', 'dl', 'py', 'th', 'qna', 'kh', 'qb', 'qt', 'gl', 'nt', 'qn', 'dno', 'kt', 'mb', 'ag')"`
 
 	Score  float32 `json:"score" gorm:"type:float;not null"`
