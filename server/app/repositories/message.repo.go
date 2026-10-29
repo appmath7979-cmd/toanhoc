@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 	"server/app/dtos/request"
 	"server/app/models"
 
@@ -38,8 +37,7 @@ func (r *MessageRepo) CreateMessage(req *request.CreateMessage) error {
 
 	details := make([]models.MessageDetail, 0, len(req.MessageDetails))
 
-	for i, d := range req.MessageDetails {
-		fmt.Printf("Detail [%d] - BetType: %s, Syntax: %s, Number: %s\n", i, d.BetType, d.Syntax, d.Number)
+	for _, d := range req.MessageDetails {
 		details = append(details, models.MessageDetail{
 			BetType:  d.BetType,
 			Syntax:   d.Syntax,

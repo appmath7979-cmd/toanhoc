@@ -18,6 +18,7 @@ func main() {
 		&models.Message{},
 		&models.MessageDetail{},
 		&models.CustomerLimit{},
+		&models.Reward{},
 	)
 
 	app := common.NewApplication()
