@@ -3,7 +3,8 @@ import { cn } from "@/libs/utils/cn";
 
 export default function Textarea({
   className,
+  id,
   ...props
 }: ComponentProps<"textarea">) {
-  return <textarea className={cn("", className)} {...props} />;
+  return <textarea id={id} className={cn("w-full", className)} {...props} />;
 }

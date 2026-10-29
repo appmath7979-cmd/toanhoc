@@ -12,7 +12,7 @@ export function nameGenerate(bet_type: BetType): string {
       setName = "Đầu Đuôi";
       break;
     case "dd3":
-      setName = "Xỉu Chủ";
+      setName = "Đầu Đuôi";
       break;
     case "da":
       setName = "Đá Thẳng";

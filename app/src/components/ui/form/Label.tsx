@@ -4,10 +4,15 @@ import { cn } from "@/libs/utils/cn";
 export default function Label({
   children,
   className,
+  htmlFor,
   ...props
 }: ComponentProps<"label">) {
   return (
-    <label className={cn("font-semibold text-sm", className)} {...props}>
+    <label
+      htmlFor={htmlFor}
+      className={cn("font-semibold text-sm", className)}
+      {...props}
+    >
       {children}
     </label>
   );

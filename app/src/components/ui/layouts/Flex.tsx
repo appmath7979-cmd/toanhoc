@@ -2,10 +2,10 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/libs/utils/cn";
 
 const directions = {
-  horizontal: "",
-  "horizontal-reverse": "",
+  horizontal: "flex-row",
+  "horizontal-reverse": "flex-row-reverse",
   vertical: "flex-col",
-  "vertical-reverse": "",
+  "vertical-reverse": "flex-col-reverse",
 };
 
 interface FlexProps extends ComponentProps<"div"> {

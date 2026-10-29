@@ -8,6 +8,8 @@ import EditCustomer from "./pages/customer/EditCustomer";
 import Message from "./pages/customer/message/Message";
 import MessageDetail from "./pages/customer/message/MessageDetail";
 import SettingCustomerLimit from "./pages/limit/SettingCustomerLimit";
+import CreateLottery from "./pages/lottery/CreateLottery";
+import Lottery from "./pages/lottery/Lotterry";
 
 export function App() {
   return (
@@ -15,7 +17,9 @@ export function App() {
       <BrowserRouter>
         <DatePicker />
         <Routes>
-          <Route path="/" element={<Customer />} />
+          <Route path="/" element={<Lottery />} />
+          <Route path="/lottery/create" element={<CreateLottery />} />
+          <Route path="/customer" element={<Customer />} />
           <Route path="/customers/add" element={<AddCustomer />} />
           <Route path="/customers/edit" element={<EditCustomer />} />
           <Route path={`/customers/:id`} element={<CustomerDetail />} />

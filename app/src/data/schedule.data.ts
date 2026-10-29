@@ -18,6 +18,8 @@ const getMN = (province: Province) => {
   return { label: found?.label ?? "", province: found?.province ?? "" };
 };
 
+type Schedule = { province: string; label: string };
+
 const schedule = [
   {
     mb: [getMB("mb")],
@@ -118,4 +120,4 @@ function mixProvince(
   return values;
 }
 
-export { provinceNameSchedule, schedule };
+export { provinceNameSchedule, type Schedule, schedule };
