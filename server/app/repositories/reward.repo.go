@@ -33,12 +33,10 @@ func (r *RewardRepo) CreateReward(req *request.CreateReward) error {
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		if createErr := r.db.Create(&models.Reward{
-			Region:       req.Region,
-			Province:     req.Province,
 			At:           req.At,
 			RewardValues: rewardValues,
 		}).Error; createErr != nil {
-			return err
+			return createErr
 		}
 
 		return nil

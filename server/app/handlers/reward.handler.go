@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"server/app/dtos/request"
 	"server/app/dtos/response"
@@ -66,9 +67,10 @@ func (h *RewardHandler) GetReward(ctx *gin.Context) {
 }
 
 func (h *RewardHandler) CreateReward(ctx *gin.Context) {
+	log.Println("[reward] 1. vào handler")
 	var req request.CreateReward
 
-	if err := ctx.ShouldBindJSON(req); err != nil {
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.StatusResponse{
 			Message: "Thông tin không hợp lệ!",
 			Success: false,
