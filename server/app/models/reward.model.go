@@ -28,7 +28,7 @@ type RewardValue struct {
 }
 
 type Reward struct {
-	ID           string                           `json:"id" gorm:"type:uuid;primaryKey;gen_random_uuid()"`
+	ID           string                           `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	At           string                           `json:"at" gorm:"type:varchar(255);not null;uniqueIndex"`
 	RewardValues datatypes.JSONSlice[RewardValue] `json:"reward_values" gorm:"type:jsonb"`
 
