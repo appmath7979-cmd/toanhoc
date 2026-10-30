@@ -7,7 +7,7 @@ type RewardRank = "g8" | "g7" | "g6" | "g5" | "g4" | "g3" | "g2" | "g1" | "gDB";
 interface RewardValue {
   region: Region;
   province: Province;
-  rank: RewardRank;
+  reward_rank: RewardRank;
   values: string[];
 }
 

@@ -10,8 +10,24 @@ async function getReward(at: string): Promise<RewardRes> {
 }
 
 async function createReward(data: CreateReward): Promise<API> {
-  const res = await appAPI.post(`${endpoint}`, data);
-  return res.data;
+  // const res = await appAPI.post(endpoint, data);
+  // return res.data;
+  const response = await fetch("http://localhost:8080/api/v1/rewards", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Thêm Authorization token nếu app của bạn yêu cầu:
+      // "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(errorBody || `HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
 }
 
 export { createReward, getReward };

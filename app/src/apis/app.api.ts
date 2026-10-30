@@ -3,23 +3,28 @@ import axios from "axios";
 const baseURL = import.meta.env.VITE_BASE_URL || "";
 
 const appAPI = axios.create({
-	baseURL,
-	headers: { "Content-Type": "application/json" },
-	withCredentials: true,
-	timeout: 10000,
+  baseURL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+  timeout: 10000,
 });
 
 appAPI.interceptors.response.use(
-	(response) => response,
-	(err) => {
-		const message =
-			err.response?.data?.error ||
-			err.response?.data?.message ||
-			err.response?.message ||
-			"Đã có lỗi xảy ra";
+  (response) => response,
+  (err) => {
+    const message =
+      err.response?.data?.error ||
+      err.response?.data?.message ||
+      err.response?.message ||
+      "Đã có lỗi xảy ra";
 
-		return Promise.reject(new Error(message));
-	},
+    console.log("axios raw error", {
+      code: err.code,
+      message: err.message,
+      url: err.config?.baseURL + err.config?.url,
+    });
+    return Promise.reject(new Error(message));
+  },
 );
 
 export default appAPI;
