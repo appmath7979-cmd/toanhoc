@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { createReward, getReward } from "@/apis/reward.api";
 import type { CreateReward } from "@/types/reward.type";
 
@@ -18,6 +19,9 @@ function useCreateReward() {
     mutationFn: (data: CreateReward) => createReward(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reward"] });
+    },
+    onError: (err) => {
+      toast.error(err.message);
     },
   });
 }

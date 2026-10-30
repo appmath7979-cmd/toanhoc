@@ -18,11 +18,12 @@ export default function CreateLotteryItem({ region }: CreateLotteryItemProps) {
   const list = schedule[date.getDay()][region];
 
   return (
-    <Box className="max-w-7xl px-4 mx-auto">
-      <Text>{regionData[region]}</Text>
-      <Box>
+    <Box className="space-y-0">
+      <Text className="text-sm ms-4 border border-border w-fit px-2 py-0.5 rounded-t-md text-primary font-medium">
+        {regionData[region]}
+      </Text>
+      <Box className="border border-border p-4 rounded-md">
         {list.map((l) => {
-          console.log(l);
           return (
             <CreateLotteryInput
               key={`${region}-${l.province}`}

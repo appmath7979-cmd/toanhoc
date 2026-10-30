@@ -19,7 +19,7 @@ export function App() {
         <Routes>
           <Route path="/" element={<Lottery />} />
           <Route path="/lottery/create" element={<CreateLottery />} />
-          <Route path="/customer" element={<Customer />} />
+          <Route path="/customers" element={<Customer />} />
           <Route path="/customers/add" element={<AddCustomer />} />
           <Route path="/customers/edit" element={<EditCustomer />} />
           <Route path={`/customers/:id`} element={<CustomerDetail />} />
